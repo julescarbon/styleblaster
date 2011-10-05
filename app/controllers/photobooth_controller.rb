@@ -1,5 +1,5 @@
 class PhotoboothController < ApplicationController
-  # http_basic_authenticate_with :name => "admin", :password => "12mercer", :except => [:index, :create]
+  http_basic_authenticate_with :name => "admin", :password => "12mercer", :except => [:index, :create, :show]
 
 =begin # this is what comes back from Image2Web when it sends a POST
 {
@@ -11,20 +11,26 @@ class PhotoboothController < ApplicationController
 }
 =end
 
+  # used by processing, returns url to image
   def create
-    # return url to image
     @photo = Photo.create(:photo => params[:test])
-    
-    puts @photo.to_yaml
-    
-    render :text => @photo.photo.url # "http://okfoc.us/assets/images/ok_icon.png"
+    render :text => @photo.photo.url
   end
   
   def destroy
+    @photo = Photo.find(params[:id])
+    @photo.destroy()
+    render :text => "OK"
+  end
+
+  def admin
+    @admin = true
+    @photos = Photo.page(params[:page]).order('created_at DESC')
+    render :template => "photobooth/index"
   end
 
   def index
-    @photos = Photo.all(:limit => 64)
+    @photos = Photo.page(params[:page]).order('created_at DESC')
   end
 
   def show

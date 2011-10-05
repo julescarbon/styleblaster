@@ -1,8 +1,12 @@
 PhotoboothGallery::Application.routes.draw do
 
-  match 'upload' => 'photobooth#create'
-  match 'gallery/:id' => 'photobooth#show'
-  match 'gallery' => 'photobooth#index'
+  match 'upload'              => 'photobooth#create', :via => :post
+  match 'gallery/page/:page'  => 'photobooth#index'
+  match 'gallery/admin/:page' => 'photobooth#admin'
+  match 'gallery/admin'       => 'photobooth#admin'
+  match 'gallery/:id/delete'  => 'photobooth#destroy', :via => :delete
+  match 'gallery/:id'         => 'photobooth#show'
+  match 'gallery'             => 'photobooth#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

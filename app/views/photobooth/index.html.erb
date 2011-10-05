@@ -1,14 +1,37 @@
 <div id="container">
 
-<div id="triangle"></div>
+<a href="/gallery"><div id="triangle"></div></a>
 <h1>Vfiles Photobooth Gallery</h1>
+
+<%= will_paginate @photos %>
 
 <ul>
 <% @photos.each do |photo| %>
-  <li>
+  <li id="photo_<%= photo.id %>">
   <%= link_to( image_tag(photo.photo.url(:thumb), :border => 0), :action => 'show', :id => photo.id ) %>
+  <% if @admin %>
+    <br/><button class="delete" data-id="<%= photo.id %>">Delete</button>
+  <% end %>
   </li>
 <% end %>
 </ul>
 
 </div>
+
+<% if @admin %>
+<script type="text/javascript">
+var rm = function () {
+console.log($(this).data())
+  var id = $(this).data("id");
+  $.ajax({
+    "type": "DELETE",
+    "url": "/gallery/" + id + "/delete",
+    "success": function () {
+      $("#photo_"+id).fadeOut("slow");
+    },
+  });
+};
+$("button.delete").bind("click", rm);
+
+</script>
+<% end %>
