@@ -1,7 +1,7 @@
 PhotoboothGallery::Application.routes.draw do
 
-  match 'post' => 'photobooth#upload'
-  match 'photobooth' => 'photobooth#gallery'
+  match 'upload' => 'photobooth#upload'
+  match 'gallery' => 'photobooth#gallery'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,0 +1,9 @@
+<h1>Photobooth Gallery</h1>
+
+<ul>
+<% @photos.each do |photo| %>
+  <li>
+  <%= photo.to_yaml %>
+  </li>
+<% end %>
+</ul>
