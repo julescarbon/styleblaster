@@ -1,6 +1,7 @@
 PhotoboothGallery::Application.routes.draw do
 
   match 'upload' => 'photobooth#create'
+  match 'gallery/:id' => 'photobooth#show'
   match 'gallery' => 'photobooth#index'
 
   # The priority is based upon order of creation:

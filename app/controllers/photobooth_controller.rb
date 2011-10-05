@@ -27,4 +27,7 @@ class PhotoboothController < ApplicationController
     @photos = Photo.all(:limit => 64)
   end
 
+  def show
+    @photo = Photo.find(params[:id])
+  end
 end
