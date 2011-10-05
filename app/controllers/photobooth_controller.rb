@@ -1,4 +1,5 @@
 class PhotoboothController < ApplicationController
+  # http_basic_authenticate_with :name => "admin", :password => "12mercer", :except => [:index, :create]
 
 =begin # this is what comes back from Image2Web when it sends a POST
 {
