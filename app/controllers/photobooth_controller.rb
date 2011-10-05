@@ -11,12 +11,19 @@ class PhotoboothController < ApplicationController
 }
 =end
 
-  def upload
+  def create
     # return url to image
-    render :text => "http://okfoc.us/assets/images/ok_icon.png"
+    @photo = Photo.create(:photo => params[:test])
+    
+    puts @photo.to_yaml
+    
+    render :text => @photo.photo.url # "http://okfoc.us/assets/images/ok_icon.png"
   end
   
-  def gallery
+  def destroy
+  end
+
+  def index
     @photos = Photo.all(:limit => 64)
   end
 
