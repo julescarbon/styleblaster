@@ -1,0 +1,2 @@
+class PhotoboothController < ApplicationController
+end

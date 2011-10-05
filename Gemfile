@@ -4,6 +4,9 @@ gem 'rails', '3.1.0'
 
 gem 'thin'
 
+gem 'paperclip', '>= 2.3.15'
+gem 'aws-s3', :require => 'aws/s3'
+
 group :production do
   gem 'pg'
 end
