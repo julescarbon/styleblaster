@@ -14,7 +14,8 @@ class PhotoboothController < ApplicationController
   # used by processing, returns url to image
   def create
     @photo = Photo.create(:photo => params[:test])
-    render :text => @photo.photo.url
+    # render :text => @photo.photo.url
+    render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end
   
   def destroy
