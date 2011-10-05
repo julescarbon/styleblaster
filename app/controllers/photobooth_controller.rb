@@ -36,8 +36,8 @@ class PhotoboothController < ApplicationController
 
   def show
     @photo = Photo.find(params[:id])
-    @previous_photo = Photo.where("id < ?", @photo.id).order("id DESC").first()
-    @next_photo = Photo.where("id > ?", @photo.id).order("id ASC").first()
+    @previous_photo = Photo.where("id > ?", @photo.id).order("id ASC").first()
+    @next_photo = Photo.where("id < ?", @photo.id).order("id DESC").first()
     if @previous_photo
       @previous_photo_link = "/gallery/" + @previous_photo.id.to_s
     else
