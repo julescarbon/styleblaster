@@ -1,21 +1,21 @@
 class PhotoboothController < ApplicationController
-  http_basic_authenticate_with :name => "admin", :password => "12mercer", :except => [:index, :create, :show]
+  http_basic_authenticate_with :name => "admin", :password => "12mercer", :except => [:index, :create, :show, :browser]
 
 =begin # this is what comes back from Image2Web when it sends a POST
-{
-  "test" => #<ActionDispatch::Http::UploadedFile:0x00000101339df0
-    @original_filename="jpg-test.jpg",
-    @content_type="image/jpeg",
-    @headers="Content-Disposition: form-data; name=\"test\"; filename=\"jpg-test.jpg\"\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n",
-    @tempfile=#<File:/var/folders/+n/+nO1Yaz4EhSpBA7s9ldDtk+++TI/-Tmp-/RackMultipart20111005-2643-rd41vh>>
-}
+  {
+    "test" => #<ActionDispatch::Http::UploadedFile:0x00000101339df0
+      @original_filename="jpg-test.jpg",
+      @content_type="image/jpeg",
+      @headers="Content-Disposition: form-data; name=\"test\"; filename=\"jpg-test.jpg\"\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n",
+      @tempfile=#<File:/var/folders/+n/+nO1Yaz4EhSpBA7s9ldDtk+++TI/-Tmp-/RackMultipart20111005-2643-rd41vh>>
+  }
 =end
 
   # used by processing, returns url to image
   def create
     @photo = Photo.create(:photo => params[:test])
-    # render :text => @photo.photo.url
-    render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
+    render :text => @photo.photo.url
+    # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end
   
   def destroy
@@ -32,6 +32,29 @@ class PhotoboothController < ApplicationController
 
   def index
     @photos = Photo.page(params[:page]).order('created_at DESC')
+  end
+
+  def browser
+    @photos = Photo.page(params[:page]).order('created_at DESC')
+    list = []
+    page = params[:page] || 1
+    @photos.each do |p|
+      list << {
+        :id => p.id,
+        :thumb => p.photo.url(:thumb),
+        :original => p.photo.url(:original)
+      }
+    end
+    
+    # will_paginate is a helper function in WillPaginate::ViewHelpers
+    # i can only get at it from the view so i will have to manipulate it with JS
+    # instead of passing it in with the json..
+    @structure = { :photos => list, :page => page }
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @structure }
+    end
   end
 
   def show

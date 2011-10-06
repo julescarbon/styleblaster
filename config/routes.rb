@@ -7,6 +7,8 @@ PhotoboothGallery::Application.routes.draw do
   match 'gallery/:id/delete'  => 'photobooth#destroy', :via => :delete
   match 'gallery/:id'         => 'photobooth#show'
   match 'gallery'             => 'photobooth#index'
+  match 'browser/page/:page'  => 'photobooth#browser'
+  match 'browser'             => 'photobooth#browser'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -27,7 +27,18 @@ ul {
   margin: 0; padding: 0;
 }
 li {
-  margin: 0; padding: 0 5px 0 0;
+  margin: 0; padding: 0 5px 5px 0;
   list-style-type: none;
   float: left;
+  cursor: pointer;
+  cursor: hand;
+  width: 133px;
+  min-height: 100px;
+}
+li img {
+  display: block;
+}
+
+#photo {
+  display: none;
 }
