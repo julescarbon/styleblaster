@@ -99,6 +99,14 @@ $(function () {
     }
   };
   
+  var page_home = function (e) {
+    if (e) e.preventDefault();
+    page_index = 1;
+    photo_index = 0;
+    $.get(page_base_href+page_index+".json", null, page_load);
+    page_load_callback = photo_unload;
+  }
+  
   var page_prev = function () {
     page_index -= 1;
     if (page_index === 0) {
@@ -175,6 +183,7 @@ $(function () {
   var page_load_callback = gallery_show;
 
   var init = function () {
+    $(".homelink").bind("click", page_home);
     $(".pagination a").each(function(){
       var page_num = parseInt($(this).html());
       if (page_num !== NaN && page_num > page_max)
