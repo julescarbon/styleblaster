@@ -1,0 +1,144 @@
+<div id="container">
+
+<a href="/gallery"><div id="triangle"></div></a>
+<h1>Vfiles Photobooth Gallery</h1>
+
+<%= will_paginate @photos %>
+
+<ul id="gallery">
+</ul>
+
+<div id="photo">
+<a href="#" id="prev">&larr; prev</a>
+<a href="#" id="next">next &rarr;</a>
+<img/>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+  var first_page = <%= @structure.to_json.html_safe %>;
+  
+  var page_data = {};
+  var photo_keys = function (e) {
+    var kc = e.keyCode;
+    switch (kc) {
+      case 27: // ESC
+        photo_unload();
+        break;
+      case 37: // LEFT
+        photo_prev();
+        break;
+      case 39: // RIGHT
+        photo_next();
+        break;
+    }
+  };
+  
+  var photo_index = 1;
+  var page_index = 1;
+  var page_max = 2;
+  var page_base_href = "";
+  
+  var photo_click = function () {
+    photo_index = $(this).data("idx");
+    $(window).bind("keydown", photo_keys);
+    $("#prev").bind("click", photo_prev);
+    $("#next").bind("click", photo_next);
+    var i = 0;
+    
+    $("#gallery li img").each(function(){$(this).delay(i += 20).fadeOut(200);});
+    $(".pagination").fadeOut(1000, photo_load);
+  };
+
+  var photo_unload = function () {
+    $(window).unbind("keydown");
+    $("#prev,#next").unbind("click");
+    $("#photo").fadeOut(300, function () {
+      $(".pagination").show();
+      $("#gallery").fadeIn(200);
+    });
+  };
+
+  var photo_load = function () {
+    $("#gallery").hide();
+    $("#photo img").attr("src", page_data[photo_index].original);
+    $("#photo").fadeIn(200, function(){ $("#gallery li img").show(); });
+  };
+  
+  var photo_next = function (e) {
+    e.preventDefault();
+    photo_index += 1;
+    if (photo_index === page_data.length)
+      page_next();
+    else
+      photo_load();
+  };
+  var photo_prev = function (e) {
+    e.preventDefault();
+    photo_index -= 1;
+    if (photo_index === -1) {
+      if (page_index === 1)
+        photo_unload();
+      else
+        page_prev();
+    } else {
+      photo_load();
+    }
+  };
+  
+  var page_next = function () {
+    page_index -= 1;
+    if (page_index === 0) {
+      page_index = 1;
+    } else {
+      $.get(href+".json", null, page_load);
+    }
+  };
+  
+  var page_prev = function () {
+    page_index += 1;
+  };
+  
+  var pagination_update = function () {
+    
+  };
+  var page_number = function (href) {
+    return parseInt(href.replace(/^.*page\//, ""));
+  };
+  
+  var page_click = function (e) {
+    var href = $(this).attr("href");
+    page_index = page_number(href);
+    $.get(href+".json", null, page_load);
+    e.preventDefault();
+  };
+  
+  var page_load = function (data) {
+    page_data = data.photos;
+    $("#gallery").html("");
+    var divs = [];
+    for (var i = 0, len = data.photos.length; i < len; i++) {
+      var el = '<li data-idx="' + i + '"><img src="' + data.photos[i].thumb + '" style="display: none;" onload="$(this).fadeIn()"></li>';
+      divs.push(el);
+    }
+    $("#gallery").append(divs.join(""));
+  };
+  
+  var init = function () {
+    $(".pagination a").each(function(){
+      var page_num = parseInt($(this).html());
+      if (page_num !== NaN && page_num > page_max)
+        page_max = page_num;
+    });
+    page_base_href = $(".next_page").attr("href").replace("2","");
+    $("#gallery li").live("click", photo_click);
+    $(".pagination a").live("click", page_click);
+    $(".pagination em").replaceWith($("<a>", {"href": page_base_href + "1"}).html("1"));
+  };
+  
+  init();
+  page_load(first_page);
+})
+
+</script>
