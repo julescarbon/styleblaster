@@ -40,12 +40,15 @@ $(function () {
   var page_max = 2;
   var page_base_href = "";
   
-  var photo_click = function () {
-    photo_index = $(this).data("idx");
+  var photo_init = function () {
     $(window).unbind("keydown");
     $(window).bind("keydown", photo_keys);
     $("#prev").bind("click", photo_prev);
-    $("#next").bind("click", photo_next);    
+    $("#next").bind("click", photo_next);
+  };
+  var photo_click = function () {
+    photo_init();
+    photo_index = $(this).data("idx");    
     gallery_hide(photo_load);
   };
 
@@ -183,8 +186,25 @@ $(function () {
     $(".pagination .previous_page").replaceWith($("<a>", {"href": page_base_href + "1", "class": "previous_page disabled"}).html("&larr; Previous"));
     $(".pagination em").replaceWith($("<a>", {"href": page_base_href + "1"}).html("1"));
     $(window).bind("keydown", page_keys);
+    if (window.location.hash.length) {
+      var partz = window.location.hash.replace("#","").split("/");
+      var page = parseInt(partz[0]);
+      var photo = parseInt(partz[1]);
+      if (partz[1].length > 0) {
+        $(".pagination").hide();
+        page_index = page;
+        photo_index = photo;
+        photo_init();
+        page_load_callback = photo_load;
+        $.get(page_base_href+page_index+".json", null, page_load);
+      } else {
+        page_index = page;
+        $.get(page_base_href+page_index+".json", null, page_load);
+      }
+    } else {
+      page_load(first_page);
+    }
   };
-  
+
   init();
-  page_load(first_page);
 });
