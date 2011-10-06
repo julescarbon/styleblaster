@@ -2,6 +2,11 @@
 
 $(function () {
   var page_data = {};
+  var photos_per_page = 30;
+  var photo_index = 1;
+  var page_index = 1;
+  var page_max = 2;
+  var page_base_href = "";
 
   var page_keys = function (e) {
     var kc = e.keyCode;
@@ -33,12 +38,23 @@ $(function () {
   var update_hash = function (page, photo) {
     window.location.hash = page + "/" + photo;
   };
-  
-  var photos_per_page = 30;
-  var photo_index = 1;
-  var page_index = 1;
-  var page_max = 2;
-  var page_base_href = "";
+
+  var parse_hash = function () {
+    var partz = window.location.hash.replace("#","").split("/");
+    var page = parseInt(partz[0]);
+    var photo = parseInt(partz[1]);
+    if (partz[1].length > 0) {
+      $(".pagination").hide();
+      page_index = page;
+      photo_index = photo;
+      photo_init();
+      page_load_callback = photo_load;
+      $.get(page_base_href+page_index+".json", null, page_load);
+    } else {
+      page_index = page;
+      $.get(page_base_href+page_index+".json", null, page_load);
+    }
+  };
   
   var photo_init = function () {
     $(window).unbind("keydown");
@@ -46,6 +62,7 @@ $(function () {
     $("#prev").bind("click", photo_prev);
     $("#next").bind("click", photo_next);
   };
+  
   var photo_click = function () {
     photo_init();
     photo_index = $(this).data("idx");    
@@ -196,20 +213,7 @@ $(function () {
     $(".pagination em").replaceWith($("<a>", {"href": page_base_href + "1"}).html("1"));
     $(window).bind("keydown", page_keys);
     if (window.location.hash.length) {
-      var partz = window.location.hash.replace("#","").split("/");
-      var page = parseInt(partz[0]);
-      var photo = parseInt(partz[1]);
-      if (partz[1].length > 0) {
-        $(".pagination").hide();
-        page_index = page;
-        photo_index = photo;
-        photo_init();
-        page_load_callback = photo_load;
-        $.get(page_base_href+page_index+".json", null, page_load);
-      } else {
-        page_index = page;
-        $.get(page_base_href+page_index+".json", null, page_load);
-      }
+      parse_hash();
     } else {
       page_load(first_page);
     }
