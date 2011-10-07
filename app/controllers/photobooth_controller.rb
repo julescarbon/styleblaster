@@ -63,7 +63,8 @@ class PhotoboothController < ApplicationController
       list << {
         :id => p.id,
         :thumb => p.photo.url(:thumb),
-        :original => p.photo.url(:original)
+        :original => p.photo.url(:original),
+        :date => p.created_at
       }
     end
     
