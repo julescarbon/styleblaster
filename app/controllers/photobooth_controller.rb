@@ -68,9 +68,9 @@ class PhotoboothController < ApplicationController
       }
     end
     
-    # will_paginate is a helper function in WillPaginate::ViewHelpers
+    # will_paginate is a helper function in WillPaginate::ViewHelpers that generates pagination links
     # i can only get at it from the view so i will have to manipulate it with JS
-    # instead of passing it in with the json..
+    # instead of passing it in here with the json, which would be preferable..
     @structure = { :photos => list, :page => page }
 
     respond_to do |format|
