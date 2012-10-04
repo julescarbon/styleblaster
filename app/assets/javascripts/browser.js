@@ -206,11 +206,16 @@ $(function () {
       if (page_num !== NaN && page_num > page_max)
         page_max = page_num;
     });
-    page_base_href = $(".next_page").attr("href").replace("2","");
+
+    // this is here for the lame rails pagination
+    if ($(".next_page").length) {
+      page_base_href = $(".next_page").attr("href").replace("2","");
+      $(".pagination .previous_page").replaceWith($("<a>", {"href": page_base_href + "1", "class": "previous_page disabled"}).html("&larr; Previous"));
+      $(".pagination em").replaceWith($("<a>", {"href": page_base_href + "1"}).html("1"));
+    }
+
     $("#gallery li").live("click", photo_click);
     $(".pagination a").live("click", page_click);
-    $(".pagination .previous_page").replaceWith($("<a>", {"href": page_base_href + "1", "class": "previous_page disabled"}).html("&larr; Previous"));
-    $(".pagination em").replaceWith($("<a>", {"href": page_base_href + "1"}).html("1"));
     $(window).bind("keydown", page_keys);
     if (window.location.hash.length) {
       parse_hash();
