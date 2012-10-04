@@ -1,5 +1,8 @@
 class PhotoboothController < ApplicationController
-  http_basic_authenticate_with :name => "admin", :password => "12mercer", :except => [:index, :create, :show, :browser]
+  http_basic_authenticate_with :name => "style", :password => "style", :except => [:comingsoon, :index, :create, :show, :browser]
+
+  def comingsoon
+  end
 
   # /upload API used by processing, returns url to image
   def create
