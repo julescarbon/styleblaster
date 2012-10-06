@@ -15,7 +15,7 @@ byte[] imgBytes;
 
  String uploadURL = "http://styleblaster.herokuapp.com/upload";
 //String uploadURL = "http://localhost:3000/upload";
-int sensorThreshold = 20;
+int sensorThreshold = 15;
 float sensorRes = 1;
 float lastTestAreaBrightness, bDiff;
 Rectangle testArea = new Rectangle(50,50,5,5);
@@ -25,7 +25,7 @@ public void setup() {
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
- // fill(255,255,31);
+  fill(255,50,50);
 //  noStroke();
   cam = new Capture(this, 640, 480);
   cam.frameRate(24);
@@ -43,6 +43,8 @@ void draw() {
   stroke(255, 100, 100);
   //***DRAW DEBUG SHIT TO SCREEN***
   if(debug){
+    //date
+    text(getTimestamp(), 5,25);
     //draw test area rect
     rect(testArea.x, testArea.y, testArea.width, testArea.height);
     text(bDiff, testArea.x, testArea.y - 5);
