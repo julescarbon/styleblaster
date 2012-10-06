@@ -6,7 +6,6 @@ gem 'thin'
 
 gem 'paperclip', '>= 2.3.15'
 gem 'aws-s3', :require => 'aws/s3'
-gem 'aws-sdk'
 gem 'will_paginate', '~> 3.0'
 
 group :production do
