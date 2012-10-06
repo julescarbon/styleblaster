@@ -15,7 +15,7 @@ byte[] imgBytes;
 
 // String uploadURL = "http://styleblaster.herokuapp.com/upload";
 String uploadURL = "http://localhost:3000/upload";
-int sensorThreshold = 10;
+int sensorThreshold = 30;
 float sensorRes = 1;
 float lastTestAreaBrightness;
 Rectangle testArea = new Rectangle(50,50,5,5);
@@ -31,7 +31,6 @@ public void setup() {
   sensor = cam;
   sensor.frameRate(2);
   cam.frameRate(24);
-  numPixels = testArea.width*testArea.height;
   cameraTimer = new Timer(5000);
   cameraTimer.start();
   noFill();
@@ -122,6 +121,8 @@ float getTestAreaBrightness(){
       testAreaBrightness += brightness(cam.get(x,y));
     }
   }
+  
+    numPixels = testArea.width*testArea.height;
   testAreaBrightness /= numPixels;
   testAreaBrightness *= sensorRes;
   return testAreaBrightness;
