@@ -7,7 +7,7 @@ Capture cam;
 Capture sensor;
 Timer cameraTimer;
 int numPixels;
-boolean firstTime = true;
+boolean ignoreSensor = true;
 boolean debug = true;
 boolean uploading = false;
 ImageToWeb img;
@@ -15,7 +15,7 @@ byte[] imgBytes;
 
  String uploadURL = "http://styleblaster.herokuapp.com/upload";
 //String uploadURL = "http://localhost:3000/upload";
-int sensorThreshold = 5;
+int sensorThreshold = 20;
 float sensorRes = 1;
 float lastTestAreaBrightness, bDiff;
 Rectangle testArea = new Rectangle(50,50,5,5);
@@ -25,13 +25,13 @@ public void setup() {
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
-  fill(255,255,31);
-  noStroke();
+ // fill(255,255,31);
+//  noStroke();
   cam = new Capture(this, 640, 480);
   cam.frameRate(24);
   cameraTimer = new Timer(5000);
   cameraTimer.start();
-  noFill();
+  //noFill();
 }
 
 void draw() {
@@ -40,7 +40,7 @@ void draw() {
     image(cam, 0, 0);
   }
   
-  stroke(255,0,0);
+  stroke(255, 100, 100);
   //***DRAW DEBUG SHIT TO SCREEN***
   if(debug){
     //draw test area rect
@@ -53,7 +53,8 @@ void draw() {
  
   
   if(mousePressed) {
-    bDiff = 0;
+     bDiff = 0;
+     ignoreSensor = true;
      testArea.width = mouseX - testArea.x;
      testArea.height = mouseY - testArea.y;
      if(testArea.width < 3){
@@ -69,12 +70,12 @@ void draw() {
      if(cam.available()){
 
     boolean hit = checkHitArea();
-    if(firstTime){
-      firstTime = false;
+    if(ignoreSensor){
+      ignoreSensor = false;
     }
     else{
       if(hit){
-        println("!!!HIT!!!");
+        println("!!!HIT!!! @ : "+bDiff);
         fill(255,0,0);
         onHit();
       }
@@ -89,6 +90,7 @@ void draw() {
 void mousePressed() {
    testArea.x = mouseX;
    testArea.y = mouseY;
+   ignoreSensor = true;
 }
 
 void keyPressed() {
@@ -98,6 +100,7 @@ void keyPressed() {
   else if(key == 'c'){
    //open camera settings
    cam.settings();
+   ignoreSensor = true;
   }
   else if(key == '.'){
    //increase the threshold
@@ -168,7 +171,7 @@ void takePicture() {
   img = new ImageToWeb(this);
   
  //  img.save(String format, boolean useDate); // saves a local copy to disk
-   img.save("jpg", true);
+ //  img.save("jpg", true);
 
   img.setType(ImageToWeb.PNG);
 
