@@ -15,9 +15,9 @@ byte[] imgBytes;
 
 // String uploadURL = "http://styleblaster.herokuapp.com/upload";
 String uploadURL = "http://localhost:3000/upload";
-int sensorThreshold = 10;
+int sensorThreshold = 5;
 float sensorRes = 1;
-float lastTestAreaBrightness;
+float lastTestAreaBrightness, bDiff;
 Rectangle testArea = new Rectangle(50,50,5,5);
 
 public void setup() {
@@ -28,8 +28,6 @@ public void setup() {
   fill(255,255,31);
   noStroke();
   cam = new Capture(this, 640, 480);
-  sensor = cam;
-  sensor.frameRate(2);
   cam.frameRate(24);
   cameraTimer = new Timer(5000);
   cameraTimer.start();
@@ -43,12 +41,30 @@ void draw() {
   }
   
   stroke(255,0,0);
+  //***DRAW DEBUG SHIT TO SCREEN***
   if(debug){
     //draw test area rect
     rect(testArea.x, testArea.y, testArea.width, testArea.height);
+    text(bDiff, testArea.x, testArea.y - 10);
   }
 
-  if(cam.available()){
+ 
+  
+  if(mousePressed) {
+    bDiff = 0;
+     testArea.width = mouseX - testArea.x;
+     testArea.height = mouseY - testArea.y;
+     if(testArea.width < 3){
+       testArea.width = 3;
+     }
+      if(testArea.height < 3){
+       testArea.height = 3;
+     }
+         numPixels = testArea.width*testArea.height;
+
+  }
+  else{
+     if(cam.available()){
 
     boolean hit = checkHitArea();
     if(firstTime){
@@ -65,18 +81,6 @@ void draw() {
       }
     }
   }
-  
-  if(mousePressed) {
-     testArea.width = mouseX - testArea.x;
-     testArea.height = mouseY - testArea.y;
-     if(testArea.width < 3){
-       testArea.width = 3;
-     }
-      if(testArea.height < 3){
-       testArea.height = 3;
-     }
-         numPixels = testArea.width*testArea.height;
-
   }
 }
 
@@ -89,6 +93,10 @@ void keyPressed() {
   if(key == ' '){
     debug = !debug;
   } 
+  else if(key == 'c'){
+   //open camera settings
+   cam.settings();
+  }
 }
 
 void onHit(){
@@ -101,9 +109,9 @@ void onHit(){
 boolean checkHitArea() {
   float testAreaBrightness = getTestAreaBrightness();
   //find teh absolute diff of the current brightness and the last brightness
-  float bDiff = abs(testAreaBrightness -  lastTestAreaBrightness);
-  println("bDiff = " +bDiff);
-  println("sensorThreshold = " +sensorThreshold);
+  bDiff = abs(testAreaBrightness -  lastTestAreaBrightness);
+ // println("bDiff = " +bDiff);
+ // println("sensorThreshold = " +sensorThreshold);
        
   lastTestAreaBrightness = testAreaBrightness;
 
