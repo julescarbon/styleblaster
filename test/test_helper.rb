@@ -10,4 +10,9 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  puts "THIS IS ONLY A TEST!!"
+
 end
+
+
