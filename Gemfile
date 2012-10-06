@@ -4,6 +4,9 @@ gem 'rails', '3.1.0'
 
 gem 'thin'
 
+# cocaine 0.4.0 breaks paperclip
+gem 'cocaine', '0.3.2'
+
 gem 'paperclip'
 gem 'aws-sdk', '~> 1.3.4'
 gem 'will_paginate', '~> 3.0'
