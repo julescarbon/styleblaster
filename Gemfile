@@ -4,8 +4,7 @@ gem 'rails', '3.1.0'
 
 gem 'thin'
 
-gem 'paperclip', '>= 2.3.15'
-#gem 'aws-s3', :require => 'aws/s3'
+gem 'paperclip'
 gem 'aws-sdk', '~> 1.3.4'
 gem 'will_paginate', '~> 3.0'
 
