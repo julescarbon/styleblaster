@@ -1,7 +1,7 @@
 class Photo < ActiveRecord::Base
   # paperclip
   has_attached_file :photo,
-    :styles => { :original => "640x480>", :thumb => "150x100>" },
+    :styles => { :original => "800x600>", :thumb => "150x100>" },
     :default_style => :original,
     :storage => :s3,
     :bucket => 'styleblaster',
