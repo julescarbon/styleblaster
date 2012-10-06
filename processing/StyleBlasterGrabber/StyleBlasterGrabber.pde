@@ -13,8 +13,8 @@ boolean uploading = false;
 ImageToWeb img;
 byte[] imgBytes;
 
-// String uploadURL = "http://styleblaster.herokuapp.com/upload";
-String uploadURL = "http://localhost:3000/upload";
+ String uploadURL = "http://styleblaster.herokuapp.com/upload";
+//String uploadURL = "http://localhost:3000/upload";
 int sensorThreshold = 5;
 float sensorRes = 1;
 float lastTestAreaBrightness, bDiff;
@@ -45,7 +45,9 @@ void draw() {
   if(debug){
     //draw test area rect
     rect(testArea.x, testArea.y, testArea.width, testArea.height);
-    text(bDiff, testArea.x, testArea.y - 10);
+    text(bDiff, testArea.x, testArea.y - 5);
+    text("threshold: "+sensorThreshold, 5, height-5);
+
   }
 
  
@@ -96,6 +98,14 @@ void keyPressed() {
   else if(key == 'c'){
    //open camera settings
    cam.settings();
+  }
+  else if(key == '.'){
+   //increase the threshold
+   sensorThreshold += 1;
+  }
+  else if(key == ','){
+   //increase the threshold
+   sensorThreshold -= 1;
   }
 }
 
