@@ -7,6 +7,9 @@ Capture cam;
 Capture sensor;
 Timer cameraTimer, sensorTimer;
 int numPixels;
+int sensorBuffer = 200;
+int sensorBufferY = 100;
+
 boolean ignoreSensor = true;
 boolean debug = true;
 boolean uploading = false;
@@ -70,7 +73,7 @@ void draw() {
     leftSensor._r.height = sensorHeight;
     rightSensor._r.height = sensorHeight;
     
-     rightSensor._r.x = leftSensor._r.x+sensorWidth;
+     rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
     // rightSensor._r.y = mouseY;
     
     if (leftSensor._r.width < 3) {
@@ -91,12 +94,13 @@ void draw() {
       boolean leftHit = false;
       boolean rightHit = false;
 
+      //MONOTR THE LEFT SENSOR
       if(!checkRight){
         //monitor the left sensor
          leftHit = leftSensor.checkHitArea(cam);
          if(leftHit){
            checkRight = true;
-           leftSensor._bDiff = 0;
+          // leftSensor._bDiff = 0;
            //start the timer
            sensorTimer.start();
          }
@@ -107,9 +111,10 @@ void draw() {
          if(sensorTimer.isFinished()){
             //STOP monitoring the right sensor
             checkRight = false;
-            rightSensor._bDiff = 0;
+           // rightSensor._bDiff = 0;
 
          }else{
+            rightHit = false;
             rightHit = rightSensor.checkHitArea(cam);
          }
       }
@@ -135,6 +140,8 @@ void mousePressed() {
   leftSensor._r.y = mouseY;
  // rightSensor._r.x = mouseX+rightSensor._r.width;
   rightSensor._r.y = mouseY;
+  rightSensor._r.y = mouseY+sensorBufferY;
+
   ignoreSensor = true;
 }
 
