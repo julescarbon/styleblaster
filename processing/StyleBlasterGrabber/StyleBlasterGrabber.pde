@@ -13,27 +13,28 @@ boolean uploading = false;
 ImageToWeb img;
 byte[] imgBytes;
 
- String uploadURL = "http://styleblaster.herokuapp.com/upload";
+String uploadURL = "http://styleblaster.herokuapp.com/upload";
 //String uploadURL = "http://localhost:3000/upload";
 int sensorThreshold = 15;
 float sensorRes = 1;
-float lastTestAreaBrightness, bDiff;
-Rectangle testArea = new Rectangle(50,50,5,5);
+
+//
+MotionSensor leftSensor, rightSensor;
 
 public void setup() {
-//  size(640, 480);
   size(800, 600);
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
-  fill(255,50,50);
-//  noStroke();
-//  cam = new Capture(this, 640, 480);
+  fill(255, 50, 50);
   cam = new Capture(this, 800, 600);
   cam.frameRate(24);
   cameraTimer = new Timer(5000);
   cameraTimer.start();
-  //noFill();
+
+  //initialize the hit areas
+  leftSensor = new MotionSensor();
+   rightSensor = new MotionSensor();
 }
 
 void draw() {
@@ -41,117 +42,106 @@ void draw() {
     cam.read();
     image(cam, 0, 0);
   }
-  
+
   stroke(255, 100, 100);
   //***DRAW DEBUG SHIT TO SCREEN***
-  if(debug){
+  if (debug) {
     //date
-    text(getTimestamp(), 5,25);
-    //draw test area rect
-    rect(testArea.x, testArea.y, testArea.width, testArea.height);
-    text(bDiff, testArea.x, testArea.y - 5);
+    text(getTimestamp(), 5, 25);
+    
+    leftSensor.draw();
+    rightSensor.draw();
+
     text("threshold: "+sensorThreshold, 5, height-5);
-
   }
 
- 
-  
-  if(mousePressed) {
-     bDiff = 0;
-     ignoreSensor = true;
-     testArea.width = mouseX - testArea.x;
-     testArea.height = mouseY - testArea.y;
-     if(testArea.width < 3){
-       testArea.width = 3;
-     }
-      if(testArea.height < 3){
-       testArea.height = 3;
-     }
-         numPixels = testArea.width*testArea.height;
+  if (mousePressed) {
+    leftSensor._bDiff = 0;
+    rightSensor._bDiff = 0;
 
-  }
-  else{
-     if(cam.available()){
-
-    boolean hit = checkHitArea();
-    if(ignoreSensor){
-      ignoreSensor = false;
+    ignoreSensor = true;
+    int sensorWidth = round((mouseX - leftSensor._r.x)/2);
+    int sensorHeight =  mouseY - leftSensor._r.y;
+    leftSensor._r.width = sensorWidth;
+    rightSensor._r.width = sensorWidth;
+    leftSensor._r.height = sensorHeight;
+    rightSensor._r.height = sensorHeight;
+    
+     rightSensor._r.x = leftSensor._r.x+sensorWidth;
+    // rightSensor._r.y = mouseY;
+    
+    if (leftSensor._r.width < 3) {
+      leftSensor.setWidth(3);
+      rightSensor.setWidth(3);
     }
-    else{
-      if(hit){
-        println("!!!HIT!!! @ : "+bDiff);
-        fill(255,0,0);
-        onHit();
+    
+    if (leftSensor._r.height < 3) {
+      leftSensor.setWidth(3);
+      rightSensor.setWidth(3);
+    }
+    
+    leftSensor.update();
+    rightSensor.update();
+  }
+  else {
+    if (cam.available()) {
+      boolean hit = leftSensor.checkHitArea(cam);
+      if (ignoreSensor) {
+        ignoreSensor = false;
       }
-      else{
-        noFill();
+      else {
+        if (hit) {
+          println("!!!HIT LEFT!!! @ : "+leftSensor._bDiff);
+          fill(255, 0, 0);
+          onHit();
+        }
+        else {
+          noFill();
+        }
       }
     }
-  }
   }
 }
 
 void mousePressed() {
-   testArea.x = mouseX;
-   testArea.y = mouseY;
-   ignoreSensor = true;
+  leftSensor._r.x = mouseX;
+  leftSensor._r.y = mouseY;
+ // rightSensor._r.x = mouseX+rightSensor._r.width;
+  rightSensor._r.y = mouseY;
+  ignoreSensor = true;
 }
 
 void keyPressed() {
-  if(key == ' '){
+  if (key == ' ') {
     debug = !debug;
   } 
-  else if(key == 'c'){
-   //open camera settings
-   cam.settings();
-   ignoreSensor = true;
+  else if (key == 'c') {
+    //open camera settings
+    cam.settings();
+    ignoreSensor = true;
   }
-  else if(key == '.'){
-   //increase the threshold
-   sensorThreshold += 1;
+  else if (key == '.') {
+    //increase the threshold
+    sensorThreshold += 1;
+    leftSensor._thresh = sensorThreshold;
+        rightSensor._thresh = sensorThreshold;
+
   }
-  else if(key == ','){
-   //increase the threshold
-   sensorThreshold -= 1;
+  else if (key == ',') {
+    //increase the threshold
+    sensorThreshold -= 1;
+
+    leftSensor._thresh = sensorThreshold;
+        rightSensor._thresh = sensorThreshold;
+
   }
 }
 
-void onHit(){
+void onHit() {
   if (cameraTimer.isFinished()) {
     takePicture();
     cameraTimer.start();
   }
-}
-
-boolean checkHitArea() {
-  float testAreaBrightness = getTestAreaBrightness();
-  //find teh absolute diff of the current brightness and the last brightness
-  bDiff = abs(testAreaBrightness -  lastTestAreaBrightness);
- // println("bDiff = " +bDiff);
- // println("sensorThreshold = " +sensorThreshold);
-       
-  lastTestAreaBrightness = testAreaBrightness;
-
-  if (bDiff > sensorThreshold) {
-    return true;
-  }
-  return false;
-}
-
-//returns the average brightness of the test area defined by the test area rectangle
-float getTestAreaBrightness(){
-  cam.loadPixels(); 
-  float testAreaBrightness = 0;
-   // For each pixel in the video frame...
-  for (int x = testArea.x; x < testArea.x+testArea.width; x+=sensorRes) {
-    for(int y = testArea.y; y < testArea.y+testArea.height; y+=sensorRes){
-      testAreaBrightness += brightness(cam.get(x,y));
-    }
-  }
-  
-  testAreaBrightness /= numPixels;
-  testAreaBrightness *= sensorRes;
-  return testAreaBrightness;
 }
 
 String getTimestamp() {
@@ -173,10 +163,6 @@ String getTimestamp() {
 void takePicture() {
   // "this" references the processing PApplet itself and is mandatory here
   img = new ImageToWeb(this);
-  
- //  img.save(String format, boolean useDate); // saves a local copy to disk
- //  img.save("jpg", true);
-
   img.setType(ImageToWeb.PNG);
 
   // load the raw bytes from the thing
@@ -191,4 +177,3 @@ void uploadPicture() {
   img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
   cameraTimer.start();
 }
-
