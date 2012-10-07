@@ -21,13 +21,15 @@ float lastTestAreaBrightness, bDiff;
 Rectangle testArea = new Rectangle(50,50,5,5);
 
 public void setup() {
-  size(640, 480);
+//  size(640, 480);
+  size(800, 600);
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
   fill(255,50,50);
 //  noStroke();
-  cam = new Capture(this, 640, 480);
+//  cam = new Capture(this, 640, 480);
+  cam = new Capture(this, 800, 600);
   cam.frameRate(24);
   cameraTimer = new Timer(5000);
   cameraTimer.start();
@@ -186,7 +188,7 @@ void takePicture() {
 
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
-  img.post("test", uploadURL, getTimestamp(), false, imgBytes);
+  img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
   cameraTimer.start();
 }
 
