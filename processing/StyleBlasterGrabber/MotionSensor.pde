@@ -10,11 +10,12 @@ class MotionSensor {
   int _numPixels;
   Capture _cam;
 
-  MotionSensor() {
+  MotionSensor(Capture cam) {
+    _cam = cam;
   }
 
-  boolean checkHitArea(Capture cam) {
-    _cam = cam;
+  boolean checkHitArea() {
+  //  _cam = cam;
     float testAreaBrightness = getTestAreaBrightness();
     //find teh absolute diff of the current brightness and the last brightness
     //println("testAreaBrightness: "+testAreaBrightness);
@@ -59,10 +60,18 @@ class MotionSensor {
     _numPixels = _r.width*_r.height;
   }
 
+ void reset(){
+     float testAreaBrightness = getTestAreaBrightness();
+    _bDiff = abs(testAreaBrightness -  _lastTestAreaBrightness);
+    _lastTestAreaBrightness = testAreaBrightness;
+  }
+
   //GETTERS AND SETTERS
   void setWidth(int n) {
     _r.width = n;
   }
+  
+ 
 
   void setHeight(int n) {
     _r.height = n;

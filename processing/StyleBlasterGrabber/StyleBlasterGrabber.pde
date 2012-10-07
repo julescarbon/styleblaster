@@ -39,8 +39,8 @@ public void setup() {
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
-  leftSensor = new MotionSensor();
-   rightSensor = new MotionSensor();
+  leftSensor = new MotionSensor(cam);
+   rightSensor = new MotionSensor(cam);
 }
 
 void draw() {
@@ -97,9 +97,10 @@ void draw() {
       //MONOTR THE LEFT SENSOR
       if(!checkRight){
         //monitor the left sensor
-         leftHit = leftSensor.checkHitArea(cam);
+         leftHit = leftSensor.checkHitArea();
          if(leftHit){
            checkRight = true;
+           rightSensor.reset();
           // leftSensor._bDiff = 0;
            //start the timer
            sensorTimer.start();
@@ -115,7 +116,7 @@ void draw() {
 
          }else{
             rightHit = false;
-            rightHit = rightSensor.checkHitArea(cam);
+            rightHit = rightSensor.checkHitArea();
          }
       }
       if (ignoreSensor) {
@@ -123,6 +124,7 @@ void draw() {
       }
       else {
         if (rightHit) {
+          leftSensor.reset();
           println("!!!HIT!!! @ : "+rightSensor._bDiff);
           fill(255, 0, 0);
           onHit();
