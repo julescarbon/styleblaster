@@ -5,11 +5,12 @@ import java.awt.Rectangle;
 
 Capture cam;
 Capture sensor;
-Timer cameraTimer;
+Timer cameraTimer, sensorTimer;
 int numPixels;
 boolean ignoreSensor = true;
 boolean debug = true;
 boolean uploading = false;
+boolean checkRight = false;
 ImageToWeb img;
 byte[] imgBytes;
 
@@ -31,6 +32,8 @@ public void setup() {
   cam.frameRate(24);
   cameraTimer = new Timer(5000);
   cameraTimer.start();
+  
+  sensorTimer = new Timer(1000);
 
   //initialize the hit areas
   leftSensor = new MotionSensor();
@@ -85,13 +88,37 @@ void draw() {
   }
   else {
     if (cam.available()) {
-      boolean hit = leftSensor.checkHitArea(cam);
+      boolean leftHit = false;
+      boolean rightHit = false;
+
+      if(!checkRight){
+        //monitor the left sensor
+         leftHit = leftSensor.checkHitArea(cam);
+         if(leftHit){
+           checkRight = true;
+           leftSensor._bDiff = 0;
+           //start the timer
+           sensorTimer.start();
+         }
+       
+      }
+      else{
+         //monitor the RIGHT sensor
+         if(sensorTimer.isFinished()){
+            //STOP monitoring the right sensor
+            checkRight = false;
+            rightSensor._bDiff = 0;
+
+         }else{
+            rightHit = rightSensor.checkHitArea(cam);
+         }
+      }
       if (ignoreSensor) {
         ignoreSensor = false;
       }
       else {
-        if (hit) {
-          println("!!!HIT LEFT!!! @ : "+leftSensor._bDiff);
+        if (rightHit) {
+          println("!!!HIT!!! @ : "+rightSensor._bDiff);
           fill(255, 0, 0);
           onHit();
         }
@@ -138,6 +165,7 @@ void keyPressed() {
 }
 
 void onHit() {
+  //IS THE CAMERA TIMER NEEDED HERE?
   if (cameraTimer.isFinished()) {
     takePicture();
     cameraTimer.start();
