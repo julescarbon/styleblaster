@@ -3,13 +3,13 @@ import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
 
+
+
 Capture cam;
 Capture sensor;
 Timer cameraTimer, sensorTimer;
 int numPixels;
-int sensorBuffer = 200;
-int sensorBufferY = 100;
-
+boolean blast; //turns photo-taking on or off
 boolean ignoreSensor = true;
 boolean debug = true;
 boolean uploading = false;
@@ -17,40 +17,51 @@ boolean checkRight = false;
 ImageToWeb img;
 byte[] imgBytes;
 
+MotionSensor leftSensor, rightSensor;
+
+//SETUP VARS
+int startHour = 7; //7am
+int endHour = 18;  //6pm
+int sensorBuffer = 200;
+int sensorBufferY = 100;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
-//String uploadURL = "http://localhost:3000/upload";
+int camWidth;
+int camHeight = 1000;
 int sensorThreshold = 15;
 float sensorRes = 1;
 
-int camWidth;
-int camHeight = 1000;
-
-
-//
-MotionSensor leftSensor, rightSensor;
-
 public void setup() {
   camWidth = (16*camHeight)/9; //get correct aspect ratio for width
- //camHeight = 2;
-  
+  //camHeight = 2;
+
   size(666, 1000);
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
   fill(255, 50, 50);
+  noFill();
   cam = new Capture(this, camWidth, camHeight);
   cam.frameRate(10);
   cameraTimer = new Timer(5000);
- // cameraTimer.start();
-  
+  // cameraTimer.start();
+
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
   leftSensor = new MotionSensor(cam);
-   rightSensor = new MotionSensor(cam);
+  rightSensor = new MotionSensor(cam);
 }
 
 void draw() {
+  blast = false;
+  if (hour()>startHour) {
+    if (hour()<endHour) {
+      if (cam.available()) {
+        blast = true;
+      }
+    }
+  }
+
   if (! uploading) {
     cam.read();
     image(cam, 0, 0);
@@ -61,7 +72,7 @@ void draw() {
   if (debug) {
     //date
     text(getTimestamp(), 5, 25);
-    
+
     leftSensor.draw();
     rightSensor.draw();
 
@@ -79,52 +90,52 @@ void draw() {
     rightSensor._r.width = sensorWidth;
     leftSensor._r.height = sensorHeight;
     rightSensor._r.height = sensorHeight;
-    
-     rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
+
+    rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
     // rightSensor._r.y = mouseY;
-    
+
     if (leftSensor._r.width < 3) {
       leftSensor.setWidth(3);
       rightSensor.setWidth(3);
     }
-    
+
     if (leftSensor._r.height < 3) {
       leftSensor.setWidth(3);
       rightSensor.setWidth(3);
     }
-    
+
     leftSensor.update();
     rightSensor.update();
   }
   else {
-    if (cam.available()) {
+    if (blast) {
+
       boolean leftHit = false;
       boolean rightHit = false;
 
       //MONOTR THE LEFT SENSOR
-      if(!checkRight){
+      if (!checkRight) {
         //monitor the left sensor
-         leftHit = leftSensor.checkHitArea();
-         if(leftHit){
-           checkRight = true;
-           rightSensor.reset();
+        leftHit = leftSensor.checkHitArea();
+        if (leftHit) {
+          checkRight = true;
+          rightSensor.reset();
           // leftSensor._bDiff = 0;
-           //start the timer
-           sensorTimer.start();
-         }
-       
+          //start the timer
+          sensorTimer.start();
+        }
       }
-      else{
-         //monitor the RIGHT sensor
-         if(sensorTimer.isFinished()){
-            //STOP monitoring the right sensor
-            checkRight = false;
-           // rightSensor._bDiff = 0;
-
-         }else{
-            rightHit = false;
-            rightHit = rightSensor.checkHitArea();
-         }
+      else {
+        //monitor the RIGHT sensor
+        if (sensorTimer.isFinished()) {
+          //STOP monitoring the right sensor
+          checkRight = false;
+          // rightSensor._bDiff = 0;
+        }
+        else {
+          rightHit = false;
+          rightHit = rightSensor.checkHitArea();
+        }
       }
       if (ignoreSensor) {
         ignoreSensor = false;
@@ -147,7 +158,7 @@ void draw() {
 void mousePressed() {
   leftSensor._r.x = mouseX;
   leftSensor._r.y = mouseY;
- // rightSensor._r.x = mouseX+rightSensor._r.width;
+  // rightSensor._r.x = mouseX+rightSensor._r.width;
   rightSensor._r.y = mouseY;
   rightSensor._r.y = mouseY+sensorBufferY;
 
@@ -167,25 +178,23 @@ void keyPressed() {
     //increase the threshold
     sensorThreshold += 1;
     leftSensor._thresh = sensorThreshold;
-        rightSensor._thresh = sensorThreshold;
-
+    rightSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
     leftSensor._thresh = sensorThreshold;
-        rightSensor._thresh = sensorThreshold;
-
+    rightSensor._thresh = sensorThreshold;
   }
 }
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
- // if (cameraTimer.isFinished()) {
-    takePicture();
-   // cameraTimer.start();
- // }
+  // if (cameraTimer.isFinished()) {
+  takePicture();
+  // cameraTimer.start();
+  // }
 }
 
 String getTimestamp() {
@@ -221,3 +230,4 @@ void uploadPicture() {
   img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
   //cameraTimer.start();
 }
+
