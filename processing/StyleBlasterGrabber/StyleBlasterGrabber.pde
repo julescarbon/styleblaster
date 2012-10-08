@@ -22,19 +22,26 @@ String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int sensorThreshold = 15;
 float sensorRes = 1;
 
+int camWidth;
+int camHeight = 1000;
+
+
 //
 MotionSensor leftSensor, rightSensor;
 
 public void setup() {
-  size(800, 600);
+  camWidth = (16*camHeight)/9; //get correct aspect ratio for width
+ //camHeight = 2;
+  
+  size(666, 1000);
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
   fill(255, 50, 50);
-  cam = new Capture(this, 800, 600);
-  cam.frameRate(24);
+  cam = new Capture(this, camWidth, camHeight);
+  cam.frameRate(10);
   cameraTimer = new Timer(5000);
-  cameraTimer.start();
+ // cameraTimer.start();
   
   sensorTimer = new Timer(1000);
 
@@ -175,10 +182,10 @@ void keyPressed() {
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
-  if (cameraTimer.isFinished()) {
+ // if (cameraTimer.isFinished()) {
     takePicture();
-    cameraTimer.start();
-  }
+   // cameraTimer.start();
+ // }
 }
 
 String getTimestamp() {
@@ -212,5 +219,5 @@ void takePicture() {
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
   img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
-  cameraTimer.start();
+  //cameraTimer.start();
 }
