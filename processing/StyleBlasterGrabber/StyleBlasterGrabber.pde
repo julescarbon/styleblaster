@@ -22,19 +22,19 @@ MotionSensor leftSensor, rightSensor;
 //SETUP VARS
 int startHour = 7; //7am
 int endHour = 18;  //6pm
-int sensorBuffer = 200;
+int sensorBuffer = 150;
 int sensorBufferY = 100;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
-int camHeight = 1000;
+int camHeight = 720;
 int sensorThreshold = 15;
 float sensorRes = 1;
 
 public void setup() {
-  camWidth = (16*camHeight)/9; //get correct aspect ratio for width
+  int camWidth = (16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
-
-  size(666, 1000);
+  int sketchHeight = (camHeight*333)/500;
+  size(sketchHeight, camHeight);
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
