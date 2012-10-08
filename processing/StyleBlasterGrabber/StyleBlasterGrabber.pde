@@ -31,7 +31,7 @@ int sensorThreshold = 15;
 float sensorRes = 1;
 
 public void setup() {
-  int camWidth = (16*camHeight)/9; //get correct aspect ratio for width
+  int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
   int sketchHeight = (camHeight*333)/500;
   size(sketchHeight, camHeight);
@@ -54,7 +54,7 @@ public void setup() {
 
 void draw() {
   blast = false;
-  if (hour()>startHour) {
+  if (hour()>=startHour) {
     if (hour()<endHour) {
       if (cam.available()) {
         blast = true;
