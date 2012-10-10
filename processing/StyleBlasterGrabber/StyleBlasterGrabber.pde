@@ -21,7 +21,7 @@ MotionSensor leftSensor, rightSensor;
 //SETUP VARS
 int startHour = 7; //7am
 int endHour = 18;  //6pm
-int sensorBuffer = -355;
+int sensorBuffer = -455;
 int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
