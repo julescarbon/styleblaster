@@ -3,8 +3,6 @@ import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
 
-
-
 Capture cam;
 Capture sensor;
 Timer cameraTimer, sensorTimer;
@@ -43,8 +41,13 @@ public void setup() {
   println(devices);
   fill(255, 50, 50);
   noFill();
-  cam = new Capture(this, 1280, 720);
-  cam.frameRate(20);
+  String[] cameras = Capture.list();
+  cam = new Capture(this, 1280, 720, "Logitech Camera");
+//cam = new Capture(this, cameras[0]);
+
+
+  cam.start();
+  //cam.frameRate(20);
   cameraTimer = new Timer(5000);
   // cameraTimer.start();
 
@@ -223,7 +226,7 @@ void keyPressed() {
   } 
   else if (key == 'c') {
     //open camera settings
-    cam.settings();
+ //   cam.settings();
     ignoreSensor = true;
   }
   else if (key == '.') {
