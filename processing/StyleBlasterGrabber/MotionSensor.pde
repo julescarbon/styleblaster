@@ -8,10 +8,11 @@ class MotionSensor {
   float _sensorRes = 1;
   float _lastTestAreaBrightness, _bDiff;
   int _numPixels;
-  Capture _cam;
+  PImage _image;
+ // Capture _cam;
 
-  MotionSensor(Capture cam) {
-    _cam = cam;
+  MotionSensor() {
+    
   }
 
   boolean checkHitArea() {
@@ -32,14 +33,14 @@ class MotionSensor {
 
   //returns the average brightness of the test area defined by the test area rectangle
   float getTestAreaBrightness() {
-    _cam.loadPixels(); 
+    _image.loadPixels(); 
     float testAreaBrightness = 0;
 
     // For each pixel in the test area
     for (int x = _r.x; x < _r.x+_r.width; x+=_sensorRes) {
       for (int y = _r.y; y < _r.y+_r.height; y+=_sensorRes) {
         // println("_cam.get(x, y): "+ _cam.get(x, y));
-        testAreaBrightness += brightness(_cam.get(x, y));
+        testAreaBrightness += brightness(_image.get(x, y));
         //  println("brightness(_cam.get(x, y): "+ brightness(_cam.get(x, y)));
       }
     }

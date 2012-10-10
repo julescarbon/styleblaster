@@ -16,14 +16,15 @@ boolean uploading = false;
 boolean checkRight = false;
 ImageToWeb img;
 byte[] imgBytes;
+PImage grabImage;
 
 MotionSensor leftSensor, rightSensor;
 
 //SETUP VARS
 int startHour = 7; //7am
 int endHour = 18;  //6pm
-int sensorBuffer = -150;
-int sensorBufferY = 100;
+int sensorBuffer = -175;
+int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
 int camHeight = 720;
@@ -33,23 +34,25 @@ float sensorRes = 1;
 public void setup() {
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
-  int sketchHeight = (camHeight*333)/500;
-  size(sketchHeight, camHeight);
+ // int sketchHeight = (camHeight*333)/500;
+  size(333, 500);
+ //   size(1280, 720);
+
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
   println(devices);
   fill(255, 50, 50);
   noFill();
-  cam = new Capture(this, camWidth, camHeight);
-  cam.frameRate(10);
+  cam = new Capture(this, 1280, 720);
+  cam.frameRate(20);
   cameraTimer = new Timer(5000);
   // cameraTimer.start();
 
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
-  leftSensor = new MotionSensor(cam);
-  rightSensor = new MotionSensor(cam);
+  leftSensor = new MotionSensor();
+  rightSensor = new MotionSensor();
 }
 
 void draw() {
@@ -64,7 +67,9 @@ void draw() {
 
   if (! uploading) {
     cam.read();
-    image(cam, 0, 0);
+ //   image(cam, 0, 0);
+    image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
+    grabImage = cam.get(cam.width/2-width/2,cam.height/2-height/2,width,height);
   }
 
   stroke(255, 100, 100);
@@ -94,7 +99,7 @@ void draw() {
     rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
     // rightSensor._r.y = mouseY;
 
-    if (leftSensor._r.width < 3) {
+ /*   if (leftSensor._r.width < 3) {
       leftSensor.setWidth(3);
       rightSensor.setWidth(3);
     }
@@ -102,7 +107,7 @@ void draw() {
     if (leftSensor._r.height < 3) {
       leftSensor.setWidth(3);
       rightSensor.setWidth(3);
-    }
+    }*/
 
     leftSensor.update();
     rightSensor.update();
@@ -112,6 +117,9 @@ void draw() {
 
       boolean leftHit = false;
       boolean rightHit = false;
+      //update the reference image on the sensors
+      rightSensor._image = grabImage;
+      leftSensor._image = grabImage;
 
       //MONOTR THE LEFT SENSOR
       if (!checkRight) {
@@ -165,29 +173,7 @@ void mousePressed() {
   ignoreSensor = true;
 }
 
-void keyPressed() {
-  if (key == ' ') {
-    debug = !debug;
-  } 
-  else if (key == 'c') {
-    //open camera settings
-    cam.settings();
-    ignoreSensor = true;
-  }
-  else if (key == '.') {
-    //increase the threshold
-    sensorThreshold += 1;
-    leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
-  }
-  else if (key == ',') {
-    //increase the threshold
-    sensorThreshold -= 1;
 
-    leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
-  }
-}
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
@@ -231,3 +217,26 @@ void uploadPicture() {
   //cameraTimer.start();
 }
 
+void keyPressed() {
+  if (key == ' ') {
+    debug = !debug;
+  } 
+  else if (key == 'c') {
+    //open camera settings
+    cam.settings();
+    ignoreSensor = true;
+  }
+  else if (key == '.') {
+    //increase the threshold
+    sensorThreshold += 1;
+    leftSensor._thresh = sensorThreshold;
+    rightSensor._thresh = sensorThreshold;
+  }
+  else if (key == ',') {
+    //increase the threshold
+    sensorThreshold -= 1;
+
+    leftSensor._thresh = sensorThreshold;
+    rightSensor._thresh = sensorThreshold;
+  }
+}
