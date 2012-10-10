@@ -21,7 +21,7 @@ MotionSensor leftSensor, rightSensor;
 //SETUP VARS
 int startHour = 7; //7am
 int endHour = 18;  //6pm
-int sensorBuffer = -200;
+int sensorBuffer = -355;
 int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
@@ -33,7 +33,7 @@ public void setup() {
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
  // int sketchHeight = (camHeight*333)/500;
-  size(333, 500);
+  size(666, 1000);
  //   size(1280, 720);
 
   String[] devices = Capture.list();
@@ -42,7 +42,7 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  cam = new Capture(this, 1280, 720, "Logitech Camera");
+  cam = new Capture(this, 2592, 1944, "Logitech Camera");
 //cam = new Capture(this, cameras[0]);
 
 
