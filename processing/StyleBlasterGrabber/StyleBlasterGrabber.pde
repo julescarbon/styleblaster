@@ -81,19 +81,19 @@ void draw() {
   if (! uploading) {
     cam.read();
     //   image(cam, 0, 0);
-  // image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
+    // image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
     grabImage = cam.get(cam.width/2-width/2, cam.height/2-height/2, width, height);
-        image(grabImage, 0,0);
+    image(grabImage, 0, 0);
 
-     of.updateImage(grabImage);
-      of.draw();
+    of.updateImage(grabImage);
+    of.draw();
   }
 
   stroke(255, 100, 100);
   //***DRAW DEBUG SHIT TO SCREEN***
 
   if (debug) {
-           rectMode(CORNER);
+    rectMode(CORNER);
     noFill();
     //date
     text(getTimestamp(), 5, 15);
@@ -105,42 +105,41 @@ void draw() {
   }
 
   if (mousePressed) {
-      rectMode(CORNER);
+    rectMode(CORNER);
 
     leftSensor._bDiff = 0;
-    rightSensor._bDiff = 0;
+    // rightSensor._bDiff = 0;
 
     ignoreSensor = true;
     int sensorWidth = round((mouseX - leftSensor._r.x)/2);
     int sensorHeight =  mouseY - leftSensor._r.y;
     leftSensor._r.width = sensorWidth;
-    rightSensor._r.width = sensorWidth;
+    //rightSensor._r.width = sensorWidth;
     leftSensor._r.height = sensorHeight;
-    rightSensor._r.height = sensorHeight;
+    //rightSensor._r.height = sensorHeight;
 
-    rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
+    // rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
 
 
     leftSensor.update();
-    rightSensor.update();
+    //rightSensor.update();
   }
   else {
     if (blast) {
 
       //BLAST OFF!
-     
 
-      boolean leftHit = false;
-      boolean rightHit = false;
+      boolean hit = false;
+      boolean grab = false;
       //update the reference image on the sensors
-      rightSensor._image = grabImage;
+      //   rightSensor._image = grabImage;
       leftSensor._image = grabImage;
 
-      leftHit = leftSensor.checkHitArea();     
-      if (leftHit) {
+      hit = leftSensor.checkHitArea();     
+      if (hit) {
         if (of.xFlowSum < 0) {
-         // onHit();
-         rightHit = true;
+          // onHit();
+          grab = true;
         }
       }
 
@@ -174,7 +173,7 @@ void draw() {
         ignoreSensor = false;
       }
       else {
-        if (rightHit) {
+        if (grab) {
           leftSensor.reset();
           println("!!!HIT!!! @ : "+rightSensor._bDiff);
           fill(255, 0, 0);
@@ -192,9 +191,8 @@ void mousePressed() {
   leftSensor._r.x = mouseX;
   leftSensor._r.y = mouseY;
   // rightSensor._r.x = mouseX+rightSensor._r.width;
-  rightSensor._r.y = mouseY;
-  rightSensor._r.y = mouseY+sensorBufferY;
-
+  // rightSensor._r.y = mouseY;
+  // rightSensor._r.y = mouseY+sensorBufferY;
   ignoreSensor = true;
 }
 
@@ -202,10 +200,10 @@ void mousePressed() {
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
-   if (cameraTimer.isFinished()) {
-  takePicture();
-   cameraTimer.start();
-   }
+  if (cameraTimer.isFinished()) {
+    takePicture();
+    cameraTimer.start();
+  }
 }
 
 String getTimestamp() {
