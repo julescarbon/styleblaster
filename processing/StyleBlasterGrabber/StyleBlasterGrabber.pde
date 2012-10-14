@@ -3,6 +3,7 @@ import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
 
+OpticalFlow of;
 Capture cam;
 Capture sensor;
 Timer cameraTimer, sensorTimer;
@@ -19,9 +20,10 @@ PImage grabImage;
 MotionSensor leftSensor, rightSensor;
 
 //SETUP VARS
+String version = "1.5";
 int startHour = 7; //7am
 int endHour = 18;  //6pm
-int sensorBuffer = -355;
+int sensorBuffer = -200;
 int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
@@ -32,9 +34,9 @@ float sensorRes = 1;
 public void setup() {
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
- // int sketchHeight = (camHeight*333)/500;
-  size(666, 1000);
- //   size(1280, 720);
+  // int sketchHeight = (camHeight*333)/500;
+  size(333, 500);
+  //   size(1280, 720);
 
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
@@ -42,23 +44,31 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  cam = new Capture(this, 2592, 1944, "Logitech Camera");
-//cam = new Capture(this, cameras[0]);
+  if (version == "2.0") {
+    cam = new Capture(this, 1280, 960, "Logitech Camera");
+  }
+  else {
+    //   cam = new Capture(this, 2592,1944);
+    cam = new Capture(this, 1280, 960);
+  }
 
-
-  cam.start();
-  //cam.frameRate(20);
-  cameraTimer = new Timer(5000);
-  // cameraTimer.start();
+  if (version == "2.0") {
+    //   cam.start();
+  }
+  cam.frameRate(20);
+  cameraTimer = new Timer(2000);
 
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
   leftSensor = new MotionSensor();
   rightSensor = new MotionSensor();
+
+  of = new OpticalFlow(cam);
 }
 
 void draw() {
+  background(0);
   blast = false;
   if (hour()>=startHour) {
     if (hour()<endHour) {
@@ -70,16 +80,23 @@ void draw() {
 
   if (! uploading) {
     cam.read();
- //   image(cam, 0, 0);
-    image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
-    grabImage = cam.get(cam.width/2-width/2,cam.height/2-height/2,width,height);
+    //   image(cam, 0, 0);
+  // image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
+    grabImage = cam.get(cam.width/2-width/2, cam.height/2-height/2, width, height);
+        image(grabImage, 0,0);
+
+     of.updateImage(grabImage);
+      of.draw();
   }
 
   stroke(255, 100, 100);
   //***DRAW DEBUG SHIT TO SCREEN***
+
   if (debug) {
+           rectMode(CORNER);
+    noFill();
     //date
-    text(getTimestamp(), 5, 25);
+    text(getTimestamp(), 5, 15);
 
     leftSensor.draw();
     rightSensor.draw();
@@ -88,6 +105,8 @@ void draw() {
   }
 
   if (mousePressed) {
+      rectMode(CORNER);
+
     leftSensor._bDiff = 0;
     rightSensor._bDiff = 0;
 
@@ -100,17 +119,7 @@ void draw() {
     rightSensor._r.height = sensorHeight;
 
     rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
-    // rightSensor._r.y = mouseY;
 
- /*   if (leftSensor._r.width < 3) {
-      leftSensor.setWidth(3);
-      rightSensor.setWidth(3);
-    }
-
-    if (leftSensor._r.height < 3) {
-      leftSensor.setWidth(3);
-      rightSensor.setWidth(3);
-    }*/
 
     leftSensor.update();
     rightSensor.update();
@@ -118,36 +127,49 @@ void draw() {
   else {
     if (blast) {
 
+      //BLAST OFF!
+     
+
       boolean leftHit = false;
       boolean rightHit = false;
       //update the reference image on the sensors
       rightSensor._image = grabImage;
       leftSensor._image = grabImage;
 
+      leftHit = leftSensor.checkHitArea();     
+      if (leftHit) {
+        if (of.xFlowSum < 0) {
+         // onHit();
+         rightHit = true;
+        }
+      }
+
+      /*
       //MONOTR THE LEFT SENSOR
-      if (!checkRight) {
-        //monitor the left sensor
-        leftHit = leftSensor.checkHitArea();
-        if (leftHit) {
-          checkRight = true;
-          rightSensor.reset();
-          // leftSensor._bDiff = 0;
-          //start the timer
-          sensorTimer.start();
-        }
-      }
-      else {
-        //monitor the RIGHT sensor
-        if (sensorTimer.isFinished()) {
-          //STOP monitoring the right sensor
-          checkRight = false;
-          // rightSensor._bDiff = 0;
-        }
-        else {
-          rightHit = false;
-          rightHit = rightSensor.checkHitArea();
-        }
-      }
+       if (!checkRight) {
+       //monitor the left sensor
+       leftHit = leftSensor.checkHitArea();
+       if (leftHit) {
+       checkRight = true;
+       rightSensor.reset();
+       // leftSensor._bDiff = 0;
+       //start the timer
+       sensorTimer.start();
+       }
+       }
+       else {
+       //monitor the RIGHT sensor
+       if (sensorTimer.isFinished()) {
+       //STOP monitoring the right sensor
+       checkRight = false;
+       // rightSensor._bDiff = 0;
+       }
+       else {
+       rightHit = false;
+       rightHit = rightSensor.checkHitArea();
+       }
+       }
+       */
       if (ignoreSensor) {
         ignoreSensor = false;
       }
@@ -180,10 +202,10 @@ void mousePressed() {
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
-  // if (cameraTimer.isFinished()) {
+   if (cameraTimer.isFinished()) {
   takePicture();
-  // cameraTimer.start();
-  // }
+   cameraTimer.start();
+   }
 }
 
 String getTimestamp() {
@@ -203,6 +225,15 @@ String getTimestamp() {
 }
 
 void takePicture() {
+
+  /* PGraphics pg = createGraphics(grabImage.width, grabImage.height, P2D); // I create a PGraphics from it
+   pg.loadPixels();
+   grabImage.loadPixels();
+   for (int i = 0; i < grabImage.pixels.length; i++)
+   {
+   pg.pixels = grabImage.pixels;
+   }*/
+
   // "this" references the processing PApplet itself and is mandatory here
   img = new ImageToWeb(this);
   img.setType(ImageToWeb.PNG);
@@ -217,7 +248,7 @@ void takePicture() {
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
   img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
-  //cameraTimer.start();
+  cameraTimer.start();
 }
 
 void keyPressed() {
@@ -226,7 +257,7 @@ void keyPressed() {
   } 
   else if (key == 'c') {
     //open camera settings
- //   cam.settings();
+    //   cam.settings();
     ignoreSensor = true;
   }
   else if (key == '.') {
@@ -243,3 +274,4 @@ void keyPressed() {
     rightSensor._thresh = sensorThreshold;
   }
 }
+
