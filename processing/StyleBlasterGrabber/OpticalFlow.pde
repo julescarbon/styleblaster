@@ -434,7 +434,7 @@ class OpticalFlow {
 
     //  print information (not shown in the movie)
     fill(255, 0, 0);
-   // text(clockDiff, 10, 10); // time (msec) for this frame
+    if(flagflow) text("xFlowSum: "+xFlowSum, width - 150, height - 5); // time (msec) for this frame
    //  if (flagmovie) text("rec", 40, 10);
   }
 

@@ -29,6 +29,7 @@ String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 15;
+int flowThreshold = -1000;
 float sensorRes = 1;
 
 public void setup() {
@@ -137,7 +138,9 @@ void draw() {
 
       hit = leftSensor.checkHitArea();     
       if (hit) {
-        if (of.xFlowSum < 0) {
+                  leftSensor.reset();
+
+        if (of.xFlowSum < flowThreshold) {
           // onHit();
           grab = true;
         }
@@ -174,7 +177,7 @@ void draw() {
       }
       else {
         if (grab) {
-          leftSensor.reset();
+//          leftSensor.reset();
           println("!!!HIT!!! @ : "+rightSensor._bDiff);
           fill(255, 0, 0);
           onHit();
