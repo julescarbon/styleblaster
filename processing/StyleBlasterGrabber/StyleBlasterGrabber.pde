@@ -13,6 +13,7 @@ boolean ignoreSensor = true;
 boolean debug = true;
 boolean uploading = false;
 boolean checkRight = false;
+boolean grab = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
@@ -29,14 +30,17 @@ String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 15;
-int flowThreshold = -1000;
+int flowThreshold = -100;
 float sensorRes = 1;
 
 public void setup() {
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
-  // int sketchHeight = (camHeight*333)/500;
-  size(333, 500);
+  int sketchHeight = 1000;
+  int sketchWidth = 666;
+  float m = .7;
+  
+  size(round(sketchWidth*m), round(sketchHeight*m));
   //   size(1280, 720);
 
   String[] devices = Capture.list();
@@ -50,7 +54,11 @@ public void setup() {
   }
   else {
     //   cam = new Capture(this, 2592,1944);
-    cam = new Capture(this, 1280, 960);
+    //Logitech 910c
+    //cam = new Capture(this, 1280, 960);
+    //Microsoft Studio
+    cam = new Capture(this, 1920, 1080);
+    // cam = new Capture(this, 1280, 720);
   }
 
   if (version == "2.0") {
@@ -88,6 +96,13 @@ void draw() {
 
     of.updateImage(grabImage);
     of.draw();
+
+    
+   /* if (grab) {
+      takePicture();
+    }
+    else {
+    }*/
   }
 
   stroke(255, 100, 100);
@@ -102,7 +117,9 @@ void draw() {
     leftSensor.draw();
     rightSensor.draw();
 
+    fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
+    text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
   if (mousePressed) {
@@ -131,14 +148,14 @@ void draw() {
       //BLAST OFF!
 
       boolean hit = false;
-      boolean grab = false;
+      grab = false;
       //update the reference image on the sensors
       //   rightSensor._image = grabImage;
       leftSensor._image = grabImage;
 
       hit = leftSensor.checkHitArea();     
       if (hit) {
-                  leftSensor.reset();
+        leftSensor.reset();
 
         if (of.xFlowSum < flowThreshold) {
           // onHit();
@@ -177,7 +194,7 @@ void draw() {
       }
       else {
         if (grab) {
-//          leftSensor.reset();
+          //          leftSensor.reset();
           println("!!!HIT!!! @ : "+rightSensor._bDiff);
           fill(255, 0, 0);
           onHit();
@@ -258,7 +275,7 @@ void keyPressed() {
   } 
   else if (key == 'c') {
     //open camera settings
-    //   cam.settings();
+    cam.settings();
     ignoreSensor = true;
   }
   else if (key == '.') {
@@ -274,5 +291,9 @@ void keyPressed() {
     leftSensor._thresh = sensorThreshold;
     rightSensor._thresh = sensorThreshold;
   }
+  else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
+  else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
+  else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
+  else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
 }
 

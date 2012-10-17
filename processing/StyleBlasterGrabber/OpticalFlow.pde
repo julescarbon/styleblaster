@@ -1,4 +1,5 @@
 /* OpenProcessing Tweak of *@*http://www.openprocessing.org/sketch/10435*@* */
+//Made into a class by Jack Kalish www.jackkalish.com
 /* !do not delete the line above, required for linking your tweak if you re-upload */
 // Optical Flow 2010/05/28
 // Hidetoshi Shimodaira shimo@is.titech.ac.jp 2010 GPL
@@ -13,16 +14,9 @@ class OpticalFlow {
   int gs=20; // grid step (pixels)
   float predsec=1.0; // prediction time (sec): larger for longer vector
 
-  // parameters for laptop pc (low performance)
-  //int wscreen=480;
-  //int hscreen=360;
-  //int gs=20; // grid step (pixels)
-  //float predsec=1.0; // prediction time (sec): larger for longer vector
-
   ///////////////////////////////////////////////
   // use video
- // Capture video;
-   PImage video;
+  PImage video;
 
   PFont font;
   color[] vline;
@@ -31,49 +25,44 @@ class OpticalFlow {
   // capture parameters
   int fps=30;
 
-  // use sound
-  /*import ddf.minim.*;
-   import ddf.minim.signals.*;
-   Minim minim;
-   AudioOutput audioout;
-   SineWave sine;*/
-   int wscreen, hscreen, as, gw, gh, gs2;
-   float df, xFlowSum;
-   
-   // regression vectors
-    float[] fx, fy, ft;
-    int fm=3*9; // length of the vectors
-    
-       // regularization term for regression
-    float fc=pow(10, 8); // larger values for noisy video
 
-    // smoothing parameters
-    float wflow=0.1; // smaller value for longer smoothing
+  int wscreen, hscreen, as, gw, gh, gs2;
+  float df, xFlowSum;
 
-    // switch
-    boolean flagseg=false; // segmentation of moving objects?
-    boolean flagball=false; // playing ball game?
-    boolean flagmirror=false; // mirroring image?
-    boolean flagflow=true; // draw opticalflow vectors?
-    boolean flagsound=true; // sound effect?
-    boolean flagimage=true; // show video image ?
-    boolean flagmovie=false; // saving movie?
+  // regression vectors
+  float[] fx, fy, ft;
+  int fm=3*9; // length of the vectors
 
-    // internally used variables
-    float ar, ag, ab; // used as return value of pixave
-    float[] dtr, dtg, dtb; // differentiation by t (red,gree,blue)
-    float[] dxr, dxg, dxb; // differentiation by x (red,gree,blue)
-    float[] dyr, dyg, dyb; // differentiation by y (red,gree,blue)
-    float[] par, pag, pab; // averaged grid values (red,gree,blue)
-    float[] flowx, flowy; // computed optical flow
-    float[] sflowx, sflowy; // slowly changing version of the flow
-    int clockNow, clockPrev, clockDiff; // for timing check
-    
-    float ballpx, ballpy, ballvx, ballvy, ballgy, ballsz, ballsz2, ballfv, ballhv, ballvmax;
+  // regularization term for regression
+  float fc=pow(10, 8); // larger values for noisy video
+
+  // smoothing parameters
+  float wflow=0.1; // smaller value for longer smoothing
+
+  // switch
+  boolean flagseg=false; // segmentation of moving objects?
+  boolean flagball=false; // playing ball game?
+  boolean flagmirror=false; // mirroring image?
+  boolean flagflow=false; // draw opticalflow vectors?
+  boolean flagsound=true; // sound effect?
+  boolean flagimage=true; // show video image ?
+  boolean flagmovie=false; // saving movie?
+
+  // internally used variables
+  float ar, ag, ab; // used as return value of pixave
+  float[] dtr, dtg, dtb; // differentiation by t (red,gree,blue)
+  float[] dxr, dxg, dxb; // differentiation by x (red,gree,blue)
+  float[] dyr, dyg, dyb; // differentiation by y (red,gree,blue)
+  float[] par, pag, pab; // averaged grid values (red,gree,blue)
+  float[] flowx, flowy; // computed optical flow
+  float[] sflowx, sflowy; // slowly changing version of the flow
+  int clockNow, clockPrev, clockDiff; // for timing check
+
+  float ballpx, ballpy, ballvx, ballvy, ballgy, ballsz, ballsz2, ballfv, ballhv, ballvmax;
 
   OpticalFlow(Capture v) {
-     wscreen=width;
-     hscreen=height;
+    wscreen=width;
+    hscreen=height;
 
     // grid parameters
     as=gs*2;  // window size for averaging (-as,...,+as)
@@ -83,34 +72,24 @@ class OpticalFlow {
     df=predsec*fps;
 
     // playing ball parameters
-     ballpx=wscreen*0.5; // position x
-     ballpy=hscreen*0.5; // position y
-     ballvx=0.0; // velocity x
-     ballvy=0.0; // velocity y
-     ballgy=0.05; // gravitation
-     ballsz=30.0; // size
-     ballsz2=ballsz/2;
-     ballfv=0.8; // rebound factor
-     ballhv=50.0; // hit factor
-     ballvmax=10.0; // max velocity (pixel/frame)
+    ballpx=wscreen*0.5; // position x
+    ballpy=hscreen*0.5; // position y
+    ballvx=0.0; // velocity x
+    ballvy=0.0; // velocity y
+    ballgy=0.05; // gravitation
+    ballsz=30.0; // size
+    ballsz2=ballsz/2;
+    ballfv=0.8; // rebound factor
+    ballhv=50.0; // hit factor
+    ballvmax=10.0; // max velocity (pixel/frame)
 
     // screen and video
-    // size(wscreen, hscreen, P2D);  
-    // video = new Capture(this, wscreen, hscreen, fps);
     video = v;
     // font
     font=createFont("Verdana", 10);
     textFont(font);
     // draw
     ellipseMode(CENTER);
-    // sound : not essential, only for ball movement
-    //minim = new Minim(this);
-    //audioout = minim.getLineOut(Minim.STEREO, 2048);
-    //sine = new SineWave(440, 0.5, audioout.sampleRate());
-    /*sine.portamento(200);
-     sine.setAmp(0.0);
-     audioout.addSignal(sine);
-     */
 
     // arrays
     par = new float[gw*gh];
@@ -207,226 +186,206 @@ class OpticalFlow {
     flowx[ig] = -2*gs*u/a; // optical flow x (pixel per frame)
     flowy[ig] = -2*gs*v/a; // optical flow y (pixel per frame)
   }
-  
-  void updateImage(PImage i){
-   video = i; 
+
+  void updateImage(PImage i) {
+    video = i;
   }
 
   void draw() {
-  //  println("OpticalFlow.draw()");
-   // if (video.available()) {
-      // video capture
-     // video.read();
     rectMode(CENTER);
 
-      // clock in msec
-      clockNow = millis();
-      clockDiff = clockNow - clockPrev;
-      clockPrev = clockNow;
+    // clock in msec
+    clockNow = millis();
+    clockDiff = clockNow - clockPrev;
+    clockPrev = clockNow;
 
-      // mirror
-      if (flagmirror) {
-        for (int y=0;y<hscreen;y++) {
-          int ig=y*wscreen;
-          for (int x=0; x<wscreen; x++) 
-            vline[x] = video.pixels[ig+x];
-          for (int x=0; x<wscreen; x++) 
-            video.pixels[ig+x]=vline[wscreen-1-x];
-        }
+    // mirror
+    if (flagmirror) {
+      for (int y=0;y<hscreen;y++) {
+        int ig=y*wscreen;
+        for (int x=0; x<wscreen; x++) 
+          vline[x] = video.pixels[ig+x];
+        for (int x=0; x<wscreen; x++) 
+          video.pixels[ig+x]=vline[wscreen-1-x];
       }
+    }
 
-      // draw image
-     // if (flagimage) set(0, 0, video);
-     // else background(0);
+    // 1st sweep : differentiation by time
+    for (int ix=0;ix<gw;ix++) {
+      int x0=ix*gs+gs2;
+      for (int iy=0;iy<gh;iy++) {
+        int y0=iy*gs+gs2;
+        int ig=iy*gw+ix;
+        // compute average pixel at (x0,y0)
+        pixave(x0-as, y0-as, x0+as, y0+as);
+        // compute time difference
+        dtr[ig] = ar-par[ig]; // red
+        dtg[ig] = ag-pag[ig]; // green
+        dtb[ig] = ab-pab[ig]; // blue
+        // save the pixel
+        par[ig]=ar;
+        pag[ig]=ag;
+        pab[ig]=ab;
+      }
+    }
 
-      // 1st sweep : differentiation by time
+    // 2nd sweep : differentiations by x and y
+    for (int ix=1;ix<gw-1;ix++) {
+      for (int iy=1;iy<gh-1;iy++) {
+        int ig=iy*gw+ix;
+        // compute x difference
+        dxr[ig] = par[ig+1]-par[ig-1]; // red
+        dxg[ig] = pag[ig+1]-pag[ig-1]; // green
+        dxb[ig] = pab[ig+1]-pab[ig-1]; // blue
+        // compute y difference
+        dyr[ig] = par[ig+gw]-par[ig-gw]; // red
+        dyg[ig] = pag[ig+gw]-pag[ig-gw]; // green
+        dyb[ig] = pab[ig+gw]-pab[ig-gw]; // blue
+      }
+    }
+
+    // 3rd sweep : solving optical flow
+     xFlowSum = 0;
+    
+    for (int ix=1;ix<gw-1;ix++) {
+      int x0=ix*gs+gs2;
+      for (int iy=1;iy<gh-1;iy++) {
+        int y0=iy*gs+gs2;
+        int ig=iy*gw+ix;
+
+        // prepare vectors fx, fy, ft
+        getnext9(dxr, fx, ig, 0); // dx red
+        getnext9(dxg, fx, ig, 9); // dx green
+        getnext9(dxb, fx, ig, 18);// dx blue
+        getnext9(dyr, fy, ig, 0); // dy red
+        getnext9(dyg, fy, ig, 9); // dy green
+        getnext9(dyb, fy, ig, 18);// dy blue
+        getnext9(dtr, ft, ig, 0); // dt red
+        getnext9(dtg, ft, ig, 9); // dt green
+        getnext9(dtb, ft, ig, 18);// dt blue
+
+        // solve for (flowx, flowy) such that
+        // fx flowx + fy flowy + ft = 0
+        solveflow(ig);
+
+        // smoothing
+        sflowx[ig]+=(flowx[ig]-sflowx[ig])*wflow;
+        sflowy[ig]+=(flowy[ig]-sflowy[ig])*wflow;
+        
+         xFlowSum += sflowx[ig];
+      }
+    }
+
+    // 4th sweep : draw the flow
+    if (flagseg) {
+      noStroke();
+      fill(0);
       for (int ix=0;ix<gw;ix++) {
         int x0=ix*gs+gs2;
         for (int iy=0;iy<gh;iy++) {
           int y0=iy*gs+gs2;
           int ig=iy*gw+ix;
-          // compute average pixel at (x0,y0)
-          pixave(x0-as, y0-as, x0+as, y0+as);
-          // compute time difference
-          dtr[ig] = ar-par[ig]; // red
-          dtg[ig] = ag-pag[ig]; // green
-          dtb[ig] = ab-pab[ig]; // blue
-          // save the pixel
-          par[ig]=ar;
-          pag[ig]=ag;
-          pab[ig]=ab;
+
+          float u=df*sflowx[ig];
+          float v=df*sflowy[ig];
+
+
+
+          float a=sqrt(u*u+v*v);
+          if (a<2.0) rect(x0, y0, gs, gs);
         }
       }
+    }
 
-      // 2nd sweep : differentiations by x and y
-      for (int ix=1;ix<gw-1;ix++) {
-        for (int iy=1;iy<gh-1;iy++) {
-          int ig=iy*gw+ix;
-          // compute x difference
-          dxr[ig] = par[ig+1]-par[ig-1]; // red
-          dxg[ig] = pag[ig+1]-pag[ig-1]; // green
-          dxb[ig] = pab[ig+1]-pab[ig-1]; // blue
-          // compute y difference
-          dyr[ig] = par[ig+gw]-par[ig-gw]; // red
-          dyg[ig] = pag[ig+gw]-pag[ig-gw]; // green
-          dyb[ig] = pab[ig+gw]-pab[ig-gw]; // blue
-        }
-      }
 
-      // 3rd sweep : solving optical flow
-      for (int ix=1;ix<gw-1;ix++) {
+  //  int flowSum = gw * gh;
+
+
+    // 5th sweep : draw the flow
+    if (flagflow) {
+      for (int ix=0;ix<gw;ix++) {
         int x0=ix*gs+gs2;
-        for (int iy=1;iy<gh-1;iy++) {
+        for (int iy=0;iy<gh;iy++) {
           int y0=iy*gs+gs2;
           int ig=iy*gw+ix;
 
-          // prepare vectors fx, fy, ft
-          getnext9(dxr, fx, ig, 0); // dx red
-          getnext9(dxg, fx, ig, 9); // dx green
-          getnext9(dxb, fx, ig, 18);// dx blue
-          getnext9(dyr, fy, ig, 0); // dy red
-          getnext9(dyg, fy, ig, 9); // dy green
-          getnext9(dyb, fy, ig, 18);// dy blue
-          getnext9(dtr, ft, ig, 0); // dt red
-          getnext9(dtg, ft, ig, 9); // dt green
-          getnext9(dtb, ft, ig, 18);// dt blue
+          float u=df*sflowx[ig];
+          float v=df*sflowy[ig];
 
-          // solve for (flowx, flowy) such that
-          // fx flowx + fy flowy + ft = 0
-          solveflow(ig);
+        //  xFlowSum += u;          
+         // yFlow += v;
 
-          // smoothing
-          sflowx[ig]+=(flowx[ig]-sflowx[ig])*wflow;
-          sflowy[ig]+=(flowy[ig]-sflowy[ig])*wflow;
-        }
-      }
-
-      // 4th sweep : draw the flow
-      if (flagseg) {
-        noStroke();
-        fill(0);
-        for (int ix=0;ix<gw;ix++) {
-          int x0=ix*gs+gs2;
-          for (int iy=0;iy<gh;iy++) {
-            int y0=iy*gs+gs2;
-            int ig=iy*gw+ix;
-
-            float u=df*sflowx[ig];
-            float v=df*sflowy[ig];
-
-
-
-            float a=sqrt(u*u+v*v);
-            if (a<2.0) rect(x0, y0, gs, gs);
+          // draw the line segments for optical flow
+          float a=sqrt(u*u+v*v);
+          if (a>=2.0) { // draw only if the length >=2.0
+            float r=0.5*(1.0+u/(a+0.1));
+            float g=0.5*(1.0+v/(a+0.1));
+            float b=0.5*(2.0-(r+g));
+            stroke(255*r, 255*g, 255*b);
+            line(x0, y0, x0+u, y0+v);
           }
         }
       }
+    }
 
+    ///////////////////////////////////////////////////////
+    // ball movement : not essential for optical flow
+   /* if (flagball) {
+      // updatating position and velocity
+      ballpx += ballvx;
+      ballpy += ballvy;
+      ballvy += ballgy;
 
-      int flowSum = gw * gh;
-      xFlowSum = 0;
-      float yFlow = 0;
+      // reflecton
+      if (ballpx<ballsz2) {
+        ballpx=ballsz2;
+        ballvx=-ballvx*ballfv;
+      } 
+      else if (ballpx>wscreen-ballsz2) {
+        ballpx=wscreen-ballsz2;
+        ballvx=-ballvx*ballfv;
+      }
+      if (ballpy<ballsz2) {
+        ballpy=ballsz2;
+        ballvy=-ballvy*ballfv;
+      } 
+      else if (ballpy>hscreen-ballsz2) {
+        ballpy=hscreen-ballsz2;
+        ballvy=-ballvy*ballfv;
+      }
 
+      // draw the ball
+      fill(50, 200, 200);
+      stroke(0, 100, 100);
+      ellipse(ballpx, ballpy, ballsz, ballsz);
 
-      // 5th sweep : draw the flow
-      if (flagflow) {
-        for (int ix=0;ix<gw;ix++) {
-          int x0=ix*gs+gs2;
-          for (int iy=0;iy<gh;iy++) {
-            int y0=iy*gs+gs2;
-            int ig=iy*gw+ix;
+      // find the grid 
+      int ix= round((ballpx-gs2)/gs);
+      int iy= round((ballpy-gs2)/gs);
+      if (ix<1) ix=1;
+      else if (ix>gw-2) ix=gw-2;
+      if (iy<1) iy=1;
+      else if (iy>gh-2) iy=gh-2;
+      int ig=iy*gw+ix;
 
-            float u=df*sflowx[ig];
-            float v=df*sflowy[ig];
-
-            xFlowSum += u;          
-            yFlow += v;
-
-            // draw the line segments for optical flow
-            float a=sqrt(u*u+v*v);
-            if (a>=2.0) { // draw only if the length >=2.0
-              float r=0.5*(1.0+u/(a+0.1));
-              float g=0.5*(1.0+v/(a+0.1));
-              float b=0.5*(2.0-(r+g));
-              stroke(255*r, 255*g, 255*b);
-              line(x0, y0, x0+u, y0+v);
-            }
-          }
+      // hit the ball by your movement
+      float u=sflowx[ig];
+      float v=sflowy[ig];
+      float a=sqrt(u*u+v*v);
+      u=u/a; 
+      v=v/a;
+      if (a>=2.0) a=2.0;
+      if (a>=0.3) {
+        ballvx += ballhv*a*u;
+        ballvy += ballhv*a*v;
+        float b=sqrt(ballvx*ballvx+ballvy*ballvy);
+        if (b>ballvmax) {
+          ballvx = ballvmax*ballvx/b;
+          ballvy = ballvmax*ballvy/b;
         }
       }
 
-
-    //  println("xFLow: "+xFlowSum);
-    //  println("yFLow: "+yFlow);
-
-
-      ///////////////////////////////////////////////////////
-      // ball movement : not essential for optical flow
-      if (flagball) {
-        // updatating position and velocity
-        ballpx += ballvx;
-        ballpy += ballvy;
-        ballvy += ballgy;
-
-        // reflecton
-        if (ballpx<ballsz2) {
-          ballpx=ballsz2;
-          ballvx=-ballvx*ballfv;
-        } 
-        else if (ballpx>wscreen-ballsz2) {
-          ballpx=wscreen-ballsz2;
-          ballvx=-ballvx*ballfv;
-        }
-        if (ballpy<ballsz2) {
-          ballpy=ballsz2;
-          ballvy=-ballvy*ballfv;
-        } 
-        else if (ballpy>hscreen-ballsz2) {
-          ballpy=hscreen-ballsz2;
-          ballvy=-ballvy*ballfv;
-        }
-
-        // draw the ball
-        fill(50, 200, 200);
-        stroke(0, 100, 100);
-        ellipse(ballpx, ballpy, ballsz, ballsz);
-
-        // find the grid 
-        int ix= round((ballpx-gs2)/gs);
-        int iy= round((ballpy-gs2)/gs);
-        if (ix<1) ix=1;
-        else if (ix>gw-2) ix=gw-2;
-        if (iy<1) iy=1;
-        else if (iy>gh-2) iy=gh-2;
-        int ig=iy*gw+ix;
-
-        // hit the ball by your movement
-        float u=sflowx[ig];
-        float v=sflowy[ig];
-        float a=sqrt(u*u+v*v);
-        u=u/a; 
-        v=v/a;
-        if (a>=2.0) a=2.0;
-        if (a>=0.3) {
-          ballvx += ballhv*a*u;
-          ballvy += ballhv*a*v;
-          float b=sqrt(ballvx*ballvx+ballvy*ballvy);
-          if (b>ballvmax) {
-            ballvx = ballvmax*ballvx/b;
-            ballvy = ballvmax*ballvy/b;
-          }
-        }
-
-        // sound
-     /*   float pan = map(ballpx, 0, wscreen, -1, 1);
-        float freq = map(ballpy, 0, hscreen, 1500, 60);
-        float vol = map(a, 0.0, 0.8, 0.0, 1.0);
-        if (!flagsound) vol=0.0;
-        sine.setPan(pan);
-        sine.setFreq(freq);
-        sine.setAmp(vol);*/
-      }
-  //  }
+    }*/
 
     ///////////////////////////////////////////////////
     // recording movie 
@@ -434,34 +393,12 @@ class OpticalFlow {
 
     //  print information (not shown in the movie)
     fill(255, 0, 0);
-    if(flagflow) text("xFlowSum: "+xFlowSum, width - 150, height - 5); // time (msec) for this frame
-   //  if (flagmovie) text("rec", 40, 10);
+    //  if (flagmovie) text("rec", 40, 10);
   }
 
-  void stopGame() {
-  //  minim.stop();
-  //  super.stop();
-  }
-
-  void keyPressed() {
-    //if(key=='c') video.settings();
-    if (key=='w') flagseg=!flagseg; // segmentation on/off
-    else if (key=='s') flagsound=!flagsound; //  sound on/off
-    else if (key=='e') stopGame(); // quit
-    else if (key=='m') flagmirror=!flagmirror; // mirror on/off
-    else if (key=='i') flagimage=!flagimage; // show video on/off
-    else if (key=='f') flagflow=!flagflow; // show opticalflow on/off
-    else if (key=='q') {
-      flagmovie=!flagmovie;
-      if (flagmovie) { // start recording movie
-      //  movie = new MovieMaker(this, width, height, "mymovie.mov", 
-       // fps);
-      } 
-      else { // stop recording movie
-        movie.finish();
-      }
-    }
-    else if (key==' ') { // kick the ball
+ /* void keyPressed() {
+   
+    if (key==' ') { // kick the ball
       ballvy = -3.0;
     }
     else if (key=='b') { // show the ball on/off
@@ -472,8 +409,15 @@ class OpticalFlow {
         ballvx=ballvy=0.0;
       }
     }
-  }
+  }*/
   
- 
+  //GETTER AND SETTERS
+  float getXFlow(){
+    float xsum = 0;
+    for(int i=0; i<sflowx.length; i++){
+     xsum += sflowx[i]; 
+    }
+    xsum /= sflowx.length;
+    return xsum;
+  }
 }
-
