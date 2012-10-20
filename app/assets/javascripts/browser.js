@@ -1,228 +1,141 @@
-//= require jquery
+$(function(){
 
-$(function () {
-  var page_data = {};
-  var photos_per_page = 30;
-  var photo_index = 1;
-  var page_index = 1;
-  var page_max = 2;
-  var page_base_href = "";
+  var queue = new Queue ();
+  var ext = { 'image/png': 'png', 'image/jpeg': 'jpg' };
 
-  var page_keys = function (e) {
-    var kc = e.keyCode;
-    switch (kc) {
-      case 37: // LEFT
-        page_prev();
-        break;
-      case 39: // RIGHT
-        page_next();
-        break;
-    }
-  };
-  
-  var photo_keys = function (e) {
-    var kc = e.keyCode;
-    switch (kc) {
-      case 27: // ESC
-        photo_unload();
-        break;
-      case 37: // LEFT
-        photo_prev();
-        break;
-      case 39: // RIGHT
-        photo_next();
-        break;
-    }
-  };
-  
-  var update_hash = function (page, photo) {
-    window.location.hash = page + "/" + photo;
-  };
-
-  var parse_hash = function () {
-    var partz = window.location.hash.replace("#","").split("/");
-    var page = parseInt(partz[0]);
-    var photo = parseInt(partz[1]);
-    if (partz[1].length > 0) {
-      $(".pagination").hide();
-      page_index = page;
-      photo_index = photo;
-      photo_init();
-      page_load_callback = photo_load;
-      $.get(page_base_href+page_index+".json", null, page_load);
-    } else {
-      page_index = page;
-      $.get(page_base_href+page_index+".json", null, page_load);
-    }
-  };
-  
-  var photo_init = function () {
-    $(window).unbind("keydown");
-    $(window).bind("keydown", photo_keys);
-    $("#prev").bind("click", photo_prev);
-    $("#next").bind("click", photo_next);
-  };
-  
-  var photo_click = function () {
-    photo_init();
-    photo_index = $(this).data("idx");    
-    gallery_hide(photo_load);
-  };
-
-  var photo_unload = function () {
-    page_load_callback = gallery_show;
-    $(window).unbind("keydown");
-    $(window).bind("keydown", page_keys);
-    $("#prev,#next").unbind("click");
-    $("#photo").fadeOut(300, function () {
-      gallery_show();
-    });
-  };
-
-  var photo_load = function () {
-    page_load_callback = photo_load;
-    if (photo_index > page_data.length)
-      photo_index = page_data.length - 1;
-    $("#gallery").hide();
-    $("#photo img").hide();
-    $("#photo").show();
-    $("#photo img").attr("src", page_data[photo_index].original);
-    $("#photo img").fadeIn(200);
-    update_hash(page_index, photo_index);
-  };
-  
-  var photo_next = function (e) {
-    if (e) e.preventDefault();
-    photo_index += 1;
-    if (photo_index === page_data.length)
-      if (page_index === page_max)
-        photo_unload();
-      else
-        page_next();
-    else
-      photo_load();
-  };
-
-  var photo_prev = function (e) {
-    if (e) e.preventDefault();
-    photo_index -= 1;
-    if (photo_index === -1) {
-      if (page_index === 1)
-        photo_unload();
-      else
-        page_prev();
-    } else {
-      photo_load();
-    }
-  };
-  
-  var page_home = function (e) {
-    if (e) e.preventDefault();
-    page_index = 1;
-    photo_index = 0;
-    $.get(page_base_href+page_index+".json", null, page_load);
-    page_load_callback = photo_unload;
-  }
-  
-  var page_prev = function () {
-    page_index -= 1;
-    if (page_index === 0) {
-      page_index = 1;
-    } else {
-      photo_index = photos_per_page - 1;
-      $.get(page_base_href+page_index+".json", null, page_load);
-    }
-    pagination_update();
-  };
-  
-  var page_next = function () {
-    page_index += 1;
-    if (page_index > page_max) {
-      page_index = page_max;
-    } else {
-      photo_index = 0;
-      $.get(page_base_href+page_index+".json", null, page_load);
-    }
-  };
-  
-  var pagination_update = function () {
-    if (page_index === 1) {
-      $(".previous_page").addClass("disabled");
-    } else {
-      $(".previous_page").removeClass("disabled").attr("href", page_base_href + (page_index - 1));
-    }
-    if (page_index === page_max) {
-      $(".next_page").addClass("disabled");
-    } else {
-      $(".next_page").removeClass("disabled").attr("href", page_base_href + (page_index + 1));
-    }
-  };
-  var page_number = function (href) {
-    return parseInt(href.replace(/^.*page\//, ""));
-  };
-  
-  var page_click = function (e) {
-    if (e) e.preventDefault();
-    var href = $(this).attr("href");
-    page_index = page_number(href);
-    $.get(href+".json", null, page_load);
-  };
-  
-  var page_load = function (data) {
-    update_hash(page_index, "");
-    pagination_update();
-    page_data = data.photos;
-    $("#gallery").html("");
-    var divs = [];
-    for (var i = 0, len = data.photos.length; i < len; i++) {
-      var el = '<li data-idx="' + i + '"><img src="' + data.photos[i].thumb + '"></li>';
-      divs.push(el);
-    }
-    $("#gallery").append(divs.join(""));
-    page_load_callback();
-  };
-  
-  var gallery_show = function (callback) {
-    if (! callback) callback = function () {}
-    var i = 0;
-    $("#gallery li img").hide()
-    $("#gallery").show();
-    $("#gallery li img").each(function(){$(this).delay(i += 20).fadeIn(200);});
-    $(".pagination").fadeIn(1000, callback);
-  };
-  var gallery_hide = function (callback) {
-    if (! callback) callback = function () {}
-    var i = 0;
-    $("#gallery li img").each(function(){$(this).delay(i += 20).fadeOut(200);});
-    $(".pagination").fadeOut(1000, callback);
-  };
-
-  var page_load_callback = gallery_show;
-
-  var init = function () {
-    $(".homelink").bind("click", page_home);
-    $(".pagination a").each(function(){
-      var page_num = parseInt($(this).html());
-      if (page_num !== NaN && page_num > page_max)
-        page_max = page_num;
-    });
-
-    // this is here for the lame rails pagination
-    if ($(".next_page").length) {
-      page_base_href = $(".next_page").attr("href").replace("2","");
-      $(".pagination .previous_page").replaceWith($("<a>", {"href": page_base_href + "1", "class": "previous_page disabled"}).html("&larr; Previous"));
-      $(".pagination em").replaceWith($("<a>", {"href": page_base_href + "1"}).html("1"));
-    }
-
-    $("#gallery li").live("click", photo_click);
-    $(".pagination a").live("click", page_click);
-    $(window).bind("keydown", page_keys);
-    if (window.location.hash.length) {
-      parse_hash();
-    } else {
-      page_load(first_page);
-    }
-  };
+  $(window).bind("keydown", keydown);
 
   init();
+
+  function Plop (data){
+    var base = this;
+    base.data = data || { id: 0, image_url: "", filetype: "" };
+
+    base.type = ext[data.photo_content_type]
+    base.data.image_url = "http://s3.amazonaws.com/styleblaster/styleblaster/photos/original/" + data.photo_file_name.replace(/.png$/, ".jpg");
+    // http://s3.amazonaws.com/styleblaster/styleblaster/photos/original
+    // created_at":"2012-10-06T21:22:45Z","id":836,"photo_content_type":"image/png","photo_file_name
+    
+    base.preload = function(){
+      var img = new Image();
+      img.src = base.data.image_url;
+    }
+  };
+
+  function Queue () {
+    var base = this;
+    base.queue = [];
+    base.index = 0;
+    
+    base.append = function(item){
+      base.queue.push(item);
+    }
+    
+    base.prepend = function(item){
+      base.queue.unshift(item);
+    }
+
+    base.forward = function(){
+      base.index += 1;
+      if (base.index > base.queue.length - 1) {
+        base.index = base.queue.length - 1;
+        return undefined;
+      } else {
+        return base.queue[base.index];
+      }
+    }
+
+    base.back = function(){
+      base.index -= 1;
+      if (base.index < 0) {
+        base.index = 0;
+        return undefined;
+      } else {
+        return base.queue[base.index];
+      }
+    }
+
+    base.first = function(){
+      return base.queue[0];
+    }
+
+    base.last = function(){
+      return base.queue[base.queue.length - 1];
+    }
+
+    base.almostAtEnd = function(){
+      return base.index > base.queue.length - 4
+    }
+
+    base.almostAtStart = function(){
+      return base.index < 4;
+    }
+  }
+
+  function init () {
+    if (window.PLOPS && PLOPS.length) {
+      preload(PLOPS);
+      var plop = queue.first();
+      show(plop);
+    }
+  }
+
+  function keydown (e) {
+    switch (e.keyCode) {
+      case 37: // left
+        var plop = queue.forward();
+        if (plop) {
+          show(plop);
+        }
+        if (queue.almostAtEnd()) {
+          fetch(queue.last().data.id);
+        }
+        break;
+      case 39: // right
+        var plop = queue.back();
+        if (plop) {
+          show(plop);
+        }
+        break;
+      case 38: // up
+        random();
+        break;
+      case 40: // down
+        latest();
+        break;
+    }
+  }
+
+  function preload(plops){
+    for (var i in plops) {
+      var plop = new Plop(plops[i]);
+      plop.preload();
+      queue.append(plop);
+    }
+  }
+
+  function show(plop){
+    console.log(plop.data.id);  
+    document.body.style.backgroundImage = 'url(' + plop.data.image_url + ')';
+    $("#square").attr('src', plop.data.image_url);
+    $("#link").attr('href', plop.data.image_url);
+  }
+
+  function random(){
+    window.location.href = "/random";
+  }
+
+  function latest(){
+    window.location.href = "/";
+  }
+
+  function fetch(id) {
+    id = parseInt(id) - 1;
+    if (id > 0) {
+      $.get("/p/" + id, csrf(), function(plops){
+        preload(plops);
+      }, "json")
+    }
+  }
+
 });
