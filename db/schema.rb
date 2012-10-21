@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111005180140) do
+ActiveRecord::Schema.define(:version => 20121021212154) do
 
   create_table "photos", :force => true do |t|
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "photo_file_name"
+    t.string    "photo_content_type"
+    t.integer   "photo_file_size"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "score",              :default => 0
   end
 
 end

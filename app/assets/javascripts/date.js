@@ -3,7 +3,7 @@ function month(m) {
   return MONTHS[m];
 }
 function merid(h) {
-  return h < 12 ? "AM" : "PM";
+  return h < 12 ? "<small>AM</small>" : "<small>PM</small>";
 }
 function twelve(h) {
   return h == 0 ? "12" : h > 12 ? h - 12 : h;

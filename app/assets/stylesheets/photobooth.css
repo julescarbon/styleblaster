@@ -82,6 +82,13 @@ html,body {
   color: #60f;
   border-bottom: 1px dotted #60f;
 }
+#nav {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
 #forward {
   font-size: 18px;
   color: #41d;
