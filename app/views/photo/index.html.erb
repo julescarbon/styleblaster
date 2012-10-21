@@ -1,0 +1,16 @@
+<div id="curtain"></div>
+
+<h1>styleblaster</h1>
+
+<div id="square_container">
+<img id="square">
+<div id="date">
+  <div id="day"></div>
+  <div id="month"></div>
+  <div id="time"></div>
+</div>
+</div>
+
+<script type="text/javascript">
+var PLOPS = <%= @photos.to_json.html_safe %>;
+</script>

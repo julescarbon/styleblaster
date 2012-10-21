@@ -1,7 +1,7 @@
 $(function(){
 
   var queue = new Queue ();
-  var ext = { 'image/png': 'png', 'image/jpeg': 'jpg' };
+  var base_url = "http://s3.amazonaws.com/styleblaster/styleblaster/photos/original/";
 
   $(window).bind("keydown", keydown);
 
@@ -11,14 +11,17 @@ $(function(){
     var base = this;
     base.data = data || { id: 0, image_url: "", filetype: "" };
 
-    base.type = ext[data.photo_content_type]
-    base.data.image_url = "http://s3.amazonaws.com/styleblaster/styleblaster/photos/original/" + data.photo_file_name.replace(/.png$/, ".jpg");
-    // http://s3.amazonaws.com/styleblaster/styleblaster/photos/original
-    // created_at":"2012-10-06T21:22:45Z","id":836,"photo_content_type":"image/png","photo_file_name
-    
+    base.id = base.data.id;
+    base.image_url = base_url + data.photo_file_name.replace(/.png$/, ".jpg");
+
+    var d = derail_date(data.created_at);
+    base.day = d.getDate();
+    base.month = month(d.getMonth());
+    base.time = twelve(d.getHours()) + ":" + zero(d.getMinutes()) + " " + merid(d.getHours());
+
     base.preload = function(){
       var img = new Image();
-      img.src = base.data.image_url;
+      img.src = base.image_url;
     }
   };
 
@@ -82,7 +85,8 @@ $(function(){
 
   function keydown (e) {
     switch (e.keyCode) {
-      case 37: // left
+
+      case 39: // right
         var plop = queue.forward();
         if (plop) {
           show(plop);
@@ -91,18 +95,22 @@ $(function(){
           fetch(queue.last().data.id);
         }
         break;
-      case 39: // right
+
+      case 37: // left
         var plop = queue.back();
         if (plop) {
           show(plop);
         }
         break;
+
       case 38: // up
         random();
         break;
+
       case 40: // down
         latest();
         break;
+
     }
   }
 
@@ -116,9 +124,12 @@ $(function(){
 
   function show(plop){
     console.log(plop.data.id);  
-    document.body.style.backgroundImage = 'url(' + plop.data.image_url + ')';
-    $("#square").attr('src', plop.data.image_url);
-    $("#link").attr('href', plop.data.image_url);
+//    document.body.style.backgroundImage = 'url(' + plop.image_url + ')';
+    $("#square").attr('src', plop.image_url);
+    $("#link").attr('href', plop.image_url);
+    $("#day").html(plop.day);
+    $("#month").html(plop.month);
+    $("#time").html(plop.time);
   }
 
   function random(){

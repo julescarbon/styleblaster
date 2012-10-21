@@ -5,5 +5,5 @@ PhotoboothGallery::Application.routes.draw do
   delete '/p/:id'       => "photo#destroy"
   get    '/p/:id'       => "photo#show"
   get    '/browser/'    => "photo#index"
-  root :to              => 'photo#comingsoon'
+  root :to              => "photo#index"
 end
