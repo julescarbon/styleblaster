@@ -6,26 +6,26 @@ html,body {
   min-height: 100%;
   padding: 0; 
   margin: 0;
+  overflow: auto;
   background-position: center center;
-}
 
-#curtain {
-  background: rgba(233,233,243,0.97); // rgba(239,248,255,0.965);
-  position: absolute;
+  background: rgba(243,243,253,0.97);
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
+
 #square_container {
   position: absolute;
   width: 399px;
   top: 50%;
   left: 50%;
-  margin-top: -300px;
-  margin-left: -200px;
+  margin-top: -310px;
+  margin-left: -235px;
   padding: 10px;
-  background: rgb(250,240,248);
+  background: rgb(255,248,248);
   box-shadow: 0 2px 8px #112233;
   border-radius: 0 2px;
 }
@@ -33,25 +33,32 @@ html,body {
   height: 600px;
   width: 399px;
   display: block;
-  border-radius: 3px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+#sidebar {
+  position: absolute;
+  width: 200px;
+  height: 580px;
+  top: 50%;
+  left: 50%;
+  margin-top: -290px;
+  margin-left: 203px;
 }
 #date {
-  position: absolute;
-  top: 20px;
-  right: -180px;
   width: 100px;
   text-align: center;
   background: rgba(0,0,0,0.6);
   padding: 15px;
-  border: 5px solid #eef;
+  border: 5px solid rgb(255,248,248);
   box-shadow: 0 1px 5px #112233;
 }
 #day {
-  color: #eef;
+  color: rgb(255,248,248);
   font-size: 25px;
 }
 #month {
-  color: #eef;
+  color: rgb(255,248,248);
   font-size: 14px;
   text-transform: uppercase;
 }
@@ -59,37 +66,125 @@ html,body {
   margin-top: 6px;
   padding-top: 5px;
   font-size: 14px;
-  color: #eee0ff;
+  color: rgb(255,240,248);
   border-top: 1px solid white;
+}
+#linx {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+#linx a {
+  color: #41d;
+  border-bottom: 1px dotted #41d;
+}
+#linx a:hover {
+  color: #60f;
+  border-bottom: 1px dotted #60f;
+}
+#forward {
+  font-size: 18px;
+  color: #41d;
+  border-bottom: 1px dotted #41d;
+}
+#forward:hover, #back:hover {
+  color: #60f;
+  border-bottom: 1px dotted #60f;
 }
 h1 {
   position: absolute;
   top: 50%; left: 50%;
-  margin-left: -248px;
+  margin-left: -284px;
   margin-top: 300px;
   color: white;
   font-size: 138px;
   line-height: 0;
   letter-spacing: -15px;
-  color: #888 ;
+  color: #888;
   z-index: 2;
   display: inline;
+  font-weight: bold;
   -webkit-transform-origin: 0 0;
   -webkit-transform: rotate(270deg);
 }
-
 h2 {
-  width: 600px;
+  font-size: 23px;
+  font-family: sans-serif;
+  font-weight: normal;
+  color: #333;
+}
+
+#curtain {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.7);
+  z-index: 8;
+  box-shadow: 0 0 100px #fff inset;
+}
+#manifesto {
+  display: none;
   position: absolute;
+  top: 50%;
   left: 50%;
-  bottom: 100px;
-  margin-left: -300px;
-  text-align: center;
-  font-size: 14px;
-  font-family: garamond, georgia, serif;
-  font-style: italic;
+  margin-left: -280px;
+  margin-top: -320px;
+  width: 400px;
+  height: 580px;
+  overflow-y: auto;
+  background: rgba(255,252,253,0.95);
+  padding: 10px 40px 40px 40px;
+  z-index: 8;
+  box-shadow: 0 3px 10px rgba(10,20,30,0.5), -10px -10px 50px #fff inset;
+}
+#manifesto p {
+  font-size: 13px;
+  color: #444455;
+  line-height: 18px;
+}
+.close {
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  width: 15px;
+  margin-top: -310px;
+  margin-right: -185px;
+  color: #444;
+  cursor: pointer;
+}
+.close:hover {
   color: #000;
 }
 a {
-  color: #30f;
+  color: #333;
+  font-size: 14px;
+  font-family: georgia, serif;
+  font-style: italic;
+  cursor: pointer;
+}
+a[href] {
+  color: #d2f;
+  font-family: sans-serif;
+  font-style: normal;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f4f4f4;
+    -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+}
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    -webkit-box-shadow: inset 0px -1px 3px rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #AAA;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #888;
+    -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
 }

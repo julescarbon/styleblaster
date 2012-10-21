@@ -3,8 +3,10 @@ $(function(){
   var queue = new Queue ();
   var base_url = "http://s3.amazonaws.com/styleblaster/styleblaster/photos/original/";
 
-  $(window).bind("keydown", keydown);
-
+  $(window).keydown(keydown);
+  $("#forward").click(forward);
+  $("#back").click(back);
+  $("#square").click(forward);
   init();
 
   function Plop (data){
@@ -87,30 +89,38 @@ $(function(){
     switch (e.keyCode) {
 
       case 39: // right
-        var plop = queue.forward();
-        if (plop) {
-          show(plop);
-        }
-        if (queue.almostAtEnd()) {
-          fetch(queue.last().data.id);
-        }
+        forward();
         break;
 
       case 37: // left
-        var plop = queue.back();
-        if (plop) {
-          show(plop);
-        }
+        back();
         break;
 
-      case 38: // up
+      case 40: // up
         random();
         break;
 
-      case 40: // down
+      case 38: // down
         latest();
         break;
 
+    }
+  }
+
+  function forward () {
+    var plop = queue.forward();
+    if (plop) {
+      show(plop);
+    }
+    if (queue.almostAtEnd()) {
+      fetch(queue.last().data.id);
+    }
+  }
+
+  function back () {
+    var plop = queue.back();
+    if (plop) {
+      show(plop);
     }
   }
 
@@ -124,7 +134,6 @@ $(function(){
 
   function show(plop){
     console.log(plop.data.id);  
-//    document.body.style.backgroundImage = 'url(' + plop.image_url + ')';
     $("#square").attr('src', plop.image_url);
     $("#link").attr('href', plop.image_url);
     $("#day").html(plop.day);
