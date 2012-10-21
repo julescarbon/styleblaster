@@ -40,18 +40,22 @@ $(function(){
   var timer = null;
   function startTimer () {
     clearTimeout(timer);
-    setTimeout(refresh, 10000);
+    setTimeout(refresh, 5000);
   }
 
   function refresh () {
     $.get("/refresh.json", csrf({ limit: 1 }), function(data) {
       startTimer();
       if (! (data && data.length > 0) ) return;
-      var plop = new Plop(plops[i]);
-      plop.preload();
-      queue.prepend(plops[0]);
-      queue.index = 0;
-      show(plop);
+      var plopData = data.shift();
+      if (plopData.id !== queue.first().id) {
+        var plop = new Plop(plopData);
+        plop.preload();
+        queue.prepend(plop);
+        queue.index = 0;
+        show(plop);
+        $("#square").hide().fadeIn(500);
+      }
     }, "json");
   }
 
@@ -119,6 +123,7 @@ $(function(){
 
   function latest(){
     window.location.href = "/";
+    startTimer();
   }
 
   function fetch(id) {

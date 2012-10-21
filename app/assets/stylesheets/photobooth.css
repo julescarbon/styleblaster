@@ -54,7 +54,7 @@ html,body {
 #date {
   width: 100px;
   text-align: center;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.8);
   padding: 15px;
   border: 5px solid rgb(255,248,248);
   box-shadow: 0 1px 5px #112233;
@@ -183,7 +183,7 @@ a {
   cursor: pointer;
 }
 a[href] {
-  color: #d2f;
+  color: #32f;
   font-family: sans-serif;
   font-style: normal;
 }
