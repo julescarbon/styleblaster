@@ -23,6 +23,22 @@ html,body {
   height: 100%;
 }
 
+h1 {
+  position: absolute;
+  top: 50%; left: 50%;
+  margin-left: -284px;
+  margin-top: 300px;
+  color: white;
+  font-size: 138px;
+  line-height: 0;
+  letter-spacing: -15px;
+  color: #888;
+  z-index: 2;
+  display: inline;
+  font-weight: bold;
+  -webkit-transform-origin: 0 0;
+  -webkit-transform: rotate(270deg);
+}
 #square_container {
   position: absolute;
   width: 399px;
@@ -75,6 +91,18 @@ html,body {
   color: rgb(255,240,248);
   border-top: 1px solid white;
 }
+#tophat {
+  width: 92px;
+  height: 80px;
+  -webkit-transform: scale(0.8);
+  transform: scale(0.8);
+  cursor: pointer;
+}
+#tophat:hover {
+  -webkit-transform: scale(1.0) rotate(5deg);
+
+  transform: scale(1.0) rotate(5deg);
+}
 #linx {
   position: absolute;
   bottom: 0;
@@ -108,22 +136,10 @@ html,body {
   color: #22f;
   border-bottom: 1px solid #22f;
 }
-h1 {
-  position: absolute;
-  top: 50%; left: 50%;
-  margin-left: -284px;
-  margin-top: 300px;
-  color: white;
-  font-size: 138px;
-  line-height: 0;
-  letter-spacing: -15px;
-  color: #888;
-  z-index: 2;
-  display: inline;
-  font-weight: bold;
-  -webkit-transform-origin: 0 0;
-  -webkit-transform: rotate(270deg);
-}
+
+
+
+
 h2 {
   font-size: 23px;
   font-family: sans-serif;
