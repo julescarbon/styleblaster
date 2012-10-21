@@ -52,5 +52,13 @@ class PhotoController < ApplicationController
     render text: "OK"
   end
 
+  # Like image
+  def like
+    @photo = Photo.find(params[:id])
+    @photo.score += 1
+    @photo.save!
+    render text: "OK"
+  end
+
 end
 

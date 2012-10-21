@@ -9,7 +9,13 @@ html,body {
   overflow: auto;
   background-position: center center;
 
-  background: rgba(243,243,253,0.97);
+  background: #fcf4d1;
+  background: -moz-radial-gradient(center, ellipse cover,  #fcf4e1 22%, #d9f3ff 100%);
+  background: -webkit-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
+  background: -o-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
+  background: -ms-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
+  background: radial-gradient(ellipse at center,  #fcf4e1 22%,#d9f3ff 100%);
+
   position: fixed;
   top: 0;
   left: 0;
@@ -73,6 +79,10 @@ html,body {
   position: absolute;
   bottom: 0;
   left: 0;
+  color: #333;
+  font-size: 14px;
+  font-family: georgia, serif;
+  font-style: italic;
 }
 #linx a {
   color: #41d;
@@ -91,12 +101,12 @@ html,body {
 }
 #forward {
   font-size: 18px;
-  color: #41d;
-  border-bottom: 1px dotted #41d;
+  color: #5344FF;
+  border-bottom: 1px dotted #5344FF;
 }
 #forward:hover, #back:hover {
-  color: #60f;
-  border-bottom: 1px dotted #60f;
+  color: #22f;
+  border-bottom: 1px solid #22f;
 }
 h1 {
   position: absolute;

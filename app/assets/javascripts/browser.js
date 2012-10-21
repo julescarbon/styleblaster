@@ -42,14 +42,27 @@ $(function(){
     clearTimeout(timer);
     setTimeout(refresh, 10000);
   }
+
   function refresh () {
-    $.get("/refresh", csrf(), function(data){
-      if (data) {
-        
-      }
-    })
+    $.get("/refresh.json", csrf({ limit: 1 }), function(data) {
+      startTimer();
+      if (! (data && data.length > 0) ) return;
+      var plop = new Plop(plops[i]);
+      plop.preload();
+      queue.prepend(plops[0]);
+      queue.index = 0;
+      show(plop);
+    }, "json");
   }
 
+  function preload(plops){
+    for (var i in plops) {
+      var plop = new Plop(plops[i]);
+      plop.preload();
+      queue.append(plop);
+    }
+  }
+  
   function keydown (e) {
     switch (e.keyCode) {
 
@@ -73,6 +86,7 @@ $(function(){
   }
 
   function forward () {
+    clearTimeout(timer);
     var plop = queue.forward();
     if (plop) {
       show(plop);
@@ -83,17 +97,10 @@ $(function(){
   }
 
   function back () {
+    clearTimeout(timer);
     var plop = queue.back();
     if (plop) {
       show(plop);
-    }
-  }
-
-  function preload(plops){
-    for (var i in plops) {
-      var plop = new Plop(plops[i]);
-      plop.preload();
-      queue.append(plop);
     }
   }
 
