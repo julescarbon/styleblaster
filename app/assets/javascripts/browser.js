@@ -50,15 +50,20 @@ $(function(){
   function fetchRandom(){
     if (fetchingRandom) return;
     fetchingRandom = true;
-    $.get("/random", csrf(), function(data){
+    $.get("/random", csrf({ 'limit': 10 }), function(data){
+      var queueWasBare = randomQueue.bare();
       if (! (data && data.length > 0) ) return;
-      for (var i in plops) {
-        var plop = new Plop(plops[i]);
+      for (var i in data) {
+        var plop = new Plop(data[i]);
         plop.preload();
         randomQueue.append(plop);
       }
-      flash();
-      show( randomQueue.forward() );
+      if (queueWasBare) {
+        flash();
+        show( randomQueue.first() );
+      } else {
+        show( randomQueue.forward() );
+      }
       fetchingRandom = false;
     }, 'json');
   }
@@ -69,7 +74,6 @@ $(function(){
     id = parseInt(id) - 1;
     if (id > 0) {
       fetching = true;
-      console.log(id);
       $.get("/p/" + id, csrf(), function(plops){
         preload(plops);
         fetching = false;
@@ -80,7 +84,7 @@ $(function(){
   function rewind(){
     startTimer();
     queue.index = 0;
-    show(queue.forward());
+    show(queue.first());
     flash();
   }
 
@@ -104,12 +108,12 @@ $(function(){
         back();
         break;
 
-      case 40: // up
-        random();
+      case 40: // down
+        latest();
         break;
 
-      case 38: // down
-        latest();
+      case 38: // up
+        random();
         break;
 
     }

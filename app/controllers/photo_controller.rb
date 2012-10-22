@@ -29,7 +29,7 @@ class PhotoController < ApplicationController
   # Show images by a random ID
   def random
     @limit = params[:limit] || 1;
-    @offset = (Photo.count - 2000) + 2 + rand(2000 - 1)
+    @offset = (Photo.order(:id).last().id - 2000) + 2 + rand(2000 - 1)
     @photos = Photo.where("id < ?", @offset).order("id DESC").limit(@limit)
 
     respond_to do |format|

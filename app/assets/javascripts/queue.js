@@ -56,6 +56,10 @@ function Queue () {
   }
 
   base.empty = function(){
-    return base.queue.length > 0 && base.index < base.queue.length - 1;
+    return ! ( base.queue.length > 0 && base.index < base.queue.length - 1 );
+  }
+
+  base.bare = function(){
+    return base.queue.length == 0
   }
 }
