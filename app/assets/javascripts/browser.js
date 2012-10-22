@@ -191,16 +191,14 @@ $(function(){
 
   function tophats (count) {
     var hats = [];
-    var hatCount = count;
+    var hatCount = Math.min(count, 20);
     while (hatCount--) {
-      hats.push("<img src='/assets/tophat.png' width='24'>")
+      hats.push( "<img src='/assets/tophat.png' width='24'>" )
     }
-/*
-    if (count) {
-      hats.unshift("<br>");
-      hats.unshift(pluralize(count, "fave", "faves"));
+    if (count > 20) {
+      hats.unshift( "<br>" );
+      hats.unshift( "+ " + pluralize(count - 20, "fave", "faves") );
     }
-*/
     return hats.join("");
   }
 
