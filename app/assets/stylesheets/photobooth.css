@@ -100,8 +100,10 @@ h1 {
 }
 #tophat:hover {
   -webkit-transform: scale(1.0) rotate(5deg);
-
   transform: scale(1.0) rotate(5deg);
+}
+#nav i {
+  font-size: 13px;
 }
 #linx {
   position: absolute;
