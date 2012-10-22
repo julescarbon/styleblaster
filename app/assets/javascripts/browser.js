@@ -192,12 +192,13 @@ $(function(){
   function tophats (count) {
     var hats = [];
     var hatCount = Math.min(count, 20);
+    if (count == 0) return "";
     while (hatCount--) {
       hats.push( "<img src='/assets/tophat.png' width='24'>" )
     }
     if (count > 20) {
-      hats.unshift( "<br>" );
-      hats.unshift( "+ " + pluralize(count - 20, "fave", "faves") );
+      hats.push( "<br>" );
+      hats.push( "+ " + pluralize(count - 20, "fave", "faves") );
     }
     return hats.join("");
   }
