@@ -14,7 +14,10 @@ $(function(){
   $(window).keydown(keydown);
   $("#forward").click(forward);
   $("#back").click(back);
-  $("#square").click(forward);
+  $("#square").click(function(e){
+    e.preventDefault();
+    forward();
+  });
 
   init();
 

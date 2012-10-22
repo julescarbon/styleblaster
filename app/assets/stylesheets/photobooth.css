@@ -202,8 +202,13 @@ a {
 }
 a[href] {
   color: #32f;
+  font-size: 13px;
+  text-decoration: none;
   font-family: sans-serif;
   font-style: normal;
+}
+a[href]:hover {
+  border-bottom: 1px solid #32f;
 }
 ::-webkit-scrollbar {
     width: 10px;
