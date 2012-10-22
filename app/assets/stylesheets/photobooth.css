@@ -36,8 +36,16 @@ h1 {
   z-index: 2;
   display: inline;
   font-weight: bold;
+  cursor: pointer;
   -webkit-transform-origin: 0 0;
   -webkit-transform: rotate(270deg);
+  -moz-transform-origin: 0 0;
+  -moz-transform: rotate(270deg);
+  transform-origin: 0 0;
+  transform: rotate(270deg);
+}
+h1:hover {
+  color: #8f8388;
 }
 #square_container {
   position: absolute;

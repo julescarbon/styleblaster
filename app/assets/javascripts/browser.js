@@ -19,6 +19,7 @@ $(function(){
     forward();
   });
   $("#tophat").click(like);
+  $("h1").click(latest);
 
   init();
 
