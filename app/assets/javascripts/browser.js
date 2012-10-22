@@ -1,7 +1,15 @@
 $(function(){
 
   var queue = new Queue ();
-  var base_url = "http://s3.amazonaws.com/styleblaster/styleblaster/photos/original/";
+  var randomQueue = new Queue ();
+
+  var History = window.History;
+  History.Adapter.bind(window, 'statechange', function(){
+    var path = History.getState().url.replace(/#.*/,"").split("/").slice(2);
+    switch (path[0]) {
+      default:
+    }
+  });
 
   $(window).keydown(keydown);
   $("#forward").click(forward);
@@ -10,29 +18,11 @@ $(function(){
 
   init();
 
-  function Plop (data){
-    var base = this;
-    base.data = data || { id: 0, image_url: "", filetype: "" };
-
-    base.id = base.data.id;
-    base.image_url = base_url + data.photo_file_name.replace(/.png$/, ".jpg");
-
-    var d = derail_date(data.created_at);
-    base.day = d.getDate();
-    base.month = month(d.getMonth());
-    base.time = twelve(d.getHours()) + ":" + zero(d.getMinutes()) + " " + merid(d.getHours());
-
-    base.preload = function(){
-      var img = new Image();
-      img.src = base.image_url;
-    }
-  };
-
   function init () {
     if (window.PLOPS && PLOPS.length) {
+//      PLOPS.shift();
       preload(PLOPS);
-      var plop = queue.first();
-      show(plop);
+      rewind();
     }
     startTimer();
   }
@@ -52,14 +42,51 @@ $(function(){
         var plop = new Plop(plopData);
         plop.preload();
         queue.prepend(plop);
-        queue.index = 0;
-        show(plop);
-        $("#square").hide().fadeIn(500);
+        rewind();
       }
     }, "json");
   }
 
+  var fetchingRandom = false;
+  function fetchRandom(){
+    if (fetchingRandom) return;
+    fetchingRandom = true;
+    $.get("/random", csrf(), function(data){
+      if (! (data && data.length > 0) ) return;
+      for (var i in plops) {
+        var plop = new Plop(plops[i]);
+        plop.preload();
+        randomQueue.append(plop);
+      }
+      flash();
+      show( randomQueue.forward() );
+      fetchingRandom = false;
+    }, 'json');
+  }
+
+  var fetching = false;
+  function fetch(id) {
+    if (fetching) return;
+    id = parseInt(id) - 1;
+    if (id > 0) {
+      fetching = true;
+      console.log(id);
+      $.get("/p/" + id, csrf(), function(plops){
+        preload(plops);
+        fetching = false;
+      }, "json")
+    }
+  }
+
+  function rewind(){
+    startTimer();
+    queue.index = 0;
+    show(queue.forward());
+    flash();
+  }
+
   function preload(plops){
+    console.log([plops[0].id, "<=>", plops[plops.length-1].id].join(" "));
     for (var i in plops) {
       var plop = new Plop(plops[i]);
       plop.preload();
@@ -94,6 +121,7 @@ $(function(){
     var plop = queue.forward();
     if (plop) {
       show(plop);
+      History.pushState(undefined, undefined, "/p/" + plop.id);
     }
     if (queue.almostAtEnd()) {
       fetch(queue.last().data.id);
@@ -105,34 +133,43 @@ $(function(){
     var plop = queue.back();
     if (plop) {
       show(plop);
+      History.pushState(undefined, undefined, "/p/" + plop.id);
+    }
+  }
+
+  function latest(){
+    History.pushState(undefined, undefined, "/");
+    rewind();
+  }
+
+  function random(){
+    History.pushState(undefined, undefined, "/random");
+    if (randomQueue.empty()) {
+      fetchRandom();
+    } else {
+      show( randomQueue.forward() );
     }
   }
 
   function show(plop){
-    console.log(plop.data.id);  
-    $("#square").attr('src', plop.image_url);
-    $("#link").attr('href', plop.image_url);
-    $("#day").html(plop.day);
-    $("#month").html(plop.month);
-    $("#time").html(plop.time);
+    $("#square").attr( 'src', plop.image_url );
+    $("#link").attr( 'href', plop.image_url) ;
+    $("#day").html( plop.day );
+    $("#month").html( plop.month );
+    $("#time").html( plop.time );
+    $("#score").html( tophats(plop.score) );
   }
 
-  function random(){
-    window.location.href = "/random";
+  function flash(){
+    $("#square").hide().fadeIn(500);
   }
 
-  function latest(){
-    window.location.href = "/";
-    startTimer();
-  }
-
-  function fetch(id) {
-    id = parseInt(id) - 1;
-    if (id > 0) {
-      $.get("/p/" + id, csrf(), function(plops){
-        preload(plops);
-      }, "json")
+  function tophats (count) {
+    var hats = [];
+    while (count--) {
+      hats.push("<img src='/assets/tophat.png' width='45'>")
     }
+    return hats.join("");
   }
 
 });

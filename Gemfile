@@ -11,7 +11,6 @@ gem 'cocaine', '0.3.2'
 
 gem 'paperclip'
 gem 'aws-sdk', '~> 1.3.4'
-gem 'will_paginate', '~> 3.0'
 
 group :production do
   gem 'pg'

@@ -4,6 +4,7 @@ class Photo < ActiveRecord::Base
     :styles => { :original => ["800x600>", :jpg], :thumb => ["150x100>", :jpg] },
     :default_style => :original,
     :storage => :s3,
+    :s3_storage_class => :reduced_redundancy,
     :bucket => 'styleblaster',
     :path => 'styleblaster/:attachment/:style/:basename.:extension',
     :s3_credentials => {
