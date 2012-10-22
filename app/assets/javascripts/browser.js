@@ -20,17 +20,16 @@ $(function(){
 
   function init () {
     if (window.PLOPS && PLOPS.length) {
-//      PLOPS.shift();
       preload(PLOPS);
       rewind();
     }
-    startTimer();
+    if (window.location.pathName == "/") startTimer();
   }
 
   var timer = null;
   function startTimer () {
     clearTimeout(timer);
-    setTimeout(refresh, 5000);
+    setTimeout(refresh, 15000);
   }
 
   function refresh () {
@@ -138,8 +137,9 @@ $(function(){
   }
 
   function latest(){
-    History.pushState(undefined, undefined, "/");
-    rewind();
+    // History.pushState(undefined, undefined, "/");
+    // rewind();
+    window.location.href = "/";
   }
 
   function random(){
@@ -151,7 +151,7 @@ $(function(){
     }
   }
 
-  function show(plop){
+  function show(plop){ 
     $("#square").attr( 'src', plop.image_url );
     $("#link").attr( 'href', plop.image_url) ;
     $("#day").html( plop.day );
