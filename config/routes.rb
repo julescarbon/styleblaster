@@ -1,9 +1,8 @@
 PhotoboothGallery::Application.routes.draw do
-  match 'upload'        => 'photo#create', :via => :post
   get    '/random'      => "photo#random"
-  post   '/plop'        => "photo#create"
+  post   '/upload'      => "photo#create"
   delete '/p/:id'       => "photo#destroy"
-  put    '/p/:id/like'  => "photo#show"
+  post   '/p/:id/like'  => "photo#like"
   get    '/p/:id'       => "photo#show"
   get    '/refresh'     => "photo#index"
   root :to              => "photo#index"

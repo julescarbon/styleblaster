@@ -138,7 +138,11 @@ h1 {
   color: #22f;
   border-bottom: 1px solid #22f;
 }
-
+#score {
+  font-size: 12px;
+  color: #888;
+  opacity: 0.5;
+}
 
 
 
@@ -148,7 +152,6 @@ h2 {
   font-weight: normal;
   color: #333;
 }
-
 #curtain {
   display: none;
   position: fixed;

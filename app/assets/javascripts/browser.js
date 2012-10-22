@@ -7,7 +7,7 @@ $(function(){
   History.Adapter.bind(window, 'statechange', function(){
     var path = History.getState().url.replace(/#.*/,"").split("/").slice(2);
     switch (path[0]) {
-      default:
+//      default:
     }
   });
 
@@ -18,6 +18,7 @@ $(function(){
     e.preventDefault();
     forward();
   });
+  $("#tophat").click(like);
 
   init();
 
@@ -26,7 +27,7 @@ $(function(){
       preload(PLOPS);
       rewind();
     }
-    if (window.location.pathName == "/") startTimer();
+    if (window.location.pathname == "/") startTimer();
   }
 
   var timer = null;
@@ -85,7 +86,6 @@ $(function(){
   }
 
   function rewind(){
-    startTimer();
     queue.index = 0;
     show(queue.first());
     flash();
@@ -120,6 +120,23 @@ $(function(){
         break;
 
     }
+  }
+
+  function like () {
+    var plop = queue.current();
+    if (! isLiked(plop.id) ) {
+      plop.score += 1;
+
+      localStorage.setItem("p" + plop.id, "t");
+
+      $.post("/p/" + plop.id + "/like", csrf(), function(data){
+        show(plop);
+      });
+    }
+  }
+
+  function isLiked (id) {
+    return localStorage.getItem("p" + id) == "t"
   }
 
   function forward () {
@@ -173,10 +190,21 @@ $(function(){
 
   function tophats (count) {
     var hats = [];
-    while (count--) {
-      hats.push("<img src='/assets/tophat.png' width='45'>")
+    var hatCount = count;
+    while (hatCount--) {
+      hats.push("<img src='/assets/tophat.png' width='24'>")
     }
+/*
+    if (count) {
+      hats.unshift("<br>");
+      hats.unshift(pluralize(count, "fave", "faves"));
+    }
+*/
     return hats.join("");
+  }
+
+  function pluralize (i, a, b) {
+    return i + " " + (i == 1 ? a : b);
   }
 
 });

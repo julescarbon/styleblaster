@@ -45,6 +45,14 @@ class PhotoController < ApplicationController
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end
 
+  # like an image
+  def like
+    @photo = Photo.find(params[:id])
+    @photo.score += 1
+    @photo.save!
+    render text: "OK"
+  end
+
   # Destroy image
   def destroy
     @photo = Photo.find(params[:id])

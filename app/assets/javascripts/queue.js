@@ -43,6 +43,10 @@ function Queue () {
     return base.queue[0];
   }
 
+  base.current = function(){
+    return base.queue[base.index];
+  }
+
   base.last = function(){
     return base.queue[base.queue.length - 1];
   }
