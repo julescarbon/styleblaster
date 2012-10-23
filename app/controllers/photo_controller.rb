@@ -8,9 +8,6 @@ class PhotoController < ApplicationController
   def index
     @limit = params[:limit].to_i || 10;
 
-    if @limit > 50
-      @limit = 50
-    end
 
     @photos = Photo.order("id DESC").limit(@limit)
 
@@ -23,9 +20,6 @@ class PhotoController < ApplicationController
   # Show the top-rated image
   def popular
     @limit = params[:limit].to_i || 20;
-    if @limit > 50
-      @limit = 50
-    end
 
     @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
 
@@ -38,10 +32,6 @@ class PhotoController < ApplicationController
   # Show the images by an ID
   def show
     @limit = params[:limit].to_i || 10;
-    if @limit > 50
-
-      @limit = 50
-    end
 
     @photos = Photo.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
