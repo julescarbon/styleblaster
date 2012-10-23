@@ -1,5 +1,6 @@
 $(function(){
 
+  var randomMode = false;
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
@@ -123,7 +124,7 @@ $(function(){
   }
 
   function like () {
-    var plop = queue.current();
+    var plop = randomMode ? randomQueue.current() : queue.current();
     $("#rad").stop().hide().show().fadeOut(800);
 
     if (! isLiked(plop.id) ) {
@@ -142,6 +143,7 @@ $(function(){
   }
 
   function forward () {
+    randomMode = false;
     clearTimeout(timer);
     var plop = queue.forward();
     if (plop) {
@@ -154,6 +156,7 @@ $(function(){
   }
 
   function back () {
+    randomMode = false;
     clearTimeout(timer);
     var plop = queue.back();
     if (plop) {
@@ -169,6 +172,7 @@ $(function(){
   }
 
   function random(){
+    randomMode = true;
     History.pushState(undefined, undefined, "/random");
     if (randomQueue.empty()) {
       fetchRandom();
