@@ -18,6 +18,7 @@ $(function(){
     bind();
     load();
   }
+
   function bind () { 
     $(window).keydown(keydown);
     $("#forward").click(forward);
@@ -29,6 +30,7 @@ $(function(){
     $("#tophat").click(like);
     $("h1").click(latest);
   }
+
   function load () {
     if (window.PLOPS && PLOPS.length) {
       preload(PLOPS);
@@ -216,7 +218,7 @@ $(function(){
     }
     if (count > 5) {
       hats.push( "<br>" );
-      hats.push( "+ " + count - 5 ); // pluralize(count - 5, "fave", "faves") );
+      hats.push( "+ " + (count - 5) ); // pluralize(count - 5, "fave", "faves") );
     }
     return hats.join("");
   }

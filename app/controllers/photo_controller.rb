@@ -18,7 +18,7 @@ class PhotoController < ApplicationController
 
   # Show the top-rated image
   def popular
-    @limit = params[:limit] || 20;
+    @limit = params[:limit] || 50;
 
     @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
 
