@@ -39,6 +39,7 @@ class PhotoController < ApplicationController
   def show
     @limit = params[:limit].to_i || 10;
     if @limit > 50
+
       @limit = 50
     end
 
