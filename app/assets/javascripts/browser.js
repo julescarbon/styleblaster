@@ -86,7 +86,7 @@ $(function(){
     id = parseInt(id) - 1;
     if (id > 0) {
       fetching = true;
-      $.get("/p/" + id, csrf(), function(plops){
+      $.get("/p/" + id, csrf({ limit: 20 }), function(plops){
         preload(plops);
         fetching = false;
       }, "json")
