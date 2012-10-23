@@ -6,8 +6,7 @@ class PhotoController < ApplicationController
 
   # Show the newest image
   def index
-    @limit = params[:limit].to_i || 10;
-
+    @limit = params[:limit] || 10;
 
     @photos = Photo.order("id DESC").limit(@limit)
 
@@ -19,7 +18,7 @@ class PhotoController < ApplicationController
 
   # Show the top-rated image
   def popular
-    @limit = params[:limit].to_i || 20;
+    @limit = params[:limit] || 20;
 
     @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
 
@@ -31,7 +30,7 @@ class PhotoController < ApplicationController
 
   # Show the images by an ID
   def show
-    @limit = params[:limit].to_i || 10;
+    @limit = params[:limit] || 10;
 
     @photos = Photo.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
@@ -43,10 +42,7 @@ class PhotoController < ApplicationController
 
   # Show images by a random ID
   def random
-    @limit = params[:limit].to_i || 1;
-    if @limit > 50
-      @limit = 50
-    end
+    @limit = params[:limit] || 1;
 
     @offset = (Photo.order(:id).last().id - 2000) + 2 + rand(2000 - 1)
     @photos = Photo.where("id < ?", @offset).order(sql_rand).limit(@limit)
