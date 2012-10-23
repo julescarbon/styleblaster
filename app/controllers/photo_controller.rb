@@ -15,6 +15,17 @@ class PhotoController < ApplicationController
     end
   end
 
+  # Show the top-rated image
+  def popular
+    @limit = params[:limit] || 20;
+    @photos = Photo.order("score DESC").limit(@limit)
+
+    respond_to do |format|
+      format.html { render :template => "photo/index" }
+      format.json { render json: @photos }
+    end
+  end
+
   # Show the images by an ID
   def show
     @limit = params[:limit] || 10;
@@ -30,7 +41,7 @@ class PhotoController < ApplicationController
   def random
     @limit = params[:limit] || 1;
     @offset = (Photo.order(:id).last().id - 2000) + 2 + rand(2000 - 1)
-    @photos = Photo.where("id < ?", @offset).order("id DESC").limit(@limit)
+    @photos = Photo.where("id < ?", @offset).order(sql_rand).limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -66,6 +77,12 @@ class PhotoController < ApplicationController
     @photo.score += 1
     @photo.save!
     render text: "OK"
+  end
+
+  private
+
+  def sql_rand
+    @sql_rand = Rails.env.production? ? "RANDOM()" : "RAND()"
   end
 
 end

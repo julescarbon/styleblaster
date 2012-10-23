@@ -1,4 +1,5 @@
 PhotoboothGallery::Application.routes.draw do
+  get    '/popular'     => "photo#popular"
   get    '/random'      => "photo#random"
   post   '/upload'      => "photo#create"
   delete '/p/:id'       => "photo#destroy"
