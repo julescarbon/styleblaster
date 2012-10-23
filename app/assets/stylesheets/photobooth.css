@@ -257,7 +257,7 @@ a[href]:hover {
 }
 
 #social {
-  height: 24px; width: 200px;
+  height: 24px; width: 210px;
   position: relative;
   left: -2px;
   opacity: 0.0;
@@ -268,6 +268,9 @@ a.twitter-share-button {
 iframe.twitter-share-button {
   position: relative;
   top: 3px;
+}
+div.fb-like > span > iframe {
+  width: 95px !important;
 }
 
 ::-webkit-scrollbar {
