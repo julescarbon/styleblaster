@@ -14,7 +14,7 @@ function zero(m) {
 
 function derail_date (date_string) {
   var e = new Date((date_string || "").replace(/[\-\+]\d\d:\d\d$/,"").replace(/-/g,"/").replace(/[TZ]/g," "));
-  var d = new Date(e.getTime() - 5 * 3600000);
+  var d = new Date(e.getTime() - 4 * 3600000);
   return d;
 }
 
