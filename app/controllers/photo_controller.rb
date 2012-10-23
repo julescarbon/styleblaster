@@ -59,7 +59,7 @@ class PhotoController < ApplicationController
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end
 
-  # like an image
+  # like an image 
   def like
     @photo = Photo.find(params[:id])
     @photo.score += 1
