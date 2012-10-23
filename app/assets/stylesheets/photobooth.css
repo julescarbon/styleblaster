@@ -113,6 +113,18 @@ h1:hover {
 #nav i {
   font-size: 13px;
 }
+#rad {
+  font-size: 48px;
+  color: #f6d;
+  font-style: italic;
+  font-family: georgia, serif;
+  position: relative;
+  top: -20px;
+  left: 10px;
+  text-shadow: 0 0 3px yellow, 0 0 3px yellow, 2px 2px 3px #ddd;
+  display: none;
+  line-height: 2px;
+}
 #linx {
   position: absolute;
   bottom: 0;

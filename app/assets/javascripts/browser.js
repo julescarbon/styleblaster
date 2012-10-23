@@ -124,6 +124,8 @@ $(function(){
 
   function like () {
     var plop = queue.current();
+    $("#rad").stop().hide().show().fadeOut(800);
+
     if (! isLiked(plop.id) ) {
       plop.score += 1;
 

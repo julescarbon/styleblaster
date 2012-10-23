@@ -12,7 +12,7 @@
 
   <br>
   <div id="nav">
-    <img src="/assets/tophat.png" id="tophat"><br>
+    <img src="/assets/tophat.png" id="tophat"> <span id="rad">rad!</span><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &uarr; <i>click the top hat<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if they're stylin!</i><br><br>
     <!--
@@ -30,6 +30,8 @@
     live fashion blog, documenting the style of today.
     <br><br>
     <a id="about">About Styleblaster</a>
+    <br><br>
+    <div class="fb-like" data-href="http://styleblaster.net/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 80px;"></div>
   </div>
 
 </div>
@@ -66,4 +68,17 @@
 
 <script type="text/javascript">
 var PLOPS = <%= @photos.to_json.html_safe %>;
+</script>
+
+<div id="fb-root"></div>
+<script>
+setTimeout(function(){
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=113276355497144";
+    fjs.parentNode.insertBefore(js, fjs);
+  })(document, 'script', 'facebook-jssdk')
+}, 2000);
 </script>
