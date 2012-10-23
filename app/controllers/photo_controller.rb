@@ -18,7 +18,7 @@ class PhotoController < ApplicationController
   # Show the top-rated image
   def popular
     @limit = params[:limit] || 20;
-    @photos = Photo.order("score DESC").limit(@limit)
+    @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
