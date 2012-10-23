@@ -1,6 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0'
+ruby '1.9.3'
+
+gem 'rails', '3.2.7'
 
 gem 'thin'
 
@@ -9,7 +11,6 @@ gem 'cocaine', '0.3.2'
 
 gem 'paperclip'
 gem 'aws-sdk', '~> 1.3.4'
-gem 'will_paginate', '~> 3.0'
 
 group :production do
   gem 'pg'
@@ -22,8 +23,7 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
-  gem 'coffee-rails', "~> 3.1.0"
+  gem 'sass-rails'
   gem 'uglifier'
 end
 

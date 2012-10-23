@@ -1,0 +1,69 @@
+<h1>styleblaster</h1>
+
+<div id="square_container">
+<a id="link"><img id="square"></a>
+</div>
+<div id="sidebar">
+  <div id="date">
+    <div id="day">&nbsp;</div>
+    <div id="month">&nbsp;</div>
+    <div id="time">&nbsp;</div>
+  </div>
+
+  <br>
+  <div id="nav">
+    <img src="/assets/tophat.png" id="tophat"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &uarr; <i>click the top hat<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if they're stylin!</i><br><br>
+    <!--
+    <a id="back" class="nav">&larr; previous,</a>
+    &nbsp;
+    -->
+    <a id="forward" class="nav">Previous style &rarr;</a>
+  </div>
+  <br>
+  <br>
+  <div id="score"></div>
+
+  <div id="linx">
+    Styleblaster is Williamsburg's premier
+    live fashion blog, documenting the style of today.
+    <br><br>
+    <a id="about">About Styleblaster</a>
+  </div>
+
+</div>
+
+<div id="curtain">
+  <div id="manifesto">
+    <span class="close">x</span>
+    <h2>About Styleblaster</h2>
+    <p>
+      Since the early 2000s, Williamsburg has been a neighborhood popular with a new cultural elite, the heirs of the artists and hipsters who in years past were attracted by its location, one subway stop from Manhattan.
+    </p>
+    <p>
+      Now in 2012, the neighborhood is poised on the cusp of a new change as the repercussions of recent zoning changes, combined with condo construction, have literally paved the way for a new breed of stylish and sassy individuals.  A place for the fashionable to be seen, Williamsburg's stretch of Bedford Avenue is often described as a modern Haight-Ashbury, a cultural mecca for the Millenial generation.
+    </p>
+
+    <p>
+      To answer the changing times, we introduce Styleblaster, a realtime account of what people in Williamsburg are wearing.  Unlike a typical streetstyle blog, Styleblaster documents all -- the visiting fashion plates, the hipsters and have-nots, the native Polish and Italian proud who have for years called this neighborhood home.  And above all -- the dapper salarymen and businesswomen who stand to inherit the area.
+    </p>
+
+    <p>
+      Situated a block from the hellmouth of the Bedford "L" subway train, our camera aims down the street, capturing Williamsburg on the hoof.  Moments after a person enters into the frame, the camera snaps, sending its image onto our blog.  For the online fashion browser, a boon: the blog updates in realtime, showcasing each new image as quick as it can be appraised.  Online viewers can watch a live feed, peruse a recent history of images, or compare shots over the days and weeks as FW-2012 blossoms into SS-2013.
+    </p>
+
+    <p>
+      We believe this service fills a need for live fashion information, with a unique and unmatched vantage point on the hippest block in New York City.  It will quickly become a destination for New York City peacocks to traipse by and show off what makes the neighborhood hop.  For the savvy, a place to be seen.  For the flaneur, a bounty of style.  At home or online, fashion has a new destination.
+    </p>
+
+    <p>
+      <a href="http://styleblaster.net/">http://styleblaster.net/</a><br>
+      October 2012
+    </p>
+  </div>
+</div>
+
+<script type="text/javascript">
+var PLOPS = <%= @photos.to_json.html_safe %>;
+</script>
