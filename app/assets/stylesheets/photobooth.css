@@ -240,6 +240,21 @@ a[href] {
 a[href]:hover {
   border-bottom: 1px solid #32f;
 }
+
+#social {
+  height: 24px; width: 200px;
+  position: relative;
+  left: -2px;
+  opacity: 0.0;
+}
+a.twitter-share-button {
+  display: none;
+}
+iframe.twitter-share-button {
+  position: relative;
+  top: 3px;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
 }

@@ -34,7 +34,10 @@
     <br><br>
     <a id="about">About Styleblaster</a>
     <br><br>
-    <div class="fb-like" data-href="http://styleblaster.net/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 80px;"></div>
+    <div id="social">
+      <div class="fb-like" data-href="http://styleblaster.net/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 80px;"></div>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://styleblaster.net/">Tweet</a>
+    </div>
   </div>
 
 </div>
@@ -82,6 +85,19 @@ setTimeout(function(){
     js = d.createElement(s); js.id = id;
     js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=113276355497144";
     fjs.parentNode.insertBefore(js, fjs);
-  })(document, 'script', 'facebook-jssdk')
-}, 2000);
+  })(document, 'script', 'facebook-jssdk');
+
+  (function(d,s,id){
+    var js, fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){
+      js=d.createElement(s);
+      js.id=id;
+      js.src="//platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js,fjs);
+    }
+  })(document,"script","twitter-wjs");
+
+  $("#social").delay(200).animate({ opacity: 1.0 }, 500);
+
+}, 500);
 </script>
