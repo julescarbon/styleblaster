@@ -4,6 +4,8 @@ $(function(){
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
+  var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!'];
+
   var History = window.History;
   History.Adapter.bind(window, 'statechange', function(){
     var path = History.getState().url.replace(/#.*/,"").split("/").slice(2);
@@ -13,12 +15,10 @@ $(function(){
   });
 
   function init () {
-    if (window.PLOPS && PLOPS.length) {
-      preload(PLOPS);
-      rewind();
-    }
-    if (window.location.pathname == "/") startTimer();
-  
+    bind();
+    load();
+  }
+  function bind () { 
     $(window).keydown(keydown);
     $("#forward").click(forward);
     $("#back").click(back);
@@ -28,6 +28,13 @@ $(function(){
     });
     $("#tophat").click(like);
     $("h1").click(latest);
+  }
+  function load () {
+    if (window.PLOPS && PLOPS.length) {
+      preload(PLOPS);
+      rewind();
+    }
+    if (window.location.pathname == "/") startTimer();
   }
 
   var timer = null;
@@ -125,7 +132,9 @@ $(function(){
 
   function like () {
     var plop = randomMode ? randomQueue.current() : queue.current();
-    $("#rad").stop().hide().show().fadeOut(800);
+    $("#rad").stop().css('opacity', 0.0);
+    $("#rad").html( choice(radPhrases) )
+    $("#rad").css('opacity', 1.0).animate({ 'opacity': 0.0 }, 800);
 
     if (! isLiked(plop.id) ) {
       plop.score += 1;
@@ -192,6 +201,10 @@ $(function(){
 
   function flash(){
     $("#square").hide().fadeIn(500);
+  }
+
+  function choice(list){
+    return list[ Math.floor(Math.random() * list.length) ]
   }
 
   function tophats (count) {

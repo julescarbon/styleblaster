@@ -113,16 +113,22 @@ h1:hover {
 #nav i {
   font-size: 13px;
 }
+#hatbox {
+  width: 400px;
+}
 #rad {
+  width: 300px;
+  overflow: visible;
   font-size: 48px;
   color: #f6d;
   font-style: italic;
   font-family: georgia, serif;
   position: relative;
-  top: -20px;
+  top: -40px;
   left: 10px;
   text-shadow: 0 0 3px yellow, 0 0 3px yellow, 2px 2px 3px #ddd;
-  display: none;
+  display: inline-block;
+  opacity: 0.0;
   line-height: 2px;
 }
 #linx {
