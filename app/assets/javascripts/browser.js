@@ -28,6 +28,8 @@ $(function(){
       forward();
     });
     $("#tophat").click(like);
+    $("#random").click(random);
+    $("#popular").click(popular);
     $("h1").click(latest);
   }
 
@@ -182,6 +184,12 @@ $(function(){
     window.location.href = "/";
   }
 
+  function popular(){
+    // History.pushState(undefined, undefined, "/");
+    // rewind();
+    window.location.href = "/popular";
+  }
+
   function random(){
     randomMode = true;
     History.pushState(undefined, undefined, "/random");
@@ -190,6 +198,7 @@ $(function(){
     } else {
       show( randomQueue.forward() );
     }
+    return false;
   }
 
   function show(plop){ 
@@ -217,8 +226,7 @@ $(function(){
       hats.push( "<img src='/assets/tophat.png' width='24'>" )
     }
     if (count > 5) {
-      hats.push( "<br>" );
-      hats.push( "+ " + (count - 5) ); // pluralize(count - 5, "fave", "faves") );
+      hats.push( "<span id='hatcount'>+ " + (count - 5) + "</span>" ); // pluralize(count - 5, "fave", "faves") );
     }
     return hats.join("");
   }

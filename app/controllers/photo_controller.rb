@@ -44,8 +44,7 @@ class PhotoController < ApplicationController
   def random
     @limit = params[:limit] || 1;
 
-    @offset = (Photo.order(:id).last().id - 2000) + 2 + rand(2000 - 1)
-    @photos = Photo.where("id < ?", @offset).order(sql_rand).limit(@limit)
+    @photos = Photo.order(sql_rand).limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -86,7 +85,7 @@ class PhotoController < ApplicationController
   private
 
   def sql_rand
-    @sql_rand = Rails.env.production? ? "RANDOM()" : "RAND()"
+    @sql_rand = Rails.env.production? ? "RANDOM()" : "RANDOM()"
   end
 
 end
