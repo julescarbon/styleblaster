@@ -6,7 +6,7 @@ class PhotoController < ApplicationController
 
   # Show the newest image
   def index
-    @limit = params[:limit] || 10;
+    @limit = params[:limit].to_i || 10;
 
     if @limit > 50
       @limit = 50
@@ -22,7 +22,7 @@ class PhotoController < ApplicationController
 
   # Show the top-rated image
   def popular
-    @limit = params[:limit] || 20;
+    @limit = params[:limit].to_i || 20;
     if @limit > 50
       @limit = 50
     end
@@ -37,7 +37,7 @@ class PhotoController < ApplicationController
 
   # Show the images by an ID
   def show
-    @limit = params[:limit] || 10;
+    @limit = params[:limit].to_i || 10;
     if @limit > 50
       @limit = 50
     end
@@ -52,7 +52,7 @@ class PhotoController < ApplicationController
 
   # Show images by a random ID
   def random
-    @limit = params[:limit] || 1;
+    @limit = params[:limit].to_i || 1;
     if @limit > 50
       @limit = 50
     end
