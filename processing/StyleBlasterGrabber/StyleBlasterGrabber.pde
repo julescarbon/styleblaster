@@ -10,7 +10,7 @@ Timer cameraTimer, sensorTimer;
 int numPixels;
 boolean blast; //turns photo-taking on or off
 boolean ignoreSensor = true;
-boolean debug = true;
+boolean debug = false;
 boolean uploading = false;
 boolean checkRight = false;
 boolean grab = false;
@@ -23,7 +23,7 @@ MotionSensor leftSensor, rightSensor;
 //SETUP VARS
 String version = "1.5";
 int startHour = 7; //7am
-int endHour = 18;  //6pm
+int endHour = 17;  //5pm
 int sensorBuffer = -200;
 int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
@@ -64,8 +64,11 @@ public void setup() {
   if (version == "2.0") {
     //   cam.start();
   }
-  cam.frameRate(20);
-  cameraTimer = new Timer(2000);
+  //set global framerate
+  int f = 25;
+  frameRate(f);
+  cam.frameRate(f);
+  cameraTimer = new Timer(1000);
 
   sensorTimer = new Timer(1000);
 
@@ -74,6 +77,7 @@ public void setup() {
   rightSensor = new MotionSensor();
 
   of = new OpticalFlow(cam);
+  
 }
 
 void draw() {
@@ -86,23 +90,45 @@ void draw() {
       }
     }
   }
+  
+  if (mousePressed) {
+    rectMode(CORNER);
+
+    leftSensor._bDiff = 0;
+    ignoreSensor = true;
+    int sensorWidth = round((mouseX - leftSensor._r.x));
+    int sensorHeight =  mouseY - leftSensor._r.y;
+    leftSensor._r.width = sensorWidth;
+    leftSensor._r.height = sensorHeight;
+
+    leftSensor.update();
+    
+    blast = false;
+  }
 
   if (! uploading) {
     cam.read();
-    //   image(cam, 0, 0);
-    // image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
     grabImage = cam.get(cam.width/2-width/2, cam.height/2-height/2, width, height);
     image(grabImage, 0, 0);
 
     of.updateImage(grabImage);
     of.draw();
-
     
-   /* if (grab) {
-      takePicture();
-    }
-    else {
-    }*/
+    if (ignoreSensor) {
+        ignoreSensor = false;
+      }
+      else {
+        if (grab) {
+          //          leftSensor.reset();
+          println("!!!HIT!!! @ : "+rightSensor._bDiff);
+          fill(255, 0, 0);
+          onHit();
+        }
+        else {
+          noFill();
+        }
+      }
+      
   }
 
   stroke(255, 100, 100);
@@ -122,27 +148,6 @@ void draw() {
     text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
-  if (mousePressed) {
-    rectMode(CORNER);
-
-    leftSensor._bDiff = 0;
-    // rightSensor._bDiff = 0;
-
-    ignoreSensor = true;
-    int sensorWidth = round((mouseX - leftSensor._r.x)/2);
-    int sensorHeight =  mouseY - leftSensor._r.y;
-    leftSensor._r.width = sensorWidth;
-    //rightSensor._r.width = sensorWidth;
-    leftSensor._r.height = sensorHeight;
-    //rightSensor._r.height = sensorHeight;
-
-    // rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
-
-
-    leftSensor.update();
-    //rightSensor.update();
-  }
-  else {
     if (blast) {
 
       //BLAST OFF!
@@ -189,22 +194,10 @@ void draw() {
        }
        }
        */
-      if (ignoreSensor) {
-        ignoreSensor = false;
-      }
-      else {
-        if (grab) {
-          //          leftSensor.reset();
-          println("!!!HIT!!! @ : "+rightSensor._bDiff);
-          fill(255, 0, 0);
-          onHit();
-        }
-        else {
-          noFill();
-        }
-      }
+      
+      
     }
-  }
+  
 }
 
 void mousePressed() {
