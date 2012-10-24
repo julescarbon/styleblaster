@@ -187,6 +187,11 @@ h1:hover {
   font-style: italic;
   padding-top: 5px;
 }
+#byebye {
+  font-family: georgia, serif;
+  font-size: 13px;
+  color: #444;
+}
 h2 {
   font-size: 23px;
   font-family: sans-serif;

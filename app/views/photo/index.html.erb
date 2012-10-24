@@ -25,7 +25,15 @@
     <a id="forward" class="nav">Previous style &rarr;</a>
   </div>
   <br>
+  <% if @hour > 17 %>
+    <span id="byebye">
+      Styleblaster is done for the night.<br>
+      Check back tomorrow morning!
+    </span>
+  <% end %>
   <br>
+  <br>
+
   <div id="score"></div>
 
   <div id="linx">

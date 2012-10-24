@@ -4,6 +4,8 @@ class PhotoController < ApplicationController
 
   http_basic_authenticate_with :name => "style", :password => "blaster", :only => :delete
 
+  before_filter :get_hour
+
   # Show the newest image
   def index
     @limit = params[:limit] || 10;
@@ -86,6 +88,10 @@ class PhotoController < ApplicationController
 
   def sql_rand
     @sql_rand = Rails.env.production? ? "RANDOM()" : "RANDOM()"
+  end
+
+  def get_hour
+    @hour = Time.now.in_time_zone("America/New_York").hour
   end
 
 end
