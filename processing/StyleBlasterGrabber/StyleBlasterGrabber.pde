@@ -31,7 +31,7 @@ String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 15;
-int flowThreshold = -200;
+int flowThreshold = -220;
 float sensorRes = 1;
 
 public void setup() {
