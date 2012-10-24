@@ -255,6 +255,10 @@ a[href] {
 a[href]:hover {
   border-bottom: 1px solid #438;
 }
+#manifesto a {
+  border-bottom: 1px dotted #34f;
+}
+
 
 #social {
   height: 24px; width: 210px;
