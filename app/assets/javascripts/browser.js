@@ -4,7 +4,7 @@ $(function(){
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
-  var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!','boom!','ooh!','tres&nbsp;brooklyn!','wickid!','wow!','holla!'];
+  var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!','boom!','ooh!','tres&nbsp;brooklyn!','wickid!','wow!','holla!','new&nbsp;aesthetic!'];
 
   var History = window.History;
   History.Adapter.bind(window, 'statechange', function(){

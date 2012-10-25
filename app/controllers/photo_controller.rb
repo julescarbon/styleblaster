@@ -22,7 +22,11 @@ class PhotoController < ApplicationController
   def popular
     @limit = params[:limit] || 50;
 
-    @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
+    @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
+
+    unless @photos.any?
+      @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
+    end
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -90,8 +94,12 @@ class PhotoController < ApplicationController
     @sql_rand = Rails.env.production? ? "RANDOM()" : "RANDOM()"
   end
 
+  def now
+    Time.now.in_time_zone("America/New_York")
+  end
+
   def get_hour
-    @hour = Time.now.in_time_zone("America/New_York").hour
+    @hour = now.hour
   end
 
 end
