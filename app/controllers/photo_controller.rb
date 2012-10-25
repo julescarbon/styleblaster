@@ -10,8 +10,8 @@ class PhotoController < ApplicationController
   def index
     @limit = params[:limit] || 10;
 
-    if @hour <= 8 or @hour >= 17
-      @photos = Photo.order(sql_rand).limit(@limit)
+    if @nighttime
+      @photos = Photo.order(sql_rand).limit(5)
     else
       @photos = Photo.order("id DESC").limit(@limit)
     end
@@ -104,6 +104,7 @@ class PhotoController < ApplicationController
 
   def get_hour
     @hour = now.hour
+    @nighttime = (@hour <= 8 or @hour >= 17)
   end
 
 end

@@ -9,18 +9,27 @@ html,body {
   overflow: auto;
   background-position: center center;
 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+body.day {
   background: #fcf4d1;
   background: -moz-radial-gradient(center, ellipse cover,  #fcf4e1 22%, #d9f3ff 100%);
   background: -webkit-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
   background: -o-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
   background: -ms-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
   background: radial-gradient(ellipse at center,  #fcf4e1 22%,#d9f3ff 100%);
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+}
+body.night {
+  background: #a7b0b4;
+  background: -moz-radial-gradient(center, ellipse cover,  #a7b0b4 22%, #222 100%);
+  background: -webkit-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
+  background: -o-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
+  background: -ms-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
+  background: radial-gradient(ellipse at center,  #a7b0b4 22%,#222 100%);
 }
 
 h1 {
@@ -46,6 +55,9 @@ h1 {
 }
 h1:hover {
   color: #8f8388;
+}
+body.night h1 {
+  color: #333;
 }
 #square_container {
   position: absolute;
