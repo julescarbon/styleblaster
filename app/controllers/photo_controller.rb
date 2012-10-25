@@ -10,7 +10,11 @@ class PhotoController < ApplicationController
   def index
     @limit = params[:limit] || 10;
 
-    @photos = Photo.order("id DESC").limit(@limit)
+    if @hour <= 8 or @hour >= 17
+      @photos = Photo.order(sql_rand).limit(@limit)
+    else
+      @photos = Photo.order("id DESC").limit(@limit)
+    end
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
