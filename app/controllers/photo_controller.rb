@@ -64,7 +64,7 @@ class PhotoController < ApplicationController
 
   # /upload API used by processing, returns url to image
   def create
-    @photo = Photo.create( :photo => params[:test], :score => (rand(3) + 1) )
+    @photo = Photo.create( :photo => params[:test], :score => (rand(2) + 1) )
     render :text => @photo.photo.url
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end
