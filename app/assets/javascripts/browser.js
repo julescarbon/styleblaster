@@ -4,7 +4,7 @@ $(function(){
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
-  var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!','boom!','ooh!','tres&nbsp;brooklyn!','wickid!','wow!','holla!','new&nbsp;aesthetic!'];
+  var radPhrases = "spooky! creepy! ghastly! putrid! vile! horrifying! scary! tres&nbsp;brooklyn! wicked! haunted! dark! bleak! cursed! condemned! harrowing!".split(" ");
 
   var History = window.History;
   History.Adapter.bind(window, 'statechange', function(){
@@ -139,6 +139,7 @@ $(function(){
     $("#rad").stop().css('opacity', 0.0);
     $("#rad").html( choice(radPhrases) )
     $("#rad").css('opacity', 1.0).animate({ 'opacity': 0.0 }, 800);
+    $("#spookybro").stop().css('opacity', 0.9).delay(500).animate({ 'opacity': 0.0 }, 800);
 
     if (! isLiked(plop.id) ) {
       plop.score += 1;

@@ -35,10 +35,10 @@ body.night {
 h1 {
   position: absolute;
   top: 50%; left: 50%;
-  margin-left: -284px;
-  margin-top: 300px;
+  margin-left: -278px;
+  margin-top: 310px;
   color: white;
-  font-size: 138px;
+  font-size: 118px;
   line-height: 0;
   letter-spacing: -15px;
   color: #888;
@@ -112,15 +112,13 @@ body.night h1 {
   border-top: 1px solid white;
 }
 #tophat {
-  width: 92px;
-  height: 80px;
-  -webkit-transform: scale(0.8);
-  transform: scale(0.8);
+  width: 118px;
+  height: 141px;
   cursor: pointer;
+  background-image: url(/assets/pumpkin.png);
 }
 #tophat:hover {
-  -webkit-transform: scale(1.0) rotate(5deg);
-  transform: scale(1.0) rotate(5deg);
+  background-position: 119px 0;
 }
 #nav i {
   font-size: 13px;
@@ -129,15 +127,16 @@ body.night h1 {
   width: 400px;
 }
 #rad {
+  pointer-events: none;
   width: 300px;
   overflow: visible;
   font-size: 48px;
-  color: #f6d;
+  color: #fd6;
   font-style: italic;
   font-family: georgia, serif;
   position: relative;
   top: -40px;
-  left: 10px;
+  left: 130px;
   text-shadow: 0 0 3px yellow, 0 0 3px yellow, 2px 2px 3px #ddd;
   display: inline-block;
   opacity: 0.0;
@@ -153,12 +152,15 @@ body.night h1 {
   font-style: italic;
 }
 #linx a {
-  color: #41d;
-  border-bottom: 1px dotted #41d;
+  color: #FFF154;
+  border-bottom: 1px dotted #FFF154;
 }
 #linx a:hover {
-  color: #60f;
-  border-bottom: 1px dotted #60f;
+  color: #fe0;
+  border-bottom: 1px solid #fe0;
+}
+#about:hover {
+  border-bottom-style: solid;
 }
 #nav {
   -webkit-user-select: none;
@@ -169,12 +171,12 @@ body.night h1 {
 }
 #forward {
   font-size: 18px;
-  color: #5344FF;
-  border-bottom: 1px dotted #5344FF;
+  color: #FFF844;
+  border-bottom: 1px dotted #FFF844;
 }
 #forward:hover, #back:hover {
-  color: #22f;
-  border-bottom: 1px solid #22f;
+  color: #FFF844;
+  border-bottom: 1px solid #FFF844;
 }
 #score {
   font-size: 12px;
@@ -192,8 +194,8 @@ body.night h1 {
   margin-top: 5px;
 }
 #linx2 a {
-  color: #438;
-  border-color: #438;
+  color: #eDbC11;
+  border-color: #eDbC11;
   font-family: georgia, serif;
   font-size: 13px;
   font-style: italic;
@@ -217,7 +219,7 @@ h2 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.7);
   z-index: 8;
   box-shadow: 0 0 100px #fff inset;
 }
@@ -263,19 +265,55 @@ a {
   cursor: pointer;
 }
 a[href] {
-  color: #438;
+  color: #000;
   font-size: 13px;
   text-decoration: none;
   font-family: sans-serif;
   font-style: normal;
 }
 a[href]:hover {
-  border-bottom: 1px solid #438;
+  border-bottom: 1px solid #000;
 }
 #manifesto a {
   border-bottom: 1px dotted #34f;
 }
-
+#cobweb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  opacity: 0.7;
+}
+#bats {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: 360px;
+  margin-top: -150px;
+}
+#spookybro {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -600px;
+  margin-top: -300px;
+  opacity: 0.0;
+}
+#moon {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+#tree {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+#death {
+  position: fixed;
+  bottom: 20px;
+  right: 140px;
+}
 
 #social {
   height: 24px; width: 210px;
@@ -295,20 +333,23 @@ div.fb-like > span > iframe {
 }
 
 ::-webkit-scrollbar {
+    width: 0px;
+}
+#manifesto::-webkit-scrollbar {
     width: 10px;
 }
-::-webkit-scrollbar-track {
+#manifesto::-webkit-scrollbar-track {
     background: #f4f4f4;
     -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
 }
-::-webkit-scrollbar-thumb {
+#manifesto::-webkit-scrollbar-thumb {
     background: #ddd;
     -webkit-box-shadow: inset 0px -1px 3px rgba(0,0,0,0.2);
 }
-::-webkit-scrollbar-thumb:hover {
+#manifesto::-webkit-scrollbar-thumb:hover {
     background: #AAA;
 }
-::-webkit-scrollbar-thumb:active {
+#manifesto::-webkit-scrollbar-thumb:active {
     background: #888;
     -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
 }
