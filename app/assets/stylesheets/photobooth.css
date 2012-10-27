@@ -292,7 +292,7 @@ a[href]:hover {
   margin-top: -150px;
 }
 #spookybro {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -600px;
@@ -300,7 +300,7 @@ a[href]:hover {
   opacity: 0.0;
 }
 #moon {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
 }
