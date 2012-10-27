@@ -4,7 +4,7 @@ $(function(){
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
-  var radPhrases = "spooky! creepy! ghastly! putrid! vile! horrifying! scary! tres&nbsp;brooklyn! wicked! haunted! dark! bleak! cursed! condemned! harrowing!".split(" ");
+  var radPhrases = "spooky! creepy! ghastly! putrid! vile! horrifying! scary! tres&nbsp;brooklyn! wicked! haunted! dark! cursed! condemned! boo!".split(" ");
 
   var History = window.History;
   History.Adapter.bind(window, 'statechange', function(){
