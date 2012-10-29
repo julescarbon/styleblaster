@@ -24,11 +24,11 @@ h1 {
   position: absolute;
   top: 50%; left: 50%;
   margin-left: -281px;
-  margin-top: 300px;
+  margin-top: 315px;
   color: white;
   font-size: 126px;
   line-height: 0;
-  letter-spacing: -15px;
+  letter-spacing: -12px;
   color: rgba(33,33,33,0.8);
   z-index: 2;
   display: inline;
