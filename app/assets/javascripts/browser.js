@@ -4,7 +4,7 @@ $(function(){
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
-  var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!','boom!','ooh!','tres&nbsp;brooklyn!','wickid!','wow!','holla!','new&nbsp;aesthetic!'];
+  var radPhrases = "boom! tres&nbsp;brooklyn! thunderclap! windy! whoosh! sandy! dandy! flooded! in&nbsp;the&nbsp;eye! stormy! wet! new&nbsp;aesthetic!".split(" ")
 
   var History = window.History;
   History.Adapter.bind(window, 'statechange', function(){
@@ -223,7 +223,7 @@ $(function(){
     var hatCount = Math.min(count, 5);
     if (count == 0) return "";
     while (hatCount--) {
-      hats.push( "<img src='/assets/tophat.png' width='24'>" )
+      hats.push( "<img src='/assets/rainhat.png' width='24'>" )
     }
     if (count > 5) {
       hats.push( "<span id='hatcount'>+ " + (count - 5) + "</span>" ); // pluralize(count - 5, "fave", "faves") );

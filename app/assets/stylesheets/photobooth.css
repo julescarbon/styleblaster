@@ -14,34 +14,22 @@ html,body {
   left: 0;
   width: 100%;
   height: 100%;
-}
-body.day {
   background: #fcf4d1;
-  background: -moz-radial-gradient(center, ellipse cover,  #fcf4e1 22%, #d9f3ff 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: radial-gradient(ellipse at center,  #fcf4e1 22%,#d9f3ff 100%);
-}
-body.night {
-  background: #a7b0b4;
-  background: -moz-radial-gradient(center, ellipse cover,  #a7b0b4 22%, #222 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: radial-gradient(ellipse at center,  #a7b0b4 22%,#222 100%);
+  background-image: url('/assets/sandy.png');
+  background-size: cover;
+  background-position: center left;
 }
 
 h1 {
   position: absolute;
   top: 50%; left: 50%;
-  margin-left: -284px;
+  margin-left: -281px;
   margin-top: 300px;
   color: white;
-  font-size: 138px;
+  font-size: 126px;
   line-height: 0;
   letter-spacing: -15px;
-  color: #888;
+  color: rgba(33,33,33,0.8);
   z-index: 2;
   display: inline;
   font-weight: bold;
@@ -54,7 +42,7 @@ h1 {
   transform: rotate(270deg);
 }
 h1:hover {
-  color: #8f8388;
+  color: rgba(33,33,33,0.95);
 }
 body.night h1 {
   color: #333;
@@ -84,8 +72,11 @@ body.night h1 {
   height: 580px;
   top: 50%;
   left: 50%;
-  margin-top: -290px;
+  margin-top: -300px;
   margin-left: 203px;
+  background: rgba(255,255,255,0.9);
+  padding: 10px;
+  box-shadow: 0 3px 5px #333;
 }
 #date {
   width: 100px;
@@ -94,6 +85,7 @@ body.night h1 {
   padding: 15px;
   border: 5px solid rgb(255,248,248);
   box-shadow: 0 1px 5px #112233;
+  margin-left: 27px;
 }
 #day {
   color: rgb(255,248,248);
@@ -151,6 +143,7 @@ body.night h1 {
   font-size: 14px;
   font-family: georgia, serif;
   font-style: italic;
+  padding: 10px;
 }
 #linx a {
   color: #41d;
@@ -166,6 +159,7 @@ body.night h1 {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  padding-left: 28px;
 }
 #forward {
   font-size: 18px;
@@ -180,6 +174,11 @@ body.night h1 {
   font-size: 12px;
   color: #888;
   opacity: 0.6;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 #hatcount {
   position: relative;
