@@ -23,6 +23,15 @@ class PhotoController < ApplicationController
     end
   end
 
+  def latest
+    @photos = Photo.order("id DESC").limit(1)
+
+    respond_to do |format|
+      format.html { render :template => "photo/index" }
+      format.json { render json: @photos }
+    end
+  end
+
   # Show the top-rated image
   def popular
     @limit = params[:limit] || 50;
