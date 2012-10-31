@@ -59,7 +59,7 @@ class PhotoController < ApplicationController
 
   # Show images by a random ID
   def random
-    @limit = params[:limit] || 1;
+    @limit = params[:limit] || 5;
 
     @photos = Photo.order(sql_rand).limit(@limit)
 
