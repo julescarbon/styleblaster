@@ -35,7 +35,7 @@ class PhotoController < ApplicationController
 
   # Show the best images
   def top
-    @limit = params[:limit] || 50;
+    @limit = params[:limit] || 200;
 
     @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
 
