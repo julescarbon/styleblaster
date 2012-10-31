@@ -6,12 +6,13 @@ class PhotoController < ApplicationController
 
   before_filter :get_hour
 
-  # Show the newest image
+  # Show something appropriate
   def index
     @limit = params[:limit] || 10;
 
     if @nighttime
-      @photos = Photo.order(sql_rand).limit(5)
+      @photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
+#      @photos = Photo.order(sql_rand).limit(5)
     else
       @photos = Photo.order("id DESC").limit(@limit)
     end
@@ -22,15 +23,21 @@ class PhotoController < ApplicationController
     end
   end
 
-  # Show the top-rated image
-  def popular
+  # Show the most recent images
+  def latest
+    @photos = Photo.order("id DESC").limit(10)
+
+    respond_to do |format|
+      format.html { render :template => "photo/index" }
+      format.json { render json: @photos }
+    end
+  end
+
+  # Show the best images
+  def top
     @limit = params[:limit] || 50;
 
-    @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
-
-    unless @photos.any?
-      @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
-    end
+    @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
