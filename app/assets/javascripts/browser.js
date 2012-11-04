@@ -130,10 +130,15 @@ $(function(){
       case 38: // up
         random();
         break;
+  
+      case 32://add case for space bar for voting here
+        like();
+        break;
 
     }
   }
 
+  //LIKE
   function like () {
     var plop = randomMode ? randomQueue.current() : queue.current();
     $("#rad").stop().css('opacity', 0.0);
