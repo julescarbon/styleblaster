@@ -92,7 +92,6 @@ class PhotoController < ApplicationController
   end
 
   # Like image
-  # Why 2 "like" defs here?
   def like
     @photo = Photo.find(params[:id])
     @photo.score += 1
