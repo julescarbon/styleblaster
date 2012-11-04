@@ -32,6 +32,18 @@ class PhotoController < ApplicationController
       format.json { render json: @photos }
     end
   end
+    
+    # Show the top-rated images from the past 24 hours
+  def popular
+    @limit = params[:limit] || 50;
+    @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
+      
+      respond_to do |format|
+          format.html { render :template => "photo/index" }
+          format.json { render json: @photos }
+      end
+  end
+
 
   # Show the best images
   def top
