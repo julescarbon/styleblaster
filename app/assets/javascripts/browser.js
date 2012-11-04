@@ -130,6 +130,10 @@ $(function(){
       case 38: // up
         random();
         break;
+  
+      case 32://add case for space bar for voting here
+        like();
+        break;
 
     }
   }
