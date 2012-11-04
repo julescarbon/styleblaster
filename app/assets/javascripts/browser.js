@@ -17,15 +17,8 @@ $(function(){
   function init () {
     bind();
     load();
+    window.top.scrollTo(0, 1);
   
-  // scroll iphone to hide address bar
-  window.addEventListener("load",function() {
-                          // Set a timeout...
-                          setTimeout(function(){
-                                     // Hide the address bar!
-                                     window.scrollTo(0, 1);
-                                     }, 0);
-                          });
   }
 
   function bind () { 
