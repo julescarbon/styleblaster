@@ -14,7 +14,7 @@ class PhotoController < ApplicationController
       @photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
 #      @photos = Photo.order(sql_rand).limit(5)
     else
-        @photos = Photo.order("id DESC").limit(@limit)
+      @photos = Photo.order("id DESC").limit(@limit)
     end
 
     respond_to do |format|
@@ -92,12 +92,12 @@ class PhotoController < ApplicationController
   end
 
   # Like image
-    # def like
-    #@photo = Photo.find(params[:id])
-    # @photo.score += 1
-      #@photo.save!
-      # render text: "OK"
-      #  end
+  def like
+    @photo = Photo.find(params[:id])
+    @photo.score += 1
+    @photo.save!
+    render text: "OK"
+  end
 
   private
 
