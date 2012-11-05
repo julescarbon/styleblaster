@@ -11,8 +11,9 @@ class PhotoController < ApplicationController
     @limit = params[:limit] || 10;
 
     if @nighttime
+        setPopPhotos
         # popular()
-        @photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
+        #@photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
 #      @photos = Photo.order(sql_rand).limit(5)
     else
       @photos = Photo.order("id DESC").limit(@limit)
@@ -43,6 +44,11 @@ class PhotoController < ApplicationController
           format.html { render :template => "photo/index" }
           format.json { render json: @photos }
       end
+  end
+    
+  def setPopPhotos
+      @limit = params[:limit] || 50;
+      @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
   end
 
 
