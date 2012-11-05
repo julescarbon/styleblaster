@@ -11,7 +11,8 @@ class PhotoController < ApplicationController
     @limit = params[:limit] || 10;
 
     if @nighttime
-      @photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
+        popular
+        #@photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
 #      @photos = Photo.order(sql_rand).limit(5)
     else
       @photos = Photo.order("id DESC").limit(@limit)
