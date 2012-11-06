@@ -110,7 +110,7 @@ h1:hover {
   width: 400px;
 }
 #rad {
-  width: 300px;
+  width: 500px;
   overflow: visible;
   font-size: 48px;
   color: #f6d;
@@ -123,6 +123,7 @@ h1:hover {
   display: inline-block;
   opacity: 0.0;
   line-height: 2px;
+  pointer-events: none;
 }
 #linx {
   position: absolute;
