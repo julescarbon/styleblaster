@@ -235,7 +235,7 @@ $(function(){
     var hatCount = Math.min(count, 5);
     if (count == 0) return "";
     while (hatCount--) {
-      hats.push( "<img src='/assets/tophat.png' width='24'>" )
+      hats.push( "<img src='/assets/vote-hat-small.png' width='24'>" )
     }
     if (count > 5) {
       hats.push( "<span id='hatcount'>+ " + (count - 5) + "</span>" ); // pluralize(count - 5, "fave", "faves") );
