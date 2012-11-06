@@ -18,7 +18,6 @@ $(function(){
     bind();
     load();
     window.top.scrollTo(0, 1);
-  
   }
 
   function bind () { 
@@ -154,6 +153,10 @@ $(function(){
       $.post("/p/" + plop.id + "/like", csrf(), function(data){
         show(plop);
       });
+
+      _gaq.push(['_trackEvent', 'fave', 'click']);
+    } else {
+      _gaq.push(['_trackEvent', 'refave', 'click']);
     }
   }
 
@@ -172,6 +175,7 @@ $(function(){
     if (queue.almostAtEnd()) {
       fetch(queue.last().data.id);
     }
+    _gaq.push(['_trackEvent', 'forward', 'click']);
   }
 
   function back () {
@@ -182,6 +186,7 @@ $(function(){
       show(plop);
       History.pushState(undefined, undefined, "/p/" + plop.id);
     }
+    _gaq.push(['_trackEvent', 'back', 'click']);
   }
 
   function latest(){
@@ -204,6 +209,7 @@ $(function(){
     } else {
       show( randomQueue.forward() );
     }
+    _gaq.push(['_trackEvent', 'random', 'click']);
     return false;
   }
 

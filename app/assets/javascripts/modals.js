@@ -3,6 +3,7 @@ $(function(){
   function showManifesto (){
     $("#manifesto").show();
     $("#curtain").fadeIn( 200 );
+    _gaq.push(['_trackEvent', 'manifesto', 'open']);
   }
   function hideModal (e){
     e.stopPropagation();
