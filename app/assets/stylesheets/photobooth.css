@@ -16,28 +16,10 @@ html,body {
   height: 100%;
 }
 body {
-  background: #fff;
+  background-color: #fff;
   background-image: url(/assets/hugeflag2.jpg);
   background-size: cover;
 }
-/*
-body.day {
-  background: #fcf4d1;
-  background: -moz-radial-gradient(center, ellipse cover,  #fcf4e1 22%, #d9f3ff 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: radial-gradient(ellipse at center,  #fcf4e1 22%,#d9f3ff 100%);
-}
-body.night {
-  background: #a7b0b4;
-  background: -moz-radial-gradient(center, ellipse cover,  #a7b0b4 22%, #222 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: radial-gradient(ellipse at center,  #a7b0b4 22%,#222 100%);
-}
-*/
 
 h1 {
   position: absolute;
