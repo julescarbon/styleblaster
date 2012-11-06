@@ -6,7 +6,7 @@ html,body {
   min-height: 100%;
   padding: 0; 
   margin: 0;
-  overflow: auto;
+  overflow: hidden;
   background-position: center center;
 }
 body {
@@ -107,7 +107,7 @@ h1:hover {
   color: #fff;
 }
 #hatbox {
-  width: 400px;
+  width: 600px;
 }
 #rad {
   width: 500px;
