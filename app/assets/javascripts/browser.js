@@ -4,7 +4,7 @@ $(function(){
   var queue = new Queue ();
   var randomQueue = new Queue ();
 
-  var radPhrases = ['tres&nbsp;libert&eacute;!','USA!','USA NUMBER ONE!','patriotic!','civic duty!','american pride!','grand old flag!','sweet land!','liberty!','equality!','vote!','hurrah!','democratic!','citizen!','old glory!','o say can U see!','home of the brave!'];
+  var radPhrases = ['tres&nbsp;libert&eacute;!','USA #1!','OBAMACARE!','Vote or Die!', 'Rock the Vote!','USA!','USA NUMBER ONE!','patriotic!','civic duty!','american pride!','grand old flag!','sweet land!','liberty!','equality!','vote!','hurrah!','democratic!','citizen!','old glory!','o say can U see!','home of the brave!'];
 
   var History = window.History;
   History.Adapter.bind(window, 'statechange', function(){
