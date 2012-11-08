@@ -1,5 +1,5 @@
 
-var base_url = "http://s3.amazonaws.com/styleblaster/styleblaster/photos/original/";
+var base_url = "http://s3.amazonaws.com/styleblast/photos/original/";
 
 function Plop (data){
   var base = this;
