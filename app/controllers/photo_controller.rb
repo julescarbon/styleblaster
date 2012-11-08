@@ -130,7 +130,7 @@ class PhotoController < ApplicationController
 
   def get_hour
     @hour = now.hour
-    @nighttime = (@hour <= 8 or @hour >= 17)
+    @nighttime = (@hour <= 8 or @hour >= 16)
   end
 
 end
