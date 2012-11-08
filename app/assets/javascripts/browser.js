@@ -139,6 +139,7 @@ $(function(){
     }
   }
 
+  var refaved = false;
   function like () {
     var plop = randomMode ? randomQueue.current() : queue.current();
     $("#rad").stop().css('opacity', 0.0);
@@ -146,6 +147,7 @@ $(function(){
     $("#rad").css('opacity', 1.0).animate({ 'opacity': 0.0 }, 800);
 
     if (! isLiked(plop.id) ) {
+      refaved = false;
       plop.score += 1;
 
       localStorage.setItem("p" + plop.id, "t");
@@ -155,7 +157,8 @@ $(function(){
       });
 
       _gaq.push(['_trackEvent', 'fave', 'click']);
-    } else {
+    } else if (! refaved) {
+      refaved = true;
       _gaq.push(['_trackEvent', 'refave', 'click']);
     }
   }
