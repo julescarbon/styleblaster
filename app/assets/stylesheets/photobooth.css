@@ -179,6 +179,7 @@ body.night h1 {
   color: #000;
   opacity: 0.8;
   padding-bottom:5px;
+  padding-top:5px;
 }
 #hatcount {
   position: relative;
