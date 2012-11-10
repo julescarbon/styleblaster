@@ -12,9 +12,6 @@ class PhotoController < ApplicationController
 
     if @nighttime
         setPopPhotos
-        # popular()
-        #@photos = Photo.where("created_at > ?", now - 24 * 3600).order(sql_rand).limit(@limit)
-#      @photos = Photo.order(sql_rand).limit(5)
     else
       @photos = Photo.order("id DESC").limit(@limit)
     end
@@ -35,10 +32,10 @@ class PhotoController < ApplicationController
     end
   end
     
-    # Show the top-rated images from the past 24 hours
+    # Show the top-rated images from the past 48 hours
   def popular
     @limit = params[:limit] || 50;
-    @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
+    @photos = Photo.where("created_at > ? AND score > 0", now - 48 * 3600).order("score DESC").limit(@limit)
       
       respond_to do |format|
           format.html { render :template => "photo/index" }
@@ -46,6 +43,7 @@ class PhotoController < ApplicationController
       end
   end
     
+    # Show the top-rated images from the past 24 hours
   def setPopPhotos
       @limit = params[:limit] || 50;
       @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
@@ -130,7 +128,7 @@ class PhotoController < ApplicationController
 
   def get_hour
     @hour = now.hour
-    @nighttime = (@hour < 8 or @hour >= 16)
+    @nighttime = (@hour < 7 or @hour >= 16)
   end
 
 end

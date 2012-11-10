@@ -27,7 +27,7 @@ MotionSensor leftSensor, rightSensor;
 
 //SETUP VARS
 String version = "1.5";
-int startHour = 8; //am
+int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
 int sensorBuffer = -220;
