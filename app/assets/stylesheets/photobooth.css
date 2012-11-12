@@ -21,12 +21,12 @@ body.day {
   background-position: center center;
 }
 body.night {
-  background: #a7b0b4;
-  background: -moz-radial-gradient(center, ellipse cover,  #a7b0b4 22%, #222 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: radial-gradient(ellipse at center,  #a7b0b4 22%,#222 100%);
+  background: #b7c0c4;
+  background: -moz-radial-gradient(center, ellipse cover,  #b7c0c4 22%, #222 100%);
+  background: -webkit-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
+  background: -o-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
+  background: -ms-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
+  background: radial-gradient(ellipse at center,  #b7c0c4 22%,#222 100%);
   background-position: center center;
 }
 
