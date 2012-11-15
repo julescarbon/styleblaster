@@ -21,12 +21,12 @@ body.day {
   background-position: center center;
 }
 body.night {
-  background: #a7b0b4;
-  background: -moz-radial-gradient(center, ellipse cover,  #a7b0b4 22%, #222 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #a7b0b4 22%,#222 100%);
-  background: radial-gradient(ellipse at center,  #a7b0b4 22%,#222 100%);
+  background: #b7c0c4;
+  background: -moz-radial-gradient(center, ellipse cover,  #b7c0c4 22%, #222 100%);
+  background: -webkit-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
+  background: -o-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
+  background: -ms-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
+  background: radial-gradient(ellipse at center,  #b7c0c4 22%,#222 100%);
   background-position: center center;
 }
 
@@ -142,13 +142,13 @@ body.night h1 {
   line-height: 2px;
 }
 #linx {
-  position: relative;
+  position: absolute;
+  bottom: 0;
   left: 0;
   color: #333;
   font-size: 14px;
   font-family: georgia, serif;
   font-style: italic;
-  padding-top:5px;
 }
 #linx a {
   color: #41d;
@@ -176,10 +176,8 @@ body.night h1 {
 }
 #score {
   font-size: 12px;
-  color: #000;
-  opacity: 0.8;
-  padding-bottom:5px;
-  padding-top:5px;
+  color: #888;
+  opacity: 0.6;
 }
 #hatcount {
   position: relative;
