@@ -10,36 +10,25 @@ html,body {
   overflow-y: auto;
   width: 100%;
   height: 100%;
+
+  background-color: #fcf4d1;
+  background-image: url(/assets/leaves.jpg);
+  background-size: cover;
 }
-body.day {
-  background: #fcf4d1;
-  background: -moz-radial-gradient(center, ellipse cover,  #fcf4e1 22%, #d9f3ff 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #fcf4e1 22%,#d9f3ff 100%);
-  background: radial-gradient(ellipse at center,  #fcf4e1 22%,#d9f3ff 100%);
-  background-position: center center;
-}
-body.night {
-  background: #b7c0c4;
-  background: -moz-radial-gradient(center, ellipse cover,  #b7c0c4 22%, #222 100%);
-  background: -webkit-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
-  background: -o-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
-  background: -ms-radial-gradient(center, ellipse cover,  #b7c0c4 22%,#222 100%);
-  background: radial-gradient(ellipse at center,  #b7c0c4 22%,#222 100%);
-  background-position: center center;
+body {
+  box-shadow: 0 0 90px #000;
 }
 
 h1 {
   position: absolute;
   top: 50%; left: 50%;
-  margin-left: -284px;
-  margin-top: 300px;
+  margin-left: -282px;
+  margin-top: 309px;
   color: white;
-  font-size: 138px;
+  font-size: 127px;
   line-height: 0;
   letter-spacing: -15px;
-  color: #888;
+  color: #555;
   z-index: 2;
   display: inline;
   font-weight: bold;
