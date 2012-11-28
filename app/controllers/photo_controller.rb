@@ -46,8 +46,7 @@ class PhotoController < ApplicationController
     # Show the top-rated images from the past 24 hours
   def setPopPhotos
       @limit = params[:limit] || 50;
-      @days = 2;
-      @photos = Photo.where("created_at > ? AND score > 0", now - 24 * days * 3600).order("score DESC").limit(@limit)
+      @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
   end
 
 
