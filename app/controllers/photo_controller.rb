@@ -11,9 +11,13 @@ class PhotoController < ApplicationController
     @limit = params[:limit] || 10;
 
     if @nighttime
-        setPopPhotos
+      @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
       @photos = Photo.order("id DESC").limit(@limit)
+    end
+
+    if not @photos.any?
+      @photos = Photo.order(sql_rand).limit(@limit)
     end
 
     respond_to do |format|
@@ -43,13 +47,6 @@ class PhotoController < ApplicationController
       end
   end
     
-    # Show the top-rated images from the past 24 hours
-  def setPopPhotos
-      @limit = params[:limit] || 50;
-      @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
-  end
-
-
   # Show the best images
   def top
     @limit = params[:limit] || 50;
