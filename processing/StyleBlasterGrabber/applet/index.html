@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <!-- charset must remain utf-8 to be handled properly by Processing -->
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    
+    <title>StyleBlasterGrabber : Built with Processing</title>
+    
+    <style type="text/css">
+      /* <![CDATA[ */
+	
+		body {
+  		  margin: 60px 0px 0px 55px;
+		  font-family: verdana, geneva, arial, helvetica, sans-serif; 
+		  font-size: 11px; 
+		  background-color: #ddddcc; 
+		  text-decoration: none; 
+		  font-weight: normal; 
+		  line-height: normal; 
+		}
+		 
+		a          { color: #3399cc; }
+		a:link     { color: #3399cc; text-decoration: underline; }
+		a:visited  { color: #3399cc; text-decoration: underline; }
+		a:active   { color: #3399cc; text-decoration: underline; }
+		a:hover    { color: #3399cc; text-decoration: underline; }
+	
+		/* ]]> */
+    </style>
+    
+  </head>
+  <body>
+    <div id="content">
+      
+      <div id="StyleBlasterGrabber_container">
+	
+	<!--[if !IE]> -->
+	<object classid="java:org.jdesktop.applet.util.JNLPAppletLauncher" 
+            	type="application/x-java-applet"
+            	archive="StyleBlasterGrabber.jar,opengl.jar,video.jar,postToWeb.jar,core.jar,http://download.java.net/media/applet-launcher/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar"
+            	width="100" height="100"
+            	standby="Loading Processing software..." >
+          
+	  <param name="archive" value="StyleBlasterGrabber.jar,opengl.jar,video.jar,postToWeb.jar,core.jar,http://download.java.net/media/applet-launcher/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar" />
+	  <param name="jnlpNumExtensions" value="1">
+	  <param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp">
+
+	  <param name="mayscript" value="true" />
+	  <param name="scriptable" value="true" />
+	  
+	  <param name="image" value="loading.gif" />
+	  <param name="boxmessage" value="Loading Processing software..." />
+	  <param name="boxbgcolor" value="#FFFFFF" />
+	  <param name="progressbar" value="true" />
+	  <!--<param name="noddraw.check" value="true">-->
+	  
+	  <param name="subapplet.classname" value="StyleBlasterGrabber" /> 
+	  <param name="subapplet.displayname" value="StyleBlasterGrabber" />
+	  
+	  <param name="test_string" value="outer" />
+	  <!--<![endif]-->
+	  
+	  <object classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" 
+		  width="100" height="100"
+		  standby="Loading Processing software..."  >
+
+	    <param name="code" 
+		   value="org.jdesktop.applet.util.JNLPAppletLauncher" />
+	    <param name="archive" value="StyleBlasterGrabber.jar,opengl.jar,video.jar,postToWeb.jar,core.jar,http://download.java.net/media/applet-launcher/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar" />
+	    <param name="jnlpNumExtensions" value="1">
+	    <param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp">
+	    
+	    <param name="mayscript" value="true" />
+	    <param name="scriptable" value="true" />
+	    
+	    <param name="image" value="loading.gif" />
+	    <param name="boxmessage" value="Loading Processing software..." />
+	    <param name="boxbgcolor" value="#FFFFFF" />
+	    <param name="progressbar" value="true" />
+	    <!--<param name="noddraw.check" value="true">-->
+
+	    <param name="subapplet.classname" value="StyleBlasterGrabber" /> 
+	    <param name="subapplet.displayname" value="StyleBlasterGrabber" />
+	    
+	    <param name="test_string" value="inner" />
+	    
+	    <p>
+	      <strong>
+		This browser does not have a Java Plug-in.
+		<br />
+		<a href="http://www.java.com/getjava" title="Download Java Plug-in">
+		  Get the latest Java Plug-in here.
+		</a>
+	      </strong>
+	    </p>
+	    
+	  </object>
+	  
+	  <!--[if !IE]> -->
+	</object>
+	<!--<![endif]-->
+	
+      </div>
+      
+      <p>
+	DRAW DEBUG SHIT TO SCREEN***
+    if (debug) {
+      rectMode(CORNER);
+      noFill();
+      //date
+      text(getTimestamp(), 5, 15);
+
+      leftSensor.draw();
+      rightSensor.draw();
+
+      fill(255);
+      text("threshold: "+sensorThreshold, 5, height-5);
+      text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
+    }
+
+    if (blast) {
+
+      //BLAST OFF!
+      boolean hit = false;
+      grab = false;
+      //update the reference image on the sensors
+      leftSensor._image = grabImage;
+
+      hit = leftSensor.checkHitArea();     
+      if (hit) {
+        leftSensor.reset();
+
+        if (of.xFlowSum < flowThreshold) {
+          grab = true;
+        }
+      }
+    }
+  }}
+
+  void mousePressed() {
+    leftSensor._r.x = mouseX;
+    leftSensor._r.y = mouseY;
+    // rightSensor._r.x = mouseX+rightSensor._r.width;
+    // rightSensor._r.y = mouseY;
+    // rightSensor._r.y = mouseY+sensorBufferY;
+    ignoreSensor = true;
+  }
+
+
+
+  void onHit() {
+    //IS THE CAMERA TIMER NEEDED HERE?
+    if (cameraTimer.isFinished()) {
+      takePicture();
+      cameraTimer.start();
+    }
+  }
+
+  String getTimestamp() {
+    String filename = "";
+    filename += String.valueOf(year());
+    filename += "-";
+    filename += String.valueOf(month());
+    filename += "-";
+    filename += String.valueOf(day());
+    filename += "-";
+    filename += String.valueOf(hour());
+    filename += "-";
+    filename += String.valueOf(minute());
+    filename += "-";
+    filename += String.valueOf(second());
+    return filename;
+  }
+
+  void takePicture() {
+
+    /* PGraphics pg = createGraphics(grabImage.width, grabImage.height, P2D); // I create a PGraphics from it
+     pg.loadPixels();
+     grabImage.loadPixels();
+     for (int i = 0; i < grabImage.pixels.length; i++)
+     {
+     pg.pixels = grabImage.pixels;
+     }
+
+      </p>
+      
+      <p>
+	Source code: <a href="StyleBlasterGrabber.pde">StyleBlasterGrabber</a> <a href="MotionSensor.pde">MotionSensor</a> <a href="OpticalFlow.pde">OpticalFlow</a> <a href="timer.pde">timer</a> 
+      </p>
+      
+      <p>
+	Built with <a href="http://processing.org" title="Processing.org">Processing</a>
+      </p>
+    </div>
+  </body>
+</html>
