@@ -1,5 +1,7 @@
 class Photo < ActiveRecord::Base
 
+  belongs_to :region
+
   has_attached_file :photo,
     :styles => { :original => ["800x600>", :jpg] },
     :default_style => :original,
