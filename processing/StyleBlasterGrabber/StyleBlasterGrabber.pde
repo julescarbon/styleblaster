@@ -16,6 +16,7 @@ boolean uploading = false;
 boolean checkRight = false;
 boolean grab = false;
 boolean disable = false;
+boolean production = false;
 boolean recordGif = false;
 boolean doGifs = false;
 ImageToWeb img;
@@ -32,7 +33,14 @@ int endHour = 16;  //3:59pm
 int endMinute = 25; 
 int sensorBuffer = -220;
 int sensorBufferY = 50;
-String uploadURL = "http://styleblaster.herokuapp.com/upload";
+
+String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
+String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
+String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
+
+// select the production endpoint for the compiled build
+String uploadURL = nycUploadURL;
+
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
@@ -248,7 +256,11 @@ void takePicture() {
 
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
-  img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  if (production) {
+    img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  } else {
+    img.post("test", devUploadURL, getTimestamp() + ".png", false, imgBytes);
+  }
   cameraTimer.start();
 }
 
@@ -279,5 +291,6 @@ void keyPressed() {
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
   else if (key=='d') disable=!disable; // show opticalflow on/off
+  else if (key=='v') production=!production; // send to production endpoint
 }
 
