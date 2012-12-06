@@ -4,7 +4,7 @@ class PhotoController < ApplicationController
 
   http_basic_authenticate_with :name => "style", :password => "blaster", :only => :delete
 
-  before_filter :get_hour
+  before_filter :get_hour, :fetch_region
 
   # Show something appropriate
   def index
@@ -85,7 +85,10 @@ class PhotoController < ApplicationController
 
   # /upload API used by processing, returns url to image
   def create
-    @photo = Photo.create( :photo => params[:test], :score => (1) )
+    if params[:secret] == @region.secret
+      @photo = Photo.create( :photo => params[:test], :score => 1, :region => @region )
+    end
+
     render :text => @photo.photo.url
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end
@@ -106,6 +109,10 @@ class PhotoController < ApplicationController
   end
 
   private
+
+  def fetch_region
+    @region = Region.find_by_name(params[:name])
+  end
 
   def sql_rand
     @sql_rand = Rails.env.production? ? "RANDOM()" : "RANDOM()"
