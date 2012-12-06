@@ -11,13 +11,13 @@ class PhotoController < ApplicationController
     @limit = params[:limit] || 10;
 
     if @nighttime
-      @photos = Photo.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
+      @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
-      @photos = Photo.order("id DESC").limit(@limit)
+      @photos = @region.photos.order("id DESC").limit(@limit)
     end
 
     if not @photos.any?
-      @photos = Photo.order(sql_rand).limit(@limit)
+      @photos = @region.photos.order(sql_rand).limit(@limit)
     end
 
     respond_to do |format|
@@ -28,7 +28,7 @@ class PhotoController < ApplicationController
 
   # Show the most recent images
   def latest
-    @photos = Photo.order("id DESC").limit(10)
+    @photos = @region.photos.order("id DESC").limit(10)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -39,7 +39,7 @@ class PhotoController < ApplicationController
     # Show the top-rated images from the past 48 hours
   def popular
     @limit = params[:limit] || 50;
-    @photos = Photo.where("created_at > ? AND score > 0", now - 48 * 3600).order("score DESC").limit(@limit)
+    @photos = @region.photos.where("created_at > ? AND score > 0", now - 48 * 3600).order("score DESC").limit(@limit)
       
       respond_to do |format|
           format.html { render :template => "photo/index" }
@@ -51,7 +51,7 @@ class PhotoController < ApplicationController
   def top
     @limit = params[:limit] || 50;
 
-    @photos = Photo.where("score > 0").order("score DESC").limit(@limit)
+    @photos = @region.photos.where("score > 0").order("score DESC").limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -63,7 +63,7 @@ class PhotoController < ApplicationController
   def show
     @limit = params[:limit] || 10;
 
-    @photos = Photo.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
+    @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -75,7 +75,7 @@ class PhotoController < ApplicationController
   def random
     @limit = params[:limit] || 1;
 
-    @photos = Photo.order(sql_rand).limit(@limit)
+    @photos = @region.photos.order(sql_rand).limit(@limit)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -85,6 +85,7 @@ class PhotoController < ApplicationController
 
   # /upload API used by processing, returns url to image
   def create
+    @region = Region.find_by_name(params[:name])
     if params[:secret] == @region.secret
       @photo = Photo.create( :photo => params[:test], :score => 1, :region => @region )
     end
@@ -111,7 +112,14 @@ class PhotoController < ApplicationController
   private
 
   def fetch_region
-    @region = Region.find_by_name(params[:name])
+    if request.subdomain == "www"
+      @region = Region.find(1)
+      return true
+    elsif @region = Region.find_by_name(request.subdomain)
+      return true
+    else
+      redirect_to Rails.env.production? ? "http://www.styleblaster.net/" : "http://www.lvh.me:3000/"
+    end
   end
 
   def sql_rand

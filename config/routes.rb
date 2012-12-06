@@ -10,7 +10,7 @@ PhotoboothGallery::Application.routes.draw do
   get    '/latest'        => "photo#latest"
   get    '/top'           => "photo#top"
   get    '/random'        => "photo#random"
-  post   '/upload'        => "photo#create"
+  post   '/upload/:name'  => "photo#create"
   delete '/p/:id'         => "photo#destroy"
   post   '/p/:id/like'    => "photo#like"
   get    '/p/:id'         => "photo#show"
