@@ -16,7 +16,6 @@ boolean uploading = false;
 boolean checkRight = false;
 boolean grab = false;
 boolean disable = false;
-boolean production = false;
 boolean recordGif = false;
 boolean doGifs = false;
 ImageToWeb img;
@@ -34,12 +33,15 @@ int endMinute = 25;
 int sensorBuffer = -220;
 int sensorBufferY = 50;
 
+boolean production = false;
+
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
 String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 
 // select the production endpoint for the compiled build
 String uploadURL = nycUploadURL;
+String tag = "nyc"
 
 int camWidth;
 int camHeight = 720;
@@ -230,6 +232,8 @@ String getTimestamp() {
   filename += String.valueOf(minute());
   filename += "-";
   filename += String.valueOf(second());
+  filename += "-";
+  filename += production ? tag : "dev";
   return filename;
 }
 
