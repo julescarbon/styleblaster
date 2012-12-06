@@ -1,1 +1,44 @@
-_form.html.erb
+<%= form_for( @region, :url => @region.new_record? ? "/r/" : "/r/#{@region.name}" ) do |f| %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div>
+    <%= f.label :secret %>
+    <%= f.text_field :secret %>
+  </div>
+
+  <div>
+    <%= f.label :tagline %>
+    <%= f.text_field :tagline %>
+  </div>
+
+  <div>
+    <%= f.label :css, "CSS" %>
+    <%= f.text_area :css %>
+  </div>
+
+  <div>
+    <%= f.label :manifesto %>
+    <%= f.text_area :manifesto %>
+  </div>
+
+  <div>
+    <label></label>
+    <%= f.submit %>
+  </div>
+
+<% end %>
+
+<style>
+label { display: inline-block; vertical-align: top; width: 100px; font-size: 12px; }
+textarea { height: 150px;}
+form div { padding: 5px;}
+</style>

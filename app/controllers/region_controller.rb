@@ -6,6 +6,10 @@ class RegionController < ApplicationController
     @regions = Region.all
   end
 
+  def new
+    @region = Region.new
+  end
+  
   def edit
     @region = Region.find_by_name(params[:name])
   end

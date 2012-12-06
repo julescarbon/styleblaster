@@ -6,6 +6,8 @@ gem 'rails', '3.2.7'
 
 gem 'thin'
 
+gem 'quiet_assets'
+
 # cocaine 0.4.0 breaks paperclip
 gem 'cocaine', '0.3.2'
 

@@ -1,4 +1,5 @@
 PhotoboothGallery::Application.routes.draw do
+  get    '/r/new/'        => "region#new"
   delete '/r/:name'       => "region#destroy"
   get    '/r/:name/edit'  => "region#edit"
   put    '/r/:name'       => "region#update"
