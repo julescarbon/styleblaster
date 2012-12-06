@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121206190117) do
+ActiveRecord::Schema.define(:version => 20121206191033) do
 
   create_table "photos", :force => true do |t|
     t.string    "photo_file_name"
@@ -28,6 +28,10 @@ ActiveRecord::Schema.define(:version => 20121206190117) do
     t.string   "secret"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "title"
+    t.string   "tagline"
+    t.text     "css"
+    t.text     "manifesto"
   end
 
 end
