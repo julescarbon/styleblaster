@@ -1,4 +1,3 @@
-
 class Timer {
  
   int savedTime; // When Timer started

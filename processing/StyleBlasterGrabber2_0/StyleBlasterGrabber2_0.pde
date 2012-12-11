@@ -23,10 +23,10 @@ byte[] imgBytes;
 PImage grabImage;
 GifMaker gifExport;
 
-MotionSensor leftSensor;
+MotionSensor leftSensor, rightSensor;
 
 //SETUP VARS
-String version = "1.5";
+String version = "2.0";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
@@ -56,34 +56,30 @@ public void setup() {
   noFill();
   String[] cameras = Capture.list();
   if (version == "2.0") {
-    cam = new Capture(this, 1280, 960, "Logitech Camera");
+    //Microsoft Studio
+    cam = new Capture(this, 1920, 1080, "Microsoft¬Æ LifeCam Studio(TM)");
   }
   else {
-    //   cam = new Capture(this, 2592,1944);
-    //Logitech 910c
-    //cam = new Capture(this, 1280, 960);
+
     //Microsoft Studio
     cam = new Capture(this, 1920, 1080);
-    // cam = new Capture(this, 1280, 720);
   }
 
-  if (version == "2.0") {
-    //   cam.start();
-  }
+  cam.start();
+
   //set global framerate
   int f = 25;
   frameRate(f);
-  cam.frameRate(f);
+  // cam.frameRate(f);
   cameraTimer = new Timer(1000);
 
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
   leftSensor = new MotionSensor();
+  rightSensor = new MotionSensor();
 
   of = new OpticalFlow(cam);
-
-
 }
 
 void draw() {
@@ -127,7 +123,7 @@ void draw() {
     }
     else {
       if (grab) {
-        println("!!!HIT!!! @ : ");
+        println("!!!HIT!!! @ : "+rightSensor._bDiff);
         fill(255, 0, 0);
         onHit();
       }
@@ -146,6 +142,7 @@ void draw() {
     text(getTimestamp(), 5, 15);
 
     leftSensor.draw();
+    rightSensor.draw();
 
     fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
@@ -159,23 +156,24 @@ void draw() {
     grab = false;
     //update the reference image on the sensors
     leftSensor._image = grabImage;
-    if (doGifs){
-    if (of.xFlowSum < flowThreshold) {
-      if (!recordGif) {
-        gifExport = new GifMaker(this, getTimestamp()+".gif");
-        gifExport.setRepeat(0); // make it an "endless" animation
+    if (doGifs) {
+      if (of.xFlowSum < flowThreshold) {
+        if (!recordGif) {
+          gifExport = new GifMaker(this, getTimestamp()+".gif");
+          gifExport.setRepeat(0); // make it an "endless" animation
+        }
+        //start recording gif
+        gifExport.setDelay(40);
+        gifExport.addFrame();
+        recordGif = true;
       }
-      //start recording gif
-      gifExport.setDelay(40);
-      gifExport.addFrame();
-      recordGif = true;
+      else if (recordGif) {
+        //stop recording gif
+        gifExport.finish();
+        recordGif = false;
+        //  gifExport = new GifMaker(this, "export.gif");
+      }
     }
-    else if (recordGif) {
-      //stop recording gif
-      gifExport.finish();
-      recordGif = false;
-      //  gifExport = new GifMaker(this, "export.gif");
-    }}
 
     hit = leftSensor.checkHitArea();     
     if (hit) {
@@ -191,8 +189,13 @@ void draw() {
 void mousePressed() {
   leftSensor._r.x = mouseX;
   leftSensor._r.y = mouseY;
+  // rightSensor._r.x = mouseX+rightSensor._r.width;
+  // rightSensor._r.y = mouseY;
+  // rightSensor._r.y = mouseY+sensorBufferY;
   ignoreSensor = true;
 }
+
+
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
@@ -251,19 +254,21 @@ void keyPressed() {
   } 
   else if (key == 'c') {
     //open camera settings
-    cam.settings();
+    // cam.settings();
     ignoreSensor = true;
   }
   else if (key == '.') {
     //increase the threshold
     sensorThreshold += 1;
     leftSensor._thresh = sensorThreshold;
+    rightSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
     leftSensor._thresh = sensorThreshold;
+    rightSensor._thresh = sensorThreshold;
   }
   else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
