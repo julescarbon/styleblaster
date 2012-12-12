@@ -39,7 +39,7 @@
     <key>Java</key>
     <dict>
       <key>VMOptions</key>
-      <string> -Xms64m -Xmx1000m</string>
+      <string> -Xms64m -Xmx2000m</string>
       <key>MainClass</key>
       <string>StyleBlasterGrabber</string>
       <key>JVMVersion</key>

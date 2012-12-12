@@ -23,7 +23,7 @@ byte[] imgBytes;
 PImage grabImage;
 GifMaker gifExport;
 
-MotionSensor leftSensor, rightSensor;
+MotionSensor leftSensor;
 
 //SETUP VARS
 String version = "1.5";
@@ -80,7 +80,6 @@ public void setup() {
 
   //initialize the hit areas
   leftSensor = new MotionSensor();
-  rightSensor = new MotionSensor();
 
   of = new OpticalFlow(cam);
 
@@ -128,7 +127,7 @@ void draw() {
     }
     else {
       if (grab) {
-        println("!!!HIT!!! @ : "+rightSensor._bDiff);
+        println("!!!HIT!!! @ : ");
         fill(255, 0, 0);
         onHit();
       }
@@ -147,7 +146,6 @@ void draw() {
     text(getTimestamp(), 5, 15);
 
     leftSensor.draw();
-    rightSensor.draw();
 
     fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
@@ -193,13 +191,8 @@ void draw() {
 void mousePressed() {
   leftSensor._r.x = mouseX;
   leftSensor._r.y = mouseY;
-  // rightSensor._r.x = mouseX+rightSensor._r.width;
-  // rightSensor._r.y = mouseY;
-  // rightSensor._r.y = mouseY+sensorBufferY;
   ignoreSensor = true;
 }
-
-
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
@@ -265,19 +258,17 @@ void keyPressed() {
     //increase the threshold
     sensorThreshold += 1;
     leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
     leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
   }
   else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
-  else if (key=='d') disable=!disable; // show opticalflow on/off
+  else if (key=='d') disable=!disable; // disable/enable
 }
 
