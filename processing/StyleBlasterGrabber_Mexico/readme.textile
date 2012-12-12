@@ -1,0 +1,6 @@
+styleblaster photobooth!!!!
+
+software to upload images to a webservice.
+if needed, download the ImageToWeb dependency, here:
+  http://libraries.seltar.org/postToWeb.
+

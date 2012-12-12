@@ -30,13 +30,12 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
-int sensorBuffer = -220;
-int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
-int flowThreshold = -220;
+int flowDirection = -1; //-1 = right to left, 1 = left to right
+int flowThreshold = 220;
 float sensorRes = 1;
 
 public void setup() {
@@ -159,7 +158,10 @@ void draw() {
     grab = false;
     //update the reference image on the sensors
     leftSensor._image = grabImage;
+    
+    //GIF EXPORT*********START
     if (doGifs){
+      
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
         gifExport = new GifMaker(this, getTimestamp()+".gif");
@@ -176,12 +178,22 @@ void draw() {
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
+//GIF EXPORT**********END
 
     hit = leftSensor.checkHitArea();     
     if (hit) {
       leftSensor.reset();
-
-      if (of.xFlowSum < flowThreshold) {
+      boolean dir = false;
+      if(flowDirection == -1){
+        //right to left
+        dir = of.xFlowSum < flowThreshold*flowDirection;
+      }
+      else{
+        //left to right
+        dir = of.xFlowSum > flowThreshold;
+      }
+      
+      if (dir) {
         grab = true;
       }
     }
