@@ -4,7 +4,8 @@ class PhotoController < ApplicationController
 
   http_basic_authenticate_with :name => "style", :password => "blaster", :only => :delete
 
-  before_filter :get_hour, :fetch_region
+  before_filter :get_hour
+  before_filter :fetch_region, :except => [:create]
 
   # Show something appropriate
   def index
@@ -86,9 +87,9 @@ class PhotoController < ApplicationController
   # /upload API used by processing, returns url to image
   def create
     @region = Region.find_by_name(params[:name])
-    if params[:secret] == @region.secret
-      @photo = Photo.create( :photo => params[:test], :score => 1, :region => @region )
-    end
+#    if params[:secret] == @region.secret
+    @photo = Photo.create( :photo => params[:test], :score => 1, :region => @region )
+#    end
 
     render :text => @photo.photo.url
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s

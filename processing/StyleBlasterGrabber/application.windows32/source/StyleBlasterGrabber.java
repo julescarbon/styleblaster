@@ -51,20 +51,19 @@ byte[] imgBytes;
 PImage grabImage;
 GifMaker gifExport;
 
-MotionSensor leftSensor, rightSensor;
+MotionSensor leftSensor;
 
 //SETUP VARS
 String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
-int sensorBuffer = -220;
-int sensorBufferY = 50;
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
-int flowThreshold = -220;
+int flowDirection = -1; //-1 = right to left, 1 = left to right
+int flowThreshold = 220;
 float sensorRes = 1;
 
 public void setup() {
@@ -108,7 +107,6 @@ public void setup() {
 
   //initialize the hit areas
   leftSensor = new MotionSensor();
-  rightSensor = new MotionSensor();
 
   of = new OpticalFlow(cam);
 
@@ -156,7 +154,7 @@ public void draw() {
     }
     else {
       if (grab) {
-        println("!!!HIT!!! @ : "+rightSensor._bDiff);
+        println("!!!HIT!!! @ : ");
         fill(255, 0, 0);
         onHit();
       }
@@ -175,7 +173,6 @@ public void draw() {
     text(getTimestamp(), 5, 15);
 
     leftSensor.draw();
-    rightSensor.draw();
 
     fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
@@ -189,7 +186,10 @@ public void draw() {
     grab = false;
     //update the reference image on the sensors
     leftSensor._image = grabImage;
+    
+    //GIF EXPORT*********START
     if (doGifs){
+      
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
         gifExport = new GifMaker(this, getTimestamp()+".gif");
@@ -206,12 +206,22 @@ public void draw() {
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
+//GIF EXPORT**********END
 
     hit = leftSensor.checkHitArea();     
     if (hit) {
       leftSensor.reset();
-
-      if (of.xFlowSum < flowThreshold) {
+      boolean dir = false;
+      if(flowDirection == -1){
+        //right to left
+        dir = of.xFlowSum < flowThreshold*flowDirection;
+      }
+      else{
+        //left to right
+        dir = of.xFlowSum > flowThreshold;
+      }
+      
+      if (dir) {
         grab = true;
       }
     }
@@ -221,13 +231,8 @@ public void draw() {
 public void mousePressed() {
   leftSensor._r.x = mouseX;
   leftSensor._r.y = mouseY;
-  // rightSensor._r.x = mouseX+rightSensor._r.width;
-  // rightSensor._r.y = mouseY;
-  // rightSensor._r.y = mouseY+sensorBufferY;
   ignoreSensor = true;
 }
-
-
 
 public void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
@@ -293,20 +298,18 @@ public void keyPressed() {
     //increase the threshold
     sensorThreshold += 1;
     leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
     leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
   }
   else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
-  else if (key=='d') disable=!disable; // show opticalflow on/off
+  else if (key=='d') disable=!disable; // disable/enable
 }
 
 
@@ -821,6 +824,7 @@ class OpticalFlow {
     return xsum;
   }
 }
+
 class Timer {
  
   int savedTime; // When Timer started
