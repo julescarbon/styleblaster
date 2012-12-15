@@ -2,7 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-import gifAnimation.*;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -21,7 +21,7 @@ boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
-GifMaker gifExport;
+//GifMaker gifExport;
 
 MotionSensor motionSensor;
 
@@ -180,17 +180,17 @@ void draw() {
       
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
-        gifExport = new GifMaker(this, getTimestamp()+".gif");
-        gifExport.setRepeat(0); // make it an "endless" animation
+       // gifExport = new GifMaker(this, getTimestamp()+".gif");
+       // gifExport.setRepeat(0); // make it an "endless" animation
       }
       //start recording gif
-      gifExport.setDelay(40);
-      gifExport.addFrame();
+      //gifExport.setDelay(40);
+      //gifExport.addFrame();
       recordGif = true;
     }
     else if (recordGif) {
       //stop recording gif
-      gifExport.finish();
+      //gifExport.finish();
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
@@ -303,7 +303,7 @@ void keyPressed() {
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
-  else if (key=='d') disable=!disable; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
+  else if (key=='d') disable=!disable; // disable/enable
 }
 

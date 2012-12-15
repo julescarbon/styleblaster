@@ -2,7 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-import gifAnimation.*;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -21,7 +21,7 @@ boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
-GifMaker gifExport;
+//GifMaker gifExport;
 
 MotionSensor motionSensor;
 
@@ -30,7 +30,16 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
-String uploadURL = "";//"http://styleblaster.herokuapp.com/upload";
+boolean production = false;
+
+String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
+String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
+String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
+
+// select the production endpoint for the compiled build
+String uploadURL = gdlUploadURL;
+String tag = "nyc";
+
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
@@ -170,17 +179,17 @@ void draw() {
       
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
-        gifExport = new GifMaker(this, getTimestamp()+".gif");
-        gifExport.setRepeat(0); // make it an "endless" animation
+       // gifExport = new GifMaker(this, getTimestamp()+".gif");
+       // gifExport.setRepeat(0); // make it an "endless" animation
       }
       //start recording gif
-      gifExport.setDelay(40);
-      gifExport.addFrame();
+      //gifExport.setDelay(40);
+      //gifExport.addFrame();
       recordGif = true;
     }
     else if (recordGif) {
       //stop recording gif
-      gifExport.finish();
+      //gifExport.finish();
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
@@ -233,6 +242,8 @@ String getTimestamp() {
   filename += String.valueOf(minute());
   filename += "-";
   filename += String.valueOf(second());
+  filename += "-";
+  filename += production ? tag : "dev";
   return filename;
 }
 
@@ -259,7 +270,11 @@ void takePicture() {
 
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
-  img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  if (production) {
+    img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  } else {
+    img.post("test", devUploadURL, getTimestamp() + ".png", false, imgBytes);
+  }
   cameraTimer.start();
 }
 
@@ -287,6 +302,7 @@ void keyPressed() {
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
+  else if (key=='v') production=!production; // send to production endpoint
   else if (key=='d') disable=!disable; // disable/enable
 }
 

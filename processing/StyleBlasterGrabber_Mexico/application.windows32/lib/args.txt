@@ -1,3 +1,3 @@
- -Xms64m -Xmx2000m
-StyleBlasterGrabber_Mexico
-StyleBlasterGrabber_Mexico.jar,core.jar,gluegen-rt.jar,jogl.jar,opengl.jar,video.jar,postToWeb.jar,gifAnimation.jar
+
+StyleBlasterGrabber_mexico
+StyleBlasterGrabber_mexico.jar,core.jar,gluegen-rt.jar,jogl.jar,opengl.jar,video.jar,postToWeb.jar

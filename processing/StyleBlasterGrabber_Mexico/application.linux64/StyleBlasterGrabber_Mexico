@@ -1,4 +1,4 @@
 #!/bin/sh
 
 APPDIR=$(dirname "$0")
-java  -Djava.library.path="$APPDIR" -cp "$APPDIR/lib/StyleBlasterGrabber_Mexico.jar:$APPDIR/lib/core.jar:$APPDIR/lib/gluegen-rt.jar:$APPDIR/lib/jogl.jar:$APPDIR/lib/opengl.jar:$APPDIR/lib/video.jar:$APPDIR/lib/postToWeb.jar:$APPDIR/lib/gifAnimation.jar" StyleBlasterGrabber_Mexico
+java  -Djava.library.path="$APPDIR" -cp "$APPDIR/lib/StyleBlasterGrabber_mexico.jar:$APPDIR/lib/core.jar:$APPDIR/lib/gluegen-rt.jar:$APPDIR/lib/jogl.jar:$APPDIR/lib/opengl.jar:$APPDIR/lib/video.jar:$APPDIR/lib/postToWeb.jar" StyleBlasterGrabber_mexico
