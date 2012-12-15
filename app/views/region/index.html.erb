@@ -23,7 +23,7 @@
   <%= link_to "today", region.path + "today" %>
 </span>
 <span style="width: 200px;">
-  <%= region.photos.order("id DESC").first.created_at %>
+  <%= region.photos.count > 0 && region.photos.order("id DESC").first.created_at %>
 </span>
   <br>
 <% end %>
