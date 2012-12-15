@@ -10,7 +10,7 @@ Capture sensor;
 Timer cameraTimer, sensorTimer;
 int numPixels;
 boolean blast; //turns photo-taking on or off
-boolean ignoreSensor = true;
+boolean ignoreSensor = false;
 boolean debug = false;
 boolean uploading = false;
 boolean checkRight = false;
@@ -23,13 +23,14 @@ byte[] imgBytes;
 PImage grabImage;
 //GifMaker gifExport;
 
-MotionSensor leftSensor, rightSensor;
+MotionSensor motionSensor;
 
 //SETUP VARS
 String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
+<<<<<<< HEAD
 int sensorBuffer = -220;
 int sensorBufferY = 50;
 
@@ -43,10 +44,14 @@ String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 String uploadURL = nycUploadURL;
 String tag = "nyc";
 
+=======
+String uploadURL = "http://styleblaster.herokuapp.com/upload";
+>>>>>>> master
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
-int flowThreshold = -220;
+int flowDirection = -1; //-1 = right to left, 1 = left to right
+int flowThreshold = 220;
 float sensorRes = 1;
 
 public void setup() {
@@ -89,8 +94,13 @@ public void setup() {
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
-  leftSensor = new MotionSensor();
-  rightSensor = new MotionSensor();
+  motionSensor = new MotionSensor();
+  //initialize sensor position
+  motionSensor._r.width = 20;
+  motionSensor._r.height = 20;
+  motionSensor._r.x = width/2 - motionSensor._r.width/2;
+  motionSensor._r.y = height * 2/3;
+  motionSensor.update();
 
   of = new OpticalFlow(cam);
 
@@ -113,14 +123,14 @@ void draw() {
   if (mousePressed) {
     rectMode(CORNER);
 
-    leftSensor._bDiff = 0;
+    motionSensor._bDiff = 0;
     ignoreSensor = true;
-    int sensorWidth = round((mouseX - leftSensor._r.x));
-    int sensorHeight =  mouseY - leftSensor._r.y;
-    leftSensor._r.width = sensorWidth;
-    leftSensor._r.height = sensorHeight;
+    int sensorWidth = round((mouseX - motionSensor._r.x));
+    int sensorHeight =  mouseY - motionSensor._r.y;
+    motionSensor._r.width = sensorWidth;
+    motionSensor._r.height = sensorHeight;
 
-    leftSensor.update();
+    motionSensor.update();
 
     blast = false;
   }
@@ -138,7 +148,7 @@ void draw() {
     }
     else {
       if (grab) {
-        println("!!!HIT!!! @ : "+rightSensor._bDiff);
+        println("!!!HIT!!! @ : ");
         fill(255, 0, 0);
         onHit();
       }
@@ -156,8 +166,7 @@ void draw() {
     //date
     text(getTimestamp(), 5, 15);
 
-    leftSensor.draw();
-    rightSensor.draw();
+    motionSensor.draw();
 
     fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
@@ -170,8 +179,11 @@ void draw() {
     boolean hit = false;
     grab = false;
     //update the reference image on the sensors
-    leftSensor._image = grabImage;
+    motionSensor._image = grabImage;
+    
+    //GIF EXPORT*********START
     if (doGifs){
+      
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
        // gifExport = new GifMaker(this, getTimestamp()+".gif");
@@ -188,12 +200,22 @@ void draw() {
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
+//GIF EXPORT**********END
 
-    hit = leftSensor.checkHitArea();     
+    hit = motionSensor.checkHitArea();     
     if (hit) {
-      leftSensor.reset();
-
-      if (of.xFlowSum < flowThreshold) {
+      motionSensor.reset();
+      boolean dir = false;
+      if(flowDirection == -1){
+        //right to left
+        dir = of.xFlowSum < flowThreshold*flowDirection;
+      }
+      else{
+        //left to right
+        dir = of.xFlowSum > flowThreshold;
+      }
+      
+      if (dir) {
         grab = true;
       }
     }
@@ -201,15 +223,10 @@ void draw() {
 }
 
 void mousePressed() {
-  leftSensor._r.x = mouseX;
-  leftSensor._r.y = mouseY;
-  // rightSensor._r.x = mouseX+rightSensor._r.width;
-  // rightSensor._r.y = mouseY;
-  // rightSensor._r.y = mouseY+sensorBufferY;
+  motionSensor._r.x = mouseX;
+  motionSensor._r.y = mouseY;
   ignoreSensor = true;
 }
-
-
 
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
@@ -280,21 +297,23 @@ void keyPressed() {
   else if (key == '.') {
     //increase the threshold
     sensorThreshold += 1;
-    leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
+    motionSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
-    leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
+    motionSensor._thresh = sensorThreshold;
   }
   else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
+<<<<<<< HEAD
   else if (key=='d') disable=!disable; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
+=======
+  else if (key=='d') disable=!disable; // disable/enable
+>>>>>>> master
 }
 
