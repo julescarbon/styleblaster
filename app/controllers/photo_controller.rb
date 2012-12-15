@@ -114,7 +114,7 @@ class PhotoController < ApplicationController
 
   def fetch_region
     if request.subdomain == "www"
-      @region = Region.find(1)
+      @region = Region.find(2)
       return true
     elsif @region = Region.find_by_name(request.subdomain)
       return true
