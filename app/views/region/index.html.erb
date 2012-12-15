@@ -6,15 +6,21 @@
   &middot;
   <%= region.name %>
   &middot;
-  <big><%= region.title %></big>
+  <big><%= link_to region.title, region.path %></big>
 <span>
   <%= region.css == "" ? "x" : "css" %>
 </span>
 <span>
   <%= region.manifesto == "" ? "x" : "manifesto" %>
 </span>
-<span>
+<span style="width: 200px;">
   <%= region.photos.count %> photos
+</span>
+<span style="width: 300px;">
+  <%= link_to "latest", region.path + "/latest" %>
+  <%= link_to "random", region.path + "/random" %>
+  <%= link_to "top scores", region.path + "/top" %>
+  <%= link_to "today", region.path + "/today" %>
 </span>
   <br>
 <% end %>
