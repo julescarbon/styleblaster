@@ -30,10 +30,6 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
-<<<<<<< HEAD
-int sensorBuffer = -220;
-int sensorBufferY = 50;
-
 boolean production = false;
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
@@ -44,9 +40,6 @@ String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 String uploadURL = nycUploadURL;
 String tag = "nyc";
 
-=======
-String uploadURL = "http://styleblaster.herokuapp.com/upload";
->>>>>>> master
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
@@ -309,11 +302,7 @@ void keyPressed() {
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
-<<<<<<< HEAD
-  else if (key=='d') disable=!disable; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
-=======
   else if (key=='d') disable=!disable; // disable/enable
->>>>>>> master
 }
 

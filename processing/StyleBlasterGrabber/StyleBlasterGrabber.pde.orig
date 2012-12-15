@@ -2,6 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -9,37 +10,58 @@ Capture sensor;
 Timer cameraTimer, sensorTimer;
 int numPixels;
 boolean blast; //turns photo-taking on or off
-boolean ignoreSensor = true;
-boolean debug = true;
+boolean ignoreSensor = false;
+boolean debug = false;
 boolean uploading = false;
 boolean checkRight = false;
+boolean grab = false;
+boolean disable = false;
+boolean recordGif = false;
+boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
+//GifMaker gifExport;
 
-MotionSensor leftSensor, rightSensor;
+MotionSensor motionSensor;
 
 //SETUP VARS
 String version = "1.5";
-int startHour = 7; //7am
-int endHour = 18;  //6pm
+int startHour = 7; //am
+int endHour = 16;  //3:59pm
+int endMinute = 25; 
 <<<<<<< HEAD
-int sensorBuffer = -200;
-=======
-int sensorBuffer = -455;
->>>>>>> 15691ac125a0224b9f4db03949b55721407d580b
+int sensorBuffer = -220;
 int sensorBufferY = 50;
+
+boolean production = false;
+
+String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
+String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
+String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
+
+// select the production endpoint for the compiled build
+String uploadURL = nycUploadURL;
+String tag = "nyc";
+
+=======
 String uploadURL = "http://styleblaster.herokuapp.com/upload";
+>>>>>>> master
 int camWidth;
 int camHeight = 720;
-int sensorThreshold = 15;
+int sensorThreshold = 13;
+int flowDirection = -1; //-1 = right to left, 1 = left to right
+int flowThreshold = 220;
 float sensorRes = 1;
 
 public void setup() {
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
-  // int sketchHeight = (camHeight*333)/500;
-  size(333, 500);
+  int sketchHeight = 1000;
+  int sketchWidth = 666;
+  float m = .7;
+
+  size(round(sketchWidth*m), round(sketchHeight*m));
   //   size(1280, 720);
 
   String[] devices = Capture.list();
@@ -53,22 +75,36 @@ public void setup() {
   }
   else {
     //   cam = new Capture(this, 2592,1944);
-    cam = new Capture(this, 1280, 960);
+    //Logitech 910c
+    //cam = new Capture(this, 1280, 960);
+    //Microsoft Studio
+    cam = new Capture(this, 1920, 1080);
+    // cam = new Capture(this, 1280, 720);
   }
 
   if (version == "2.0") {
     //   cam.start();
   }
-  cam.frameRate(20);
-  cameraTimer = new Timer(2000);
+  //set global framerate
+  int f = 25;
+  frameRate(f);
+  cam.frameRate(f);
+  cameraTimer = new Timer(1000);
 
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
-  leftSensor = new MotionSensor();
-  rightSensor = new MotionSensor();
+  motionSensor = new MotionSensor();
+  //initialize sensor position
+  motionSensor._r.width = 20;
+  motionSensor._r.height = 20;
+  motionSensor._r.x = width/2 - motionSensor._r.width/2;
+  motionSensor._r.y = height * 2/3;
+  motionSensor.update();
 
   of = new OpticalFlow(cam);
+
+
 }
 
 void draw() {
@@ -77,139 +113,127 @@ void draw() {
   if (hour()>=startHour) {
     if (hour()<endHour) {
       if (cam.available()) {
-        blast = true;
+        if (disable == false) {
+          blast = true;
+        }
       }
     }
   }
 
+  if (mousePressed) {
+    rectMode(CORNER);
+
+    motionSensor._bDiff = 0;
+    ignoreSensor = true;
+    int sensorWidth = round((mouseX - motionSensor._r.x));
+    int sensorHeight =  mouseY - motionSensor._r.y;
+    motionSensor._r.width = sensorWidth;
+    motionSensor._r.height = sensorHeight;
+
+    motionSensor.update();
+
+    blast = false;
+  }
+
   if (! uploading) {
     cam.read();
-    //   image(cam, 0, 0);
-  // image(cam, -cam.width/2+width/2, -cam.height/2+height/2);
     grabImage = cam.get(cam.width/2-width/2, cam.height/2-height/2, width, height);
-        image(grabImage, 0,0);
+    image(grabImage, 0, 0);
 
-     of.updateImage(grabImage);
-      of.draw();
+    of.updateImage(grabImage);
+    of.draw();
+
+    if (ignoreSensor) {
+      ignoreSensor = false;
+    }
+    else {
+      if (grab) {
+        println("!!!HIT!!! @ : ");
+        fill(255, 0, 0);
+        onHit();
+      }
+      else {
+        noFill();
+      }
+    }
   }
 
   stroke(255, 100, 100);
   //***DRAW DEBUG SHIT TO SCREEN***
-
   if (debug) {
-           rectMode(CORNER);
+    rectMode(CORNER);
     noFill();
     //date
     text(getTimestamp(), 5, 15);
 
-    leftSensor.draw();
-    rightSensor.draw();
+    motionSensor.draw();
 
+    fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
+    text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
-  if (mousePressed) {
-      rectMode(CORNER);
+  if (blast) {
 
-    leftSensor._bDiff = 0;
-    rightSensor._bDiff = 0;
-
-    ignoreSensor = true;
-    int sensorWidth = round((mouseX - leftSensor._r.x)/2);
-    int sensorHeight =  mouseY - leftSensor._r.y;
-    leftSensor._r.width = sensorWidth;
-    rightSensor._r.width = sensorWidth;
-    leftSensor._r.height = sensorHeight;
-    rightSensor._r.height = sensorHeight;
-
-    rightSensor._r.x = leftSensor._r.x+sensorWidth+sensorBuffer;
-
-
-    leftSensor.update();
-    rightSensor.update();
-  }
-  else {
-    if (blast) {
-
-      //BLAST OFF!
-     
-
-      boolean leftHit = false;
-      boolean rightHit = false;
-      //update the reference image on the sensors
-      rightSensor._image = grabImage;
-      leftSensor._image = grabImage;
-
-      leftHit = leftSensor.checkHitArea();     
-      if (leftHit) {
-        if (of.xFlowSum < 0) {
-         // onHit();
-         rightHit = true;
-        }
+    //BLAST OFF!
+    boolean hit = false;
+    grab = false;
+    //update the reference image on the sensors
+    motionSensor._image = grabImage;
+    
+    //GIF EXPORT*********START
+    if (doGifs){
+      
+    if (of.xFlowSum < flowThreshold) {
+      if (!recordGif) {
+       // gifExport = new GifMaker(this, getTimestamp()+".gif");
+       // gifExport.setRepeat(0); // make it an "endless" animation
       }
+      //start recording gif
+      //gifExport.setDelay(40);
+      //gifExport.addFrame();
+      recordGif = true;
+    }
+    else if (recordGif) {
+      //stop recording gif
+      //gifExport.finish();
+      recordGif = false;
+      //  gifExport = new GifMaker(this, "export.gif");
+    }}
+//GIF EXPORT**********END
 
-      /*
-      //MONOTR THE LEFT SENSOR
-       if (!checkRight) {
-       //monitor the left sensor
-       leftHit = leftSensor.checkHitArea();
-       if (leftHit) {
-       checkRight = true;
-       rightSensor.reset();
-       // leftSensor._bDiff = 0;
-       //start the timer
-       sensorTimer.start();
-       }
-       }
-       else {
-       //monitor the RIGHT sensor
-       if (sensorTimer.isFinished()) {
-       //STOP monitoring the right sensor
-       checkRight = false;
-       // rightSensor._bDiff = 0;
-       }
-       else {
-       rightHit = false;
-       rightHit = rightSensor.checkHitArea();
-       }
-       }
-       */
-      if (ignoreSensor) {
-        ignoreSensor = false;
+    hit = motionSensor.checkHitArea();     
+    if (hit) {
+      motionSensor.reset();
+      boolean dir = false;
+      if(flowDirection == -1){
+        //right to left
+        dir = of.xFlowSum < flowThreshold*flowDirection;
       }
-      else {
-        if (rightHit) {
-          leftSensor.reset();
-          println("!!!HIT!!! @ : "+rightSensor._bDiff);
-          fill(255, 0, 0);
-          onHit();
-        }
-        else {
-          noFill();
-        }
+      else{
+        //left to right
+        dir = of.xFlowSum > flowThreshold;
+      }
+      
+      if (dir) {
+        grab = true;
       }
     }
   }
 }
 
 void mousePressed() {
-  leftSensor._r.x = mouseX;
-  leftSensor._r.y = mouseY;
-  // rightSensor._r.x = mouseX+rightSensor._r.width;
-  rightSensor._r.y = mouseY;
-  rightSensor._r.y = mouseY+sensorBufferY;
-
+  motionSensor._r.x = mouseX;
+  motionSensor._r.y = mouseY;
   ignoreSensor = true;
 }
 
-
-
 void onHit() {
   //IS THE CAMERA TIMER NEEDED HERE?
-   if (cameraTimer.isFinished()) {
-  takePicture();
-   cameraTimer.start();
-   }
+  if (cameraTimer.isFinished()) {
+    takePicture();
+    cameraTimer.start();
+  }
 }
 
 String getTimestamp() {
@@ -225,6 +249,8 @@ String getTimestamp() {
   filename += String.valueOf(minute());
   filename += "-";
   filename += String.valueOf(second());
+  filename += "-";
+  filename += production ? tag : "dev";
   return filename;
 }
 
@@ -251,7 +277,11 @@ void takePicture() {
 
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
-  img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  if (production) {
+    img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  } else {
+    img.post("test", devUploadURL, getTimestamp() + ".png", false, imgBytes);
+  }
   cameraTimer.start();
 }
 
@@ -261,21 +291,29 @@ void keyPressed() {
   } 
   else if (key == 'c') {
     //open camera settings
-    //   cam.settings();
+    cam.settings();
     ignoreSensor = true;
   }
   else if (key == '.') {
     //increase the threshold
     sensorThreshold += 1;
-    leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
+    motionSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
-    leftSensor._thresh = sensorThreshold;
-    rightSensor._thresh = sensorThreshold;
+    motionSensor._thresh = sensorThreshold;
   }
+  else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
+  else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
+  else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
+  else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
+<<<<<<< HEAD
+  else if (key=='d') disable=!disable; // show opticalflow on/off
+  else if (key=='v') production=!production; // send to production endpoint
+=======
+  else if (key=='d') disable=!disable; // disable/enable
+>>>>>>> master
 }
 
