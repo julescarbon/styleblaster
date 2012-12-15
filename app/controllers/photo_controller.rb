@@ -12,7 +12,7 @@ class PhotoController < ApplicationController
     @limit = params[:limit] || 10;
 
     if @nighttime
-      @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
+      @photos = @region.photos.where("created_at > ? AND score > 0", midnight).order("score DESC").limit(@limit)
     else
       @photos = @region.photos.order("id DESC").limit(@limit)
     end
@@ -129,6 +129,10 @@ class PhotoController < ApplicationController
 
   def now
     Time.now.in_time_zone("America/New_York")
+  end
+
+  def midnight
+    Time.now.in_time_zone("America/New_York").midnight
   end
 
   def get_hour
