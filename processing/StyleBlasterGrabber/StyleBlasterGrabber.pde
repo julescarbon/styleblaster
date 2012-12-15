@@ -2,7 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-import gifAnimation.*;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -21,7 +21,7 @@ boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
-GifMaker gifExport;
+//GifMaker gifExport;
 
 MotionSensor leftSensor, rightSensor;
 
@@ -41,7 +41,7 @@ String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 
 // select the production endpoint for the compiled build
 String uploadURL = nycUploadURL;
-String tag = "nyc"
+String tag = "nyc";
 
 int camWidth;
 int camHeight = 720;
@@ -174,17 +174,17 @@ void draw() {
     if (doGifs){
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
-        gifExport = new GifMaker(this, getTimestamp()+".gif");
-        gifExport.setRepeat(0); // make it an "endless" animation
+       // gifExport = new GifMaker(this, getTimestamp()+".gif");
+       // gifExport.setRepeat(0); // make it an "endless" animation
       }
       //start recording gif
-      gifExport.setDelay(40);
-      gifExport.addFrame();
+      //gifExport.setDelay(40);
+      //gifExport.addFrame();
       recordGif = true;
     }
     else if (recordGif) {
       //stop recording gif
-      gifExport.finish();
+      //gifExport.finish();
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
