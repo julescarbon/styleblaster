@@ -33,9 +33,9 @@ int endMinute = 25;
 
 boolean production = false;
 
-String nycUploadURL = "http://lvh.me:3000/upload/nyc";
-String gdlUploadURL = "http://lvh.me:3000/upload/gdl";
-String devUploadURL = "http://lvh.me:3000/upload/dev";
+String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
+String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
+String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 
 // select the production endpoint for the compiled build
 String uploadURL = nycUploadURL;
