@@ -17,10 +17,13 @@
   <%= region.photos.count %> photos
 </span>
 <span style="width: 300px;">
-  <%= link_to "latest", region.path + "/latest" %>
-  <%= link_to "random", region.path + "/random" %>
-  <%= link_to "top scores", region.path + "/top" %>
-  <%= link_to "today", region.path + "/today" %>
+  <%= link_to "latest", region.path + "latest" %>
+  <%= link_to "random", region.path + "random" %>
+  <%= link_to "top scores", region.path + "top" %>
+  <%= link_to "today", region.path + "today" %>
+</span>
+<span style="width: 200px;">
+  <%= region.photos.order("id DESC").first.created_at %>
 </span>
   <br>
 <% end %>
