@@ -30,7 +30,7 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
-boolean production = false;
+boolean production = true;
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
@@ -92,7 +92,7 @@ public void setup() {
   motionSensor._r.width = 20;
   motionSensor._r.height = 20;
   motionSensor._r.x = width/2 - motionSensor._r.width/2;
-  motionSensor._r.y = height * 2/3;
+  motionSensor._r.y = height * 3/5;
   motionSensor.update();
 
   of = new OpticalFlow(cam);

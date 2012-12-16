@@ -30,7 +30,7 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
-boolean production = false;
+boolean production = true;
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
