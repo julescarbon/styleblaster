@@ -30,20 +30,25 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
+<<<<<<< HEAD
+boolean production = true;
+=======
+
 boolean production = false;
+>>>>>>> d2bdf6df4bae00565aec9914c625bff0ff017c02
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
 String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 
 // select the production endpoint for the compiled build
-String uploadURL = gdlUploadURL;
+String uploadURL = nycUploadURL;
 String tag = "nyc";
 
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
-int flowDirection = 1; //-1 = right to left, 1 = left to right
+int flowDirection = -1; //-1 = right to left, 1 = left to right
 int flowThreshold = 220;
 float sensorRes = 1;
 
@@ -92,7 +97,7 @@ public void setup() {
   motionSensor._r.width = 20;
   motionSensor._r.height = 20;
   motionSensor._r.x = width/2 - motionSensor._r.width/2;
-  motionSensor._r.y = height * 2/3;
+  motionSensor._r.y = height * 3/5;
   motionSensor.update();
 
   of = new OpticalFlow(cam);

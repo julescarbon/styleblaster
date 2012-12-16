@@ -30,6 +30,7 @@ String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
+
 boolean production = false;
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
@@ -37,13 +38,13 @@ String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
 String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 
 // select the production endpoint for the compiled build
-String uploadURL = gdlUploadURL;
+String uploadURL = nycUploadURL;
 String tag = "nyc";
 
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
-int flowDirection = 1; //-1 = right to left, 1 = left to right
+int flowDirection = -1; //-1 = right to left, 1 = left to right
 int flowThreshold = 220;
 float sensorRes = 1;
 

@@ -27,10 +27,10 @@ MotionSensor motionSensor;
 
 //SETUP VARS
 String version = "1.5";
-int startHour = 8; //am
-int endHour = 15;  //3pm
+int startHour = 7; //am
+int endHour = 16;  //3:59pm
 int endMinute = 25; 
-boolean production = true;
+boolean production = false;
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
@@ -63,14 +63,21 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
- 
+  if (version == "2.0") {
+    cam = new Capture(this, 1280, 960, "Logitech Camera");
+  }
+  else {
     //   cam = new Capture(this, 2592,1944);
     //Logitech 910c
     //cam = new Capture(this, 1280, 960);
     //Microsoft Studio
     cam = new Capture(this, 1920, 1080);
     // cam = new Capture(this, 1280, 720);
-cam.settings();
+  }
+
+  if (version == "2.0") {
+    //   cam.start();
+  }
   //set global framerate
   int f = 25;
   frameRate(f);
@@ -85,7 +92,7 @@ cam.settings();
   motionSensor._r.width = 20;
   motionSensor._r.height = 20;
   motionSensor._r.x = width/2 - motionSensor._r.width/2;
-  motionSensor._r.y = height * 3/5;
+  motionSensor._r.y = height * 2/3;
   motionSensor.update();
 
   of = new OpticalFlow(cam);
@@ -96,7 +103,6 @@ cam.settings();
 void draw() {
   background(0);
   blast = false;
- // println("hour(): "+hour());
   if (hour()>=startHour) {
     if (hour()<endHour) {
       if (cam.available()) {
@@ -160,11 +166,11 @@ void draw() {
     text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
-  grab = false;
   if (blast) {
 
     //BLAST OFF!
     boolean hit = false;
+    grab = false;
     //update the reference image on the sensors
     motionSensor._image = grabImage;
     

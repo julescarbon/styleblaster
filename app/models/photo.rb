@@ -10,8 +10,8 @@ class Photo < ActiveRecord::Base
     :bucket => 'styleblast',
     :path => ':attachment/:style/:basename.:extension',
     :s3_credentials => {
-      :access_key_id => ENV['ASDF_S3_KEY'],
-      :secret_access_key => ENV['ASDF_S3_SECRET']
+      :access_key_id => ENV['OKFOCUS_S3_KEY'],
+      :secret_access_key => ENV['OKFOCUS_S3_SECRET']
     }
 
 end

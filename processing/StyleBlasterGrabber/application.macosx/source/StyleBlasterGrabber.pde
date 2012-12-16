@@ -2,7 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-import gifAnimation.*;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -10,7 +10,7 @@ Capture sensor;
 Timer cameraTimer, sensorTimer;
 int numPixels;
 boolean blast; //turns photo-taking on or off
-boolean ignoreSensor = true;
+boolean ignoreSensor = false;
 boolean debug = false;
 boolean uploading = false;
 boolean checkRight = false;
@@ -21,16 +21,25 @@ boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
-GifMaker gifExport;
+//GifMaker gifExport;
 
-MotionSensor leftSensor;
+MotionSensor motionSensor;
 
 //SETUP VARS
 String version = "1.5";
-int startHour = 7; //am
-int endHour = 16;  //3:59pm
+int startHour = 8; //am
+int endHour = 15;  //3pm
 int endMinute = 25; 
-String uploadURL = "http://styleblaster.herokuapp.com/upload";
+boolean production = true;
+
+String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
+String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
+String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
+
+// select the production endpoint for the compiled build
+String uploadURL = nycUploadURL;
+String tag = "nyc";
+
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
@@ -54,21 +63,14 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  if (version == "2.0") {
-    cam = new Capture(this, 1280, 960, "Logitech Camera");
-  }
-  else {
+ 
     //   cam = new Capture(this, 2592,1944);
     //Logitech 910c
     //cam = new Capture(this, 1280, 960);
     //Microsoft Studio
     cam = new Capture(this, 1920, 1080);
     // cam = new Capture(this, 1280, 720);
-  }
-
-  if (version == "2.0") {
-    //   cam.start();
-  }
+cam.settings();
   //set global framerate
   int f = 25;
   frameRate(f);
@@ -78,7 +80,13 @@ public void setup() {
   sensorTimer = new Timer(1000);
 
   //initialize the hit areas
-  leftSensor = new MotionSensor();
+  motionSensor = new MotionSensor();
+  //initialize sensor position
+  motionSensor._r.width = 20;
+  motionSensor._r.height = 20;
+  motionSensor._r.x = width/2 - motionSensor._r.width/2;
+  motionSensor._r.y = height * 3/5;
+  motionSensor.update();
 
   of = new OpticalFlow(cam);
 
@@ -88,6 +96,7 @@ public void setup() {
 void draw() {
   background(0);
   blast = false;
+ // println("hour(): "+hour());
   if (hour()>=startHour) {
     if (hour()<endHour) {
       if (cam.available()) {
@@ -101,14 +110,14 @@ void draw() {
   if (mousePressed) {
     rectMode(CORNER);
 
-    leftSensor._bDiff = 0;
+    motionSensor._bDiff = 0;
     ignoreSensor = true;
-    int sensorWidth = round((mouseX - leftSensor._r.x));
-    int sensorHeight =  mouseY - leftSensor._r.y;
-    leftSensor._r.width = sensorWidth;
-    leftSensor._r.height = sensorHeight;
+    int sensorWidth = round((mouseX - motionSensor._r.x));
+    int sensorHeight =  mouseY - motionSensor._r.y;
+    motionSensor._r.width = sensorWidth;
+    motionSensor._r.height = sensorHeight;
 
-    leftSensor.update();
+    motionSensor.update();
 
     blast = false;
   }
@@ -144,45 +153,45 @@ void draw() {
     //date
     text(getTimestamp(), 5, 15);
 
-    leftSensor.draw();
+    motionSensor.draw();
 
     fill(255);
     text("threshold: "+sensorThreshold, 5, height-5);
     text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
+  grab = false;
   if (blast) {
 
     //BLAST OFF!
     boolean hit = false;
-    grab = false;
     //update the reference image on the sensors
-    leftSensor._image = grabImage;
+    motionSensor._image = grabImage;
     
     //GIF EXPORT*********START
     if (doGifs){
       
     if (of.xFlowSum < flowThreshold) {
       if (!recordGif) {
-        gifExport = new GifMaker(this, getTimestamp()+".gif");
-        gifExport.setRepeat(0); // make it an "endless" animation
+       // gifExport = new GifMaker(this, getTimestamp()+".gif");
+       // gifExport.setRepeat(0); // make it an "endless" animation
       }
       //start recording gif
-      gifExport.setDelay(40);
-      gifExport.addFrame();
+      //gifExport.setDelay(40);
+      //gifExport.addFrame();
       recordGif = true;
     }
     else if (recordGif) {
       //stop recording gif
-      gifExport.finish();
+      //gifExport.finish();
       recordGif = false;
       //  gifExport = new GifMaker(this, "export.gif");
     }}
 //GIF EXPORT**********END
 
-    hit = leftSensor.checkHitArea();     
+    hit = motionSensor.checkHitArea();     
     if (hit) {
-      leftSensor.reset();
+      motionSensor.reset();
       boolean dir = false;
       if(flowDirection == -1){
         //right to left
@@ -201,8 +210,8 @@ void draw() {
 }
 
 void mousePressed() {
-  leftSensor._r.x = mouseX;
-  leftSensor._r.y = mouseY;
+  motionSensor._r.x = mouseX;
+  motionSensor._r.y = mouseY;
   ignoreSensor = true;
 }
 
@@ -227,6 +236,8 @@ String getTimestamp() {
   filename += String.valueOf(minute());
   filename += "-";
   filename += String.valueOf(second());
+  filename += "-";
+  filename += production ? tag : "dev";
   return filename;
 }
 
@@ -253,7 +264,11 @@ void takePicture() {
 
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
-  img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  if (production) {
+    img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  } else {
+    img.post("test", devUploadURL, getTimestamp() + ".png", false, imgBytes);
+  }
   cameraTimer.start();
 }
 
@@ -269,18 +284,19 @@ void keyPressed() {
   else if (key == '.') {
     //increase the threshold
     sensorThreshold += 1;
-    leftSensor._thresh = sensorThreshold;
+    motionSensor._thresh = sensorThreshold;
   }
   else if (key == ',') {
     //increase the threshold
     sensorThreshold -= 1;
 
-    leftSensor._thresh = sensorThreshold;
+    motionSensor._thresh = sensorThreshold;
   }
   else if (key=='w') of.flagseg=!of.flagseg; // segmentation on/off
   else if (key=='s') of.flagsound=!of.flagsound; //  sound on/off
   else if (key=='m') of.flagmirror=!of.flagmirror; // mirror on/off
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
+  else if (key=='v') production=!production; // send to production endpoint
   else if (key=='d') disable=!disable; // disable/enable
 }
 
