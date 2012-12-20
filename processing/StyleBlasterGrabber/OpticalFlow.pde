@@ -20,7 +20,7 @@ class OpticalFlow {
 
   PFont font;
   color[] vline;
-  MovieMaker movie;
+ // MovieMaker movie;
 
   // capture parameters
   int fps=30;
@@ -389,7 +389,7 @@ class OpticalFlow {
 
     ///////////////////////////////////////////////////
     // recording movie 
-    if (flagmovie) movie.addFrame();
+  //  if (flagmovie) movie.addFrame();
 
     //  print information (not shown in the movie)
     fill(255, 0, 0);
