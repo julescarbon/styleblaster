@@ -2,7 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-import gifAnimation.*;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -16,12 +16,12 @@ boolean uploading = false;
 boolean checkRight = false;
 boolean grab = false;
 boolean disable = false;
-boolean recordGif = false;
-boolean doGifs = false;
+//boolean recordGif = false;
+//boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
-GifMaker gifExport;
+//GifMaker gifExport;
 
 MotionSensor leftSensor, rightSensor;
 
@@ -46,7 +46,7 @@ public void setup() {
   int sketchWidth = 666;
   float m = .7;
 
-  size(round(sketchWidth*m), round(sketchHeight*m));
+  size(round(sketchWidth*m), round(sketchHeight*m), P2D);
   //   size(1280, 720);
 
   String[] devices = Capture.list();
@@ -57,7 +57,11 @@ public void setup() {
   String[] cameras = Capture.list();
   if (version == "2.0") {
     //Microsoft Studio
-    cam = new Capture(this, 1920, 1080, "Microsoft¬Æ LifeCam Studio(TM)");
+  //  cam = new Capture(this, 1920, 1080, "Microsoft¬Æ LifeCam Studio(TM)");
+    //  cam = new Capture(this, 1920, 1080);
+
+      cam = new Capture(this, cameras[0]);
+
   }
   else {
 
@@ -112,8 +116,12 @@ void draw() {
 
   if (! uploading) {
     cam.read();
+    println("cam.width: "+cam.width);
+    
     grabImage = cam.get(cam.width/2-width/2, cam.height/2-height/2, width, height);
     image(grabImage, 0, 0);
+   
+  //  image(cam, 0, 0);
 
     of.updateImage(grabImage);
     of.draw();
@@ -156,7 +164,7 @@ void draw() {
     grab = false;
     //update the reference image on the sensors
     leftSensor._image = grabImage;
-    if (doGifs) {
+    /*if (doGifs) {
       if (of.xFlowSum < flowThreshold) {
         if (!recordGif) {
           gifExport = new GifMaker(this, getTimestamp()+".gif");
@@ -173,7 +181,7 @@ void draw() {
         recordGif = false;
         //  gifExport = new GifMaker(this, "export.gif");
       }
-    }
+    }*/
 
     hit = leftSensor.checkHitArea();     
     if (hit) {

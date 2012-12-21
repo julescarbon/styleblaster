@@ -26,7 +26,7 @@ PImage grabImage;
 MotionSensor motionSensor;
 
 //SETUP VARS
-String version = "2";
+String version = "1.5";
 int startHour = 7; //am
 int endHour = 16;  //3:59pm
 int endMinute = 25; 
@@ -64,10 +64,8 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  if (version == "2") {
-   // cam = new Capture(this, 1280, 960, "Logitech Camera");
-        cam = new Capture(this, 1280, 960);
-
+  if (version == "2.0") {
+    cam = new Capture(this, 1280, 960, "Logitech Camera");
   }
   else {
     //   cam = new Capture(this, 2592,1944);
@@ -78,13 +76,13 @@ public void setup() {
     // cam = new Capture(this, 1280, 720);
   }
 
-  if (version == "2") {
-       cam.start();
+  if (version == "2.0") {
+    //   cam.start();
   }
   //set global framerate
   int f = 25;
   frameRate(f);
-  //cam.frameRate(f);
+  cam.frameRate(f);
   cameraTimer = new Timer(1000);
 
   sensorTimer = new Timer(1000);
@@ -287,7 +285,7 @@ void keyPressed() {
   } 
   else if (key == 'c') {
     //open camera settings
-  //  cam.settings();
+    cam.settings();
     ignoreSensor = true;
   }
   else if (key == '.') {
@@ -307,5 +305,7 @@ void keyPressed() {
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
   else if (key=='d') disable=!disable; // disable/enable
+    else if (key=='=') disable=!disable; // zoom in
+
 }
 
