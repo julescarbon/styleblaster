@@ -12,7 +12,7 @@ class PhotoController < ApplicationController
     @limit = params[:limit] || 10;
 
     if @nighttime
-      @photos = @region.photos.where("created_at > ? AND score > 0", midnight).order("score DESC").limit(@limit)
+      @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
       @photos = @region.photos.order("id DESC").limit(@limit)
     end
@@ -41,11 +41,15 @@ class PhotoController < ApplicationController
   def popular
     @limit = params[:limit] || 50;
     @photos = @region.photos.where("created_at > ? AND score > 0", now - 48 * 3600).order("score DESC").limit(@limit)
-      
-      respond_to do |format|
-          format.html { render :template => "photo/index" }
-          format.json { render json: @photos }
-      end
+    
+    if not @photos.any?
+      @photos = @region.photos.where("score < 100 AND score > 20").order("score DESC").limit(@limit)
+    end
+
+    respond_to do |format|
+        format.html { render :template => "photo/index" }
+        format.json { render json: @photos }
+    end
   end
     
   # Show the best images
@@ -87,10 +91,7 @@ class PhotoController < ApplicationController
   # /upload API used by processing, returns url to image
   def create
     @region = Region.find_by_name(params[:name])
-#    if params[:secret] == @region.secret
     @photo = Photo.create( :photo => params[:test], :score => 1, :region => @region )
-#    end
-
     render :text => @photo.photo.url
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s
   end

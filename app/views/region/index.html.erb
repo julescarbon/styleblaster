@@ -13,8 +13,8 @@
 <span>
   <%= region.manifesto == "" ? "x" : "manifesto" %>
 </span>
-<span style="width: 200px;">
-  <%= region.photos.count %> photos
+<span style="width: 100px; text-align: right;">
+  <%= region.photos.count %> photos&nbsp;
 </span>
 <span style="width: 300px;">
   <%= link_to "latest", region.path + "latest" %>
