@@ -11,7 +11,7 @@ class PhotoController < ApplicationController
   def index
     @limit = params[:limit] || 10;
 
-    if @nighttime
+    if @nighttime and @region.name != "bottt"
       @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
       @photos = @region.photos.order("id DESC").limit(@limit)
@@ -51,7 +51,7 @@ class PhotoController < ApplicationController
         format.json { render json: @photos }
     end
   end
-    
+  
   # Show the best images
   def top
     @limit = params[:limit] || 50;
