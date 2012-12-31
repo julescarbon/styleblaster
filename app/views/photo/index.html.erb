@@ -130,6 +130,10 @@
 var PLOPS = <%= @photos.to_json.html_safe %>;
 </script>
 
+<% if @region.css %>
+<style><%= @region.css %></style>
+<% end %>
+
 <div id="fb-root"></div>
 <script>
 setTimeout(function(){
