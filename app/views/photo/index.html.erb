@@ -36,8 +36,12 @@
   <div id="score"></div>
 
   <div id="linx">
-    Styleblaster is Williamsburg's premier
-    live fashion blog, documenting the style of today.
+		<% if @region.tagline %>
+			<%= @region.tagline %>
+		<% else %>
+			Styleblaster is Williamsburg's premier
+			live fashion blog, documenting the style of today.
+		<% end %>
     <br><br>
     <a id="about">About Styleblaster</a>
     <div id="linx2">
