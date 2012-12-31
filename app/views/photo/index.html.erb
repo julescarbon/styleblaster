@@ -37,7 +37,7 @@
 
   <div id="linx">
 		<% if @region.tagline %>
-			<%= @region.tagline %>
+			<%= @region.tagline.html_safe %>
 		<% else %>
 			Styleblaster is Williamsburg's premier
 			live fashion blog, documenting the style of today.
@@ -129,7 +129,7 @@ var PLOPS = <%= @photos.to_json.html_safe %>;
 </script>
 
 <% if @region.css %>
-<style><%= @region.css %></style>
+<style><%= @region.css.html_safe %></style>
 <% end %>
 
 <div id="fb-root"></div>
