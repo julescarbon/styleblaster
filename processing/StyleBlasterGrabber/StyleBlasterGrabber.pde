@@ -30,7 +30,12 @@ String version = "1.5";
 int startHour = 8; //am
 int endHour = 15;  //3pm
 int endMinute = 25; 
+<<<<<<< HEAD
 boolean production = true;
+=======
+
+boolean production = false;
+>>>>>>> bd59ede9b8ae62f2b4a6f3564609c63ea5eb8f1f
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
@@ -298,5 +303,7 @@ void keyPressed() {
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
   else if (key=='d') disable=!disable; // disable/enable
+    else if (key=='=') disable=!disable; // zoom in
+
 }
 

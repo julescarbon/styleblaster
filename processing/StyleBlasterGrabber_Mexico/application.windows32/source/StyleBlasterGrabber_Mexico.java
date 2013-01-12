@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.zip.*; 
 import java.util.regex.*; 
 
-public class StyleBlasterGrabber_mexico extends PApplet {
+public class StyleBlasterGrabber_Mexico extends PApplet {
 
 
 
@@ -55,7 +55,7 @@ MotionSensor motionSensor;
 //SETUP VARS
 String version = "1.5";
 int startHour = 7; //am
-int endHour = 16;  //3:59pm
+int endHour = 19;  //3:59pm
 int endMinute = 25; 
 boolean production = true;
 
@@ -67,16 +67,12 @@ String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 String uploadURL = gdlUploadURL;
 String tag = "nyc";
 
-int camWidth;
-int camHeight = 720;
 int sensorThreshold = 13;
 int flowDirection = 1; //-1 = right to left, 1 = left to right
 int flowThreshold = 220;
 float sensorRes = 1;
 
 public void setup() {
-  int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
-  //camHeight = 2;
   int sketchHeight = 1000;
   int sketchWidth = 666;
   float m = .7f;
@@ -90,21 +86,14 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  if (version == "2.0") {
-    cam = new Capture(this, 1280, 960, "Logitech Camera");
-  }
-  else {
+ 
     //   cam = new Capture(this, 2592,1944);
     //Logitech 910c
     //cam = new Capture(this, 1280, 960);
     //Microsoft Studio
-    cam = new Capture(this, 1920, 1080);
-    // cam = new Capture(this, 1280, 720);
-  }
+   // cam = new Capture(this, 1920, 1080);
+     cam = new Capture(this, 1280, 720);
 
-  if (version == "2.0") {
-    //   cam.start();
-  }
   //set global framerate
   int f = 25;
   frameRate(f);
@@ -123,7 +112,6 @@ public void setup() {
   motionSensor.update();
 
   of = new OpticalFlow(cam);
-
 
 }
 
@@ -875,6 +863,6 @@ class Timer {
 }
 
   static public void main(String args[]) {
-    PApplet.main(new String[] { "--bgcolor=#c0c0c0", "StyleBlasterGrabber_mexico" });
+    PApplet.main(new String[] { "--bgcolor=#FFFFFF", "StyleBlasterGrabber_Mexico" });
   }
 }
