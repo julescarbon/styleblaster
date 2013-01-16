@@ -120,7 +120,7 @@ class PhotoController < ApplicationController
     elsif @region = Region.find_by_name(request.subdomain)
       return true
     else
-      redirect_to Rails.env.production? ? "http://www.styleblaster.net/" : "http://www.lvh.me:3000/"
+      redirect_to Rails.env.production? ? "http://www.styleblaster.net#{request.fullpath}" : "http://www.lvh.me:3000#{request.fullpath}"
     end
   end
 
