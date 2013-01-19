@@ -1,8 +1,11 @@
+var master = null;
 $(function(){
+	master = this;
 
   var randomMode = false;
   var queue = new Queue ();
   var randomQueue = new Queue ();
+	var gallery = new Gallery (master, queue);
 
   var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!','boom!','ooh!','tres&nbsp;brooklyn!','wickid!','wow!','holla!','new&nbsp;aesthetic!'];
 
@@ -86,13 +89,13 @@ $(function(){
   }
 
   var fetching = false;
-  function fetch(id) {
+  master.fetch(id, callback) {
     if (fetching) return;
     id = parseInt(id) - 1;
     if (id > 0) {
       fetching = true;
       $.get("/p/" + id, csrf({ limit: 20 }), function(plops){
-        preload(plops);
+        preload(plops, callback);
         fetching = false;
       }, "json")
     }
@@ -104,13 +107,14 @@ $(function(){
     flash();
   }
 
-  function preload(plops){
+  function preload(plops, callback){
     console.log([plops[0].id, "<=>", plops[plops.length-1].id].join(" "));
     for (var i in plops) {
       var plop = new Plop(plops[i]);
       plop.preload();
       queue.append(plop);
     }
+    if (callback) callback();
   }
   
   function keydown (e) {
@@ -176,7 +180,7 @@ $(function(){
       History.pushState(undefined, undefined, "/p/" + plop.id);
     }
     if (queue.almostAtEnd()) {
-      fetch(queue.last().data.id);
+      master.fetch(queue.last().data.id);
     }
     _gaq.push(['_trackEvent', 'forward', 'click']);
   }
@@ -218,7 +222,7 @@ $(function(){
 
   function show(plop){ 
     $("#square").attr( 'src', plop.image_url );
-    $("#link").attr( 'href', plop.image_url) ;
+    $("#link").attr( 'href', plop.image_url );
     $("#day").html( plop.day );
     $("#month").html( plop.month );
     $("#time").html( plop.time );
