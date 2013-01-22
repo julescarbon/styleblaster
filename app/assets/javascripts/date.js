@@ -6,7 +6,7 @@ function merid(h) {
   return h < 12 ? "<small>AM</small>" : "<small>PM</small>";
 }
 function twelve(h) {
-  return h == 0 ? "12" : h > 12 ? h - 12 : h;
+  return (h < 0 || h == 0) ? "12" : h > 12 ? h - 12 : h;
 }
 function zero(m) {
   return m < 10 ? "0" + m : m;
