@@ -1,6 +1,7 @@
-var master = null;
 $(function(){
-	master = this;
+	if (!( 'REGION' in window )) return;
+	
+	var region = "/" + REGION;
 
   var randomMode = false;
   var queue = new Queue ();
@@ -51,7 +52,7 @@ $(function(){
   }
 
   function refresh () {
-    $.get("/refresh.json", csrf({ limit: 1 }), function(data) {
+    $.get(region + "/refresh.json", csrf({ limit: 1 }), function(data) {
       startTimer();
       if (! (data && data.length > 0) ) return;
       var plopData = data.shift();
@@ -69,7 +70,7 @@ $(function(){
   function fetchRandom(){
     if (fetchingRandom) return;
     fetchingRandom = true;
-    $.get("/random", csrf({ 'limit': 10 }), function(data){
+    $.get(region + "/random", csrf({ 'limit': 10 }), function(data){
       var queueWasBare = randomQueue.bare();
       if (! (data && data.length > 0) ) return;
       for (var i in data) {
@@ -88,12 +89,12 @@ $(function(){
   }
 
   var fetching = false;
-  master.fetch = function (id, callback) {
+  function fetch (id, callback) {
     if (fetching) return;
     id = parseInt(id) - 1;
     if (id > 0) {
       fetching = true;
-      $.get("/p/" + id, csrf({ limit: 24 }), function(plops){
+      $.get(region + "/p/" + id, csrf({ limit: 24 }), function(plops){
         preload(plops, callback);
         fetching = false;
       }, "json")
@@ -120,7 +121,7 @@ $(function(){
     switch (e.keyCode) {
 			
 			case 27: // esc
-				window.location.href = "/gallery";
+				window.location.href = region + "/gallery";
 				break;
 
       case 39: // right
@@ -159,7 +160,7 @@ $(function(){
 
       localStorage.setItem("p" + plop.id, "t");
 
-      $.post("/p/" + plop.id + "/like", csrf(), function(data){
+      $.post(region + "/p/" + plop.id + "/like", csrf(), function(data){
         show(plop);
       });
 
@@ -180,10 +181,10 @@ $(function(){
     var plop = queue.forward();
     if (plop) {
       show(plop);
-      History.pushState(undefined, undefined, "/p/" + plop.id);
+      History.pushState(undefined, undefined, region + "/p/" + plop.id);
     }
     if (queue.almostAtEnd()) {
-      master.fetch(queue.last().data.id);
+      fetch(queue.last().data.id);
     }
     _gaq.push(['_trackEvent', 'forward', 'click']);
   }
@@ -194,7 +195,7 @@ $(function(){
     var plop = queue.back();
     if (plop) {
       show(plop);
-      History.pushState(undefined, undefined, "/p/" + plop.id);
+      History.pushState(undefined, undefined, region + "/p/" + plop.id);
     }
     _gaq.push(['_trackEvent', 'back', 'click']);
   }
@@ -202,18 +203,18 @@ $(function(){
   function latest(){
     // History.pushState(undefined, undefined, "/");
     // rewind();
-    window.location.href = "/";
+    window.location.href = region;
   }
 
   function popular(){
     // History.pushState(undefined, undefined, "/");
     // rewind();
-    window.location.href = "/popular";
+    window.location.href = region + "/popular";
   }
 
   function random(){
     randomMode = true;
-    History.pushState(undefined, undefined, "/random");
+    History.pushState(undefined, undefined, region + "/random");
     if (randomQueue.empty()) {
       fetchRandom();
     } else {
