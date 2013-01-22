@@ -17,6 +17,7 @@ function Queue () {
   
   base.prepend = function(item){
     base.queue.unshift(item);
+		base.index += 1;
   }
 
   base.forward = function(){

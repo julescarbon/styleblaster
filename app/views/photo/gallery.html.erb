@@ -1,0 +1,9 @@
+<div id="gallery">
+	<div class="items">
+		<% @photos.each do |photo| %>
+			<%= link_to image_tag(photo.photo.url), "/<%= @region.name %>/p/#{photo.id}" %>
+		<% end %>
+	</div>
+	<a class="next" href="/<%= @region.name %>/gallery/<%= @next_id %>">next page &rarr;</a>
+	<a class="prev" href="/<%= @region.name %>/gallery/<%= @prev_id %>"><%= @region.name %> . <%= @photos.first.created_at.strftime("%a %b %d %Y %l:%I %p") %></a>
+</div>

@@ -24,14 +24,14 @@ ActiveRecord::Schema.define(:version => 20121206191033) do
   end
 
   create_table "regions", :force => true do |t|
-    t.string   "name"
-    t.string   "secret"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "title"
-    t.string   "tagline"
-    t.text     "css"
-    t.text     "manifesto"
+    t.string    "name"
+    t.string    "secret"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
+    t.string    "title"
+    t.string    "tagline"
+    t.text      "css"
+    t.text      "manifesto"
   end
 
 end

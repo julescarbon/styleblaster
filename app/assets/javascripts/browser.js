@@ -5,7 +5,6 @@ $(function(){
   var randomMode = false;
   var queue = new Queue ();
   var randomQueue = new Queue ();
-	var gallery = new Gallery (master, queue);
 
   var radPhrases = ['cool!','top style!','rad!','bangin!','sweet!','sick!','dang!','awesome!','sooo good!','boom!','ooh!','tres&nbsp;brooklyn!','wickid!','wow!','holla!','new&nbsp;aesthetic!'];
 
@@ -89,12 +88,12 @@ $(function(){
   }
 
   var fetching = false;
-  master.fetch(id, callback) {
+  master.fetch = function (id, callback) {
     if (fetching) return;
     id = parseInt(id) - 1;
     if (id > 0) {
       fetching = true;
-      $.get("/p/" + id, csrf({ limit: 20 }), function(plops){
+      $.get("/p/" + id, csrf({ limit: 24 }), function(plops){
         preload(plops, callback);
         fetching = false;
       }, "json")
@@ -119,9 +118,13 @@ $(function(){
   
   function keydown (e) {
     switch (e.keyCode) {
+			
+			case 27: // esc
+				window.location.href = "/gallery";
+				break;
 
       case 39: // right
-        forward();
+				forward();
         break;
 
       case 37: // left
@@ -136,7 +139,7 @@ $(function(){
         random();
         break;
   
-      case 32://add case for space bar for voting here
+      case 32: // spacebar
         like();
         break;
 

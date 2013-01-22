@@ -9,7 +9,7 @@ class PhotoController < ApplicationController
 
   # Show something appropriate
   def index
-    @limit = params[:limit] || 10;
+    @limit = params[:limit] || 24;
 
     if @nighttime and @region.name != "bottt"
       @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
@@ -29,7 +29,7 @@ class PhotoController < ApplicationController
 
   # Show the most recent images
   def latest
-    @photos = @region.photos.order("id DESC").limit(10)
+    @photos = @region.photos.order("id DESC").limit(18)
 
     respond_to do |format|
       format.html { render :template => "photo/index" }
@@ -66,7 +66,7 @@ class PhotoController < ApplicationController
 
   # Show the images by an ID
   def show
-    @limit = params[:limit] || 10;
+    @limit = params[:limit] || 24;
 
     @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
@@ -75,6 +75,23 @@ class PhotoController < ApplicationController
       format.json { render json: @photos }
     end
   end
+  
+  def gallery
+    @limit = 25
+
+    if not params[:id].nil?
+      @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit).all
+      @next_id = @photos.pop.id
+    else
+      @photos = @region.photos.order("id DESC").limit(@limit)
+      @next_id = @photos.pop.id
+    end
+
+    respond_to do |format|
+      format.html { render :template => "photo/gallery" }
+      format.json { render json: @photos }
+    end
+  end    
 
   # Show images by a random ID
   def random
@@ -114,13 +131,10 @@ class PhotoController < ApplicationController
   private
 
   def fetch_region
-    if request.subdomain == "www"
-      @region = Region.find(2)
-      return true
-    elsif @region = Region.find_by_name(request.subdomain)
-      return true
+    if params[:region]
+      @region = Region.find_by_name(params[:region])
     else
-      redirect_to Rails.env.production? ? "http://www.styleblaster.net#{request.fullpath}" : "http://www.lvh.me:3000#{request.fullpath}"
+      @region = Region.find_by_name("nyc")
     end
   end
 
