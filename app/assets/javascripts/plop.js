@@ -7,7 +7,7 @@ function Plop (data){
 
   base.id = base.data.id;
   base.score = base.data.score;
-  base.image_url = base_url + data.photo_file_name.replace(/.png$/, ".jpg");
+  base.image_url = base_url + data.photo_file_name.replace(".JPG", ".jpg").replace(/.png$/, ".jpg");
 
   var d = derail_date(data.created_at);
   base.day = d.getDate();
