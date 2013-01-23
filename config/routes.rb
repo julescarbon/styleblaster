@@ -1,4 +1,10 @@
 PhotoboothGallery::Application.routes.draw do
+  post   '/bgz'           => "backgrounds#create"
+  get    '/bgz/admin'     => "backgrounds#admin"
+  delete '/bgz/:id'       => "backgrounds#create"
+  get    '/bgz/:id'       => "backgrounds#pick"
+  get    '/bgz'           => "backgrounds#index"
+
   get    '/r/new/'        => "region#new"
   delete '/r/:name'       => "region#destroy"
   get    '/r/:name/edit'  => "region#edit"

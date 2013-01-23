@@ -2,6 +2,8 @@ class Background < ActiveRecord::Base
   attr_accessible :name, :bg, :selected
 
   has_attached_file :bg,
+    :styles => { :original => ["800x600>", :jpg], :thumb => ["300x300>", :jpg] },
+    :default_style => :original,
     :storage => :s3,
     :s3_storage_class => :reduced_redundancy,
     :bucket => 'styleblast',
