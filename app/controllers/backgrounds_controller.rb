@@ -6,7 +6,7 @@ class BackgroundsController < ApplicationController
     respond_to do |format|
       format.html { render }
       format.json { render json: @bgs.map {|bg|
-      	{ :key => bg.key, :url => bg.bg.url }
+      	{ :key => bg.key, :url => bg.bg.url(:original, false) }
       } }
     end
 	end
