@@ -61,7 +61,7 @@ $(function(){
         plop.preload();
         queue.prepend(plop);
         rewind();
-        History.pushState(undefined, undefined, "/");
+        History.pushState(undefined, undefined, region + "/");
       }
     }, "json");
   }
@@ -95,8 +95,10 @@ $(function(){
     if (id > 0) {
       fetching = true;
       $.get(region + "/p/" + id, csrf({ limit: 24 }), function(plops){
-        preload(plops, callback);
-        fetching = false;
+      	if (plops.length > 0) {
+					preload(plops, callback);
+				}
+				fetching = false;
       }, "json")
     }
   }

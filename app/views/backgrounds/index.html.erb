@@ -57,9 +57,9 @@ h7 {
 
 </style>
 
+<h6>styleblaster</h6>
+
 <div id="backgrounds">
-	<h6>styleblaster</h6>
-	
 	<ul id="bgs">
 		<% @bgs.each do |bg| %>
 			<li data-id="<%= bg.id %>" <% if bg.selected %>class="selected"<% end %>>
@@ -71,26 +71,27 @@ h7 {
 </div>
 
 <div id="thanks">
-	<h6>styleblaster</h6>
 	<h7>thanks! please have your picture taken..</h7>
 	<button id="ok">OK</button
 </div>
 
 <script type="text/javascript">
 $(function(){
-	$("#bgs li").bind("touchstart click", function(){
+	$("#bgs li").bind("touchend click", function(){
 		$(".selected").removeClass("selected");
 		$(this).addClass("selected");
 		var id = $(this).data('id');
 		$("#backgrounds").hide();
 		$.post("/bgz/" + id + "/pick", csrf(), function(){
-			$("#thanks").show();
+			$("#thanks").fadeIn(200);
 		});
 	});
 
-	$("#ok").bind("touchstart click", function(){
+	$("#ok").bind("touchend click", function(){
 		$("#thanks").hide();
-		$("#backgrounds").show();
+		setTimeout(function(){
+			$("#backgrounds").fadeIn(400);
+		}, 400);
 	});
 
 });

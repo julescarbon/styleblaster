@@ -1,0 +1,130 @@
+<div id="container">
+
+	<div id="square_container">
+	<a id="link"><img id="square"></a>
+	</div>
+	<div id="sidebar">
+		<div id="date">
+			<div id="day">&nbsp;</div>
+			<div id="month">&nbsp;</div>
+			<div id="time">&nbsp;</div>
+		</div>
+		<h1><%= @region.title %></h1>
+	
+		<div id="nav">
+			<div id="hatbox">
+				<img src="/assets/tophat.png" id="tophat">
+			</div>
+			<a id="back" class="nav">&larr; back</a>
+			&nbsp;
+			<a id="forward" class="nav">next &rarr;</a>
+			<br>
+			<a id="about">About</a> &middot;
+			<a href="/<%= @region.name %>/top" id="top">Popular</a> &middot; <a href="/<%= @region.name %>/random" id="random">Random</a> &middot; <a href="/<%= @region.name %>/gallery">Gallery</a>
+		</div>
+	
+	</div>
+	
+	<div id="curtain">
+		<div id="manifesto">
+			<span class="close">x</span>
+			<h2>About Styleblaster</h2>
+			<p>
+				Since the early 2000s, Williamsburg has been a neighborhood popular with a new cultural elite, the heirs of the artists and hipsters who in years past were attracted by its location, one subway stop from Manhattan.
+			</p>
+			<p>
+				Now in 2012, the neighborhood is poised on the cusp of a new change as the repercussions of recent zoning changes, combined with inland condo construction, have literally paved the way for a new breed of stylish and sassy individuals.  A place for the fashionable to be seen, Williamsburg's stretch of Bedford Avenue is often described as a modern Haight-Ashbury, a cultural mecca for the Millenial generation.
+			</p>
+	
+			<p>
+				To answer the changing times, we introduce Styleblaster, a realtime account of what people in Williamsburg are wearing.  Unlike a typical streetstyle blog, Styleblaster documents all -- the visiting fashion plates, the hipsters and have-nots, the native Polish and Italian proud who have for years called this neighborhood home.  And above all -- the dapper salarymen and businesswomen who stand to inherit the area.
+			</p>
+	
+			<p>
+				Situated a block from the hellmouth of the Bedford "L" subway train, our camera aims down the street, capturing Williamsburg on the hoof.  Moments after a person enters into the frame, the camera snaps, sending its image onto our blog.  For the online fashion browser, a boon: the blog updates in realtime, showcasing each new image as quick as it can be appraised.  Online viewers can watch a live feed, peruse a recent history of images, or compare shots over the days and weeks as FW-2012 blossoms into SS-2013.
+			</p>
+	
+			<p>
+				We believe this service fills a need for live fashion information, with a unique and unmatched vantage point on the hippest block in New York City.  It will quickly become a destination for New York City peacocks to traipse by and show off what makes the neighborhood hop.  For the savvy, a place to be seen.  For the flaneur, a bounty of style.  At home or online, fashion has a new destination.
+			</p>
+	
+			<p>
+				<a href="http://styleblaster.net/">http://styleblaster.net/</a><br>
+				October 2012
+			</p>
+	
+			<p id="created">
+				<b>CREATED BY</b><br>
+				<a href="http://www.familylobby.com/common/tt8372685fltt.gif">Mary Burford</a><br>
+				<a href="http://jackkalish.com/">Jack Kalish</a><br>
+				<a href="http://winslowporter.com/">Winslow Porter</a><br>
+				<a href="http://carbonpictures.com/">Jules Laplace</a>
+			</p>
+	
+			<p>
+				<b>SOUNDTRACK BY</b><br>
+				<a href="http://chickswithhitsmix.com/">Chicks With Hits</a>
+			</p>
+	
+			<p>
+				<b>HOURS</b><br>
+				8 AM to 4 PM
+			</p>
+	
+			<p>
+				<b>GET IN TOUCH</b><br>
+				Follow <a href="https://twitter.com/styleblaster">@styleblaster</a> on Twitter.
+			</p>
+	
+			<p>
+				<b>KEYBOARD CONTROLS</b><br>
+				&rarr; next image<br>
+				&larr; prev. image<br>
+				&uarr; random<br>
+				&darr; latest<br>
+				[SPACEBAR] like
+			</p>
+	
+			<p>
+				<b>A <a href="http://hellainteractive.com/">HELLA INTERACTIVE</a> / <a href="http://okfoc.us/">OKFOCUS</a> JOINT</b>
+			</p>
+	
+			<br>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var PLOPS = <%= @photos.to_json.html_safe %>;
+var REGION = "<%= @region.name %>";
+</script>
+
+<% if @region.css %>
+<style><%= @region.css.html_safe %></style>
+<% end %>
+
+<div id="fb-root"></div>
+<script>
+setTimeout(function(){
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=113276355497144";
+    fjs.parentNode.insertBefore(js, fjs);
+  })(document, 'script', 'facebook-jssdk');
+
+  (function(d,s,id){
+    var js, fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){
+      js=d.createElement(s);
+      js.id=id;
+      js.src="//platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js,fjs);
+    }
+  })(document,"script","twitter-wjs");
+
+  $("#social").delay(200).animate({ opacity: 1.0 }, 500);
+
+}, 500);
+</script>

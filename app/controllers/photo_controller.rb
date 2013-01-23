@@ -22,7 +22,7 @@ class PhotoController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :template => "photo/index" }
+      format.html { render :template => @template }
       format.json { render json: @photos }
     end
   end
@@ -32,7 +32,7 @@ class PhotoController < ApplicationController
     @photos = @region.photos.order("id DESC").limit(18)
 
     respond_to do |format|
-      format.html { render :template => "photo/index" }
+      format.html { render :template => @template }
       format.json { render json: @photos }
     end
   end
@@ -47,7 +47,7 @@ class PhotoController < ApplicationController
     end
 
     respond_to do |format|
-        format.html { render :template => "photo/index" }
+      format.html { render :template => @template }
         format.json { render json: @photos }
     end
   end
@@ -59,7 +59,7 @@ class PhotoController < ApplicationController
     @photos = @region.photos.where("score > 0").order("score DESC").limit(@limit)
 
     respond_to do |format|
-      format.html { render :template => "photo/index" }
+      format.html { render :template => @template }
       format.json { render json: @photos }
     end
   end
@@ -71,7 +71,7 @@ class PhotoController < ApplicationController
     @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
     respond_to do |format|
-      format.html { render :template => "photo/index" }
+      format.html { render :template => @template }
       format.json { render json: @photos }
     end
   end
@@ -100,7 +100,7 @@ class PhotoController < ApplicationController
     @photos = @region.photos.order(sql_rand).limit(@limit)
 
     respond_to do |format|
-      format.html { render :template => "photo/index" }
+      format.html { render :template => @template }
       format.json { render json: @photos }
     end
   end
@@ -133,8 +133,17 @@ class PhotoController < ApplicationController
   def fetch_region
     if params[:region]
       @region = Region.find_by_name(params[:region])
+      if @region.name == "artstech"
+      	@landscape = true
+      	@template = "photo/landscape"
+      else
+      	@landscape = false
+      	@template = "photo/index"
+			end
     else
       @region = Region.find_by_name("nyc")
+      @landscape = false
+			@template = "photo/index"
     end
   end
 
