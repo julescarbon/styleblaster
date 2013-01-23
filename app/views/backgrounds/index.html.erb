@@ -1,8 +1,75 @@
-<ul>
-	<% @bgs.each do |bg| %>
-		<li>
-			<%= @bg.name %>
-			<%= image_tag @bg.bg.url %>
-		</li>
-	<% end %>
-</ul>
+<style type="text/css">
+#backgrounds h6 {
+	font-size: 166px;
+	letter-spacing: -15px;
+	margin: 20px; padding: 0;
+	text-align: center;
+	color: #666;
+}
+#backgrounds h7 {
+	font-size: 66px;
+	letter-spacing: -5px;
+	margin: 20px; padding: 0;
+	text-align: center;
+	display: block;
+	color: #666;
+}
+#bgs {
+	margin: 0; padding: 0;
+	width: 100%;
+	margin-bottom: 200px;
+}
+#bgs li {
+	margin: 0 0 40px 0; padding: 0;
+	width: 49%;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+	list-style-type: none;
+	font-size: 24px;
+}
+#bgs li.selected {
+	font-weight: bold;
+}
+#bgs li img {
+	margin: 0 auto;
+	display: block;
+	width: 80%;
+	margin-bottom: 10px;
+	border: 5px solid white;
+	box-shadow: 0 1px 2px #888;
+	opacity: 0.6;
+	background: #fff;
+}
+#bgs li.selected img {
+	opacity: 1.0;
+}
+
+</style>
+
+<div id="backgrounds">
+	<h6>styleblaster</h6>
+	
+	<ul id="bgs">
+		<% @bgs.each do |bg| %>
+			<li data-id="<%= bg.id %>" <% if bg.selected %>class="selected"<% end %>>
+				<%= image_tag bg.bg.url(:thumb) %>
+				<%= bg.name %>
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	$("#bgs li").bind("touchstart click", function(){
+		$(".selected").removeClass("selected");
+		$(this).addClass("selected");
+		var id = $(this).data('id');
+		$.post("/bgz/" + id + "/pick", csrf(), function(){
+			alert("picked " + id);
+		});
+	});
+});
+
+</script>

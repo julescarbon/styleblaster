@@ -2,10 +2,22 @@ class BackgroundsController < ApplicationController
 
 	def index
 		@bgs = Background.all
+
+    respond_to do |format|
+      format.html { render }
+      format.json { render json: @bgs.map {|bg|
+      	{ :key => bg.key, :url => bg.bg.url }
+      } }
+    end
 	end
 	
 	def admin
 		@bgs = Background.all
+	end
+
+	def current
+		@bg = Background.where(:selected => true).first
+		render :text => @bg.key
 	end
 	
 	def pick
@@ -13,12 +25,12 @@ class BackgroundsController < ApplicationController
 			bg.selected = false
 			bg.save
 		end
-		bg = Background.find(params:id)
-		bg.selected = true
-		bg.save
+		@bg = Background.find(params[:id])
+		@bg.selected = true
+		@bg.save
 		render :text => "OK"
 	end
-		
+	
 	def create
     @bg = Background.new(params[:background])
     if @bg.save
@@ -28,7 +40,7 @@ class BackgroundsController < ApplicationController
   
   def destroy
     @bg = Background.find(params[:id])
-    @bg.destroy!
+    @bg.destroy
     redirect_to "/bgz/admin"
   end
 
