@@ -27,9 +27,10 @@ $(function(){
     $(window).keydown(keydown);
     $("#forward").click(forward);
     $("#back").click(back);
-    $("#square").click(function(e){
+    $("#link").click(function(e){
       e.preventDefault();
       forward();
+      return false;
     });
     $("#tophat").click(like);
     $("#random").click(random);
