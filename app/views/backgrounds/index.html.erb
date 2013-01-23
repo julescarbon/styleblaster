@@ -1,0 +1,10 @@
+
+<ul>
+	<% @bgs.each do |bg| %>
+		<li>
+			<%= @bg.name %>
+			<%= image_tag @bg.bg.url %>
+		</li>
+	<% end %>
+</ul>
+

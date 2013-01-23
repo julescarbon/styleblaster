@@ -1,0 +1,27 @@
+<%= form_for( Background.new, :url => "/bgz/" ) do |bg| %>
+
+  <div>
+    <%= bg.label :name %>
+    <%= bg.text_field :name %>
+  </div>
+
+	<div>
+		<%= bg.label :bg %>
+		<%= bg.file_field :bg %>
+	</div>
+	
+  <div>
+    <label></label>
+    <%= f.submit %>
+  </div>
+  
+<% end %>
+
+<ul>
+	<% @bgs.each do |bg| %>
+		<li>
+			<%= @bg.name %>
+			<%= image_tag @bg.bg.url %>
+		</li>
+	<% end %>
+</ul>

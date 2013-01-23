@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121206191033) do
+ActiveRecord::Schema.define(:version => 20130123005320) do
+
+  create_table "backgrounds", :force => true do |t|
+    t.string   "name"
+    t.boolean  "selected",        :default => false
+    t.string   "bg_file_name"
+    t.string   "bg_content_type"
+    t.integer  "bg_file_size"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
 
   create_table "photos", :force => true do |t|
     t.string    "photo_file_name"
