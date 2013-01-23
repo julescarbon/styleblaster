@@ -11,7 +11,9 @@ class PhotoController < ApplicationController
   def index
     @limit = params[:limit] || 24;
 
-    elsif @nighttime and @region.name != "bottt" and @region.name != "artstech"
+    if @region.name == "artstech"
+      @photos = @region.photos.order("id DESC").limit(@limit)
+    elsif @nighttime and @region.name != "bottt"
       @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
       @photos = @region.photos.order("id DESC").limit(@limit)
