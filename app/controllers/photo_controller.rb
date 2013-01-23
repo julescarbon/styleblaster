@@ -13,6 +13,7 @@ class PhotoController < ApplicationController
 
     if @region.name == "artstech"
       @photos = @region.photos.order("id DESC").limit(@limit)
+      @nighttime = false
     elsif @nighttime and @region.name != "bottt"
       @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
