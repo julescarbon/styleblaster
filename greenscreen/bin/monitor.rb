@@ -21,19 +21,22 @@ def current_key
 end
 
 def convert(jpg, key)
+  watermark = "watermarks/watermark_#{rand(6)}.png"
   output = Time.now.strftime("#{BUCKET}-%Y-%m-%d-%H-%M-%S.jpg")
-  cmd  = "convert \\( backgrounds/#{key}.jpg -resize x600 \\) \\( #{jpg}"
+  cmd  = "convert \\( backgrounds/#{key}.jpg -resize x600 \\)"
+  cmd += " #{watermark} -geometry +20+15 -gravity NorthEast -compose Over -composite"
+  cmd += " \\( #{jpg} -gravity Center"
   cmd += " -fuzz 8% -transparent \\#34643b"
   cmd += " -fuzz 4% -transparent \\#19351e"
   cmd += " -fuzz 4% -transparent \\#294f2e"
   cmd += " -normalize -resize 600x -rotate 270 \\)"
-  cmd += " -compose Over -composite -normalize output/#{output}"
+  cmd += " -compose Over -composite -normalize -quality 88 output/#{output}"
   system(cmd)
   return output
 end
 
 def upload(jpg)
-  if File.exists?("output/#{jpg}")
+  if not jpg.nil? and File.exists?("output/#{jpg}")
     cmd = "curl -i -F test=@output/#{jpg} http://styleblaster.net/upload/artstech"
     system(cmd)
   end
