@@ -11,22 +11,23 @@
 		</div>
 		<h1><%= @region.title %></h1>
 	
+		<div id="hatbox">
+			<img src="/assets/tophat.png" id="tophat">
+		</div>
 		<div id="nav">
-			<div id="hatbox">
-				<img src="/assets/tophat.png" id="tophat">
+			<div class="inner">
+				<a id="back" class="nav">&larr; back</a>
+				&nbsp;
+				<a id="forward" class="nav">next &rarr;</a>
+				<br>
+				<a id="about">About</a> &middot;
+				<a href="/<%= @region.name %>/top" id="top">Popular</a> &middot; <a href="/<%= @region.name %>/random" id="random">Random</a> &middot; <a href="/<%= @region.name %>/gallery">Gallery</a>
+	
+				<div id="social">
+					<div class="fb-like" data-href="http://styleblaster.net/<%= @region.name %>/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 95px;"></div>
+					<a href="https://twitter.com/share" class="twitter-share-button" data-text="<%= @region.name.capitalize %> Styleblaster" data-url="http://styleblaster.net/<%= @region.name %>">Tweet</a>
+				</div>
 			</div>
-			<a id="back" class="nav">&larr; back</a>
-			&nbsp;
-			<a id="forward" class="nav">next &rarr;</a>
-			<br>
-			<a id="about">About</a> &middot;
-			<a href="/<%= @region.name %>/top" id="top">Popular</a> &middot; <a href="/<%= @region.name %>/random" id="random">Random</a> &middot; <a href="/<%= @region.name %>/gallery">Gallery</a>
-
-			<div id="social">
-				<div class="fb-like" data-href="http://styleblaster.net/<%= @region.name %>/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 95px;"></div>
-				<a href="https://twitter.com/share" class="twitter-share-button" data-text="<%= @region.name.capitalize %> Styleblaster" data-url="http://styleblaster.net/<%= @region.name %>">Tweet</a>
-			</div>
-
 		</div>
 	
 	</div>

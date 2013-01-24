@@ -68,6 +68,7 @@
 		border: 5px solid rgb(255,248,248);
 		box-shadow: 0 1px 5px #112233;
 		float: left;
+		margin-right: 10px;
 	}
 	#day {
 		color: rgb(255,248,248);
@@ -91,13 +92,23 @@
 		-webkit-transform: scale(0.8);
 		transform: scale(0.8);
 		cursor: pointer;
+		position: relative;
+		top: 36px;
 	}
 	#tophat:hover, #tophat:active {
 		-webkit-transform: scale(1.0) rotate(5deg);
 		transform: scale(1.0) rotate(5deg);
 	}
 	#nav {
- 		float: left;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		overflow: visible;
+		.inner {
+			position: relative;
+			top: 20px;
+			left: 30px;
+		}
 	}
 	#nav i {
 		font-size: 13px;
@@ -105,6 +116,8 @@
 	#hatbox {
 		width: 100px;
 		float: left;
+		position: relative;
+		left: -30px;
 	}
 	#rad {
 		width: 490px;
@@ -256,10 +269,12 @@
 	
 	
 	#social {
-		height: 24px; width: 210px;
+		height: 24px;
+		width: 210px;
 		position: relative;
 		left: -2px;
 		opacity: 0.0;
+		-webkit-transform: scale(0.8);
 	}
 	a.twitter-share-button {
 		display: none;
@@ -267,6 +282,9 @@
 	iframe.twitter-share-button {
 		position: relative;
 		top: 3px;
+	}
+	div.fb-like span {
+		width: 95px !important;
 	}
 	div.fb-like > span > iframe {
 		width: 95px !important;
