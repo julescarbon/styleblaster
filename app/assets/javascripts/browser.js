@@ -49,7 +49,7 @@ $(function(){
   var timer = null;
   function startTimer () {
     clearTimeout(timer);
-    timer = setTimeout(refresh, 15000);
+    timer = setTimeout(refresh, 3000);
   }
 
   function refresh () {
