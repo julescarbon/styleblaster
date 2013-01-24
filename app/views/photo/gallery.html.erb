@@ -1,25 +1,35 @@
 <table id="gallery" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 	
-		<td class="sidebar" rowspan="2">
-			&nbsp;
+		<td class="corner">
+			<img src="/assets/tophat.png" id="tophat">
 		</td>
 		
 		<td class="header" valign="bottom">
 			<div class="inner">
-				<h5>styleblaster.net/<%= @region.name %></h5>
-				<span class="time">
+				<span class="left">
+					<h5>styleblaster.net/<%= @region.name %></h5>
 					<%= @photos.first.created_at.strftime("%A, %B %d, %Y") %>
 				</span>
 				
-				<% if @next_id %>
-					<a class="next" href="/<%= @region.name %>/gallery/<%= @next_id %>">next page &rarr;</a>
-				<% end %>
+				<span class="right">
+					<% if @next_id %>
+						<a class="next" href="/<%= @region.name %>/gallery/<%= @next_id %>">next page &rarr;</a>
+					<% else %>
+						<div id="social">
+							<div class="fb-like" data-href="http://styleblaster.net/<%= @region.name %>/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 95px;"></div>
+							<a href="https://twitter.com/share" class="twitter-share-button" data-text="Live Williamsburg streetstyle -- Styleblaster" data-url="http://styleblaster.net/">Tweet</a>
+						</div>
+					<% end %>
+				</span>
 			</div>
 		</td>
 	</tr>
 
 	<tr>
+		<td class="sidebar">
+			&nbsp;
+		</td>
 		<td class="items" valign="top">
 			<div class="inner">
 				<% @photos.each do |photo| %>
@@ -30,3 +40,29 @@
 	</tr>
 
 </table>
+
+<div id="fb-root"></div>
+<script>
+setTimeout(function(){
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=113276355497144";
+    fjs.parentNode.insertBefore(js, fjs);
+  })(document, 'script', 'facebook-jssdk');
+
+  (function(d,s,id){
+    var js, fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){
+      js=d.createElement(s);
+      js.id=id;
+      js.src="//platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js,fjs);
+    }
+  })(document,"script","twitter-wjs");
+
+  $("#social").delay(200).animate({ opacity: 1.0 }, 500);
+
+}, 500);
+</script>
