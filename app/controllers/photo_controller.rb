@@ -80,8 +80,11 @@ class PhotoController < ApplicationController
 		else
 			@og_title = "Styleblaster"
 		end
-		@og_image = @photos.first.photo.url
-    @og_url = "http://styleblaster.net/#{@region.name}/p/#{@photos.first.id}/"
+		
+		if @photos.any?
+			@og_image = @photos.first.photo.url
+			@og_url = "http://styleblaster.net/#{@region.name}/p/#{@photos.first.id}/"
+		end
 
     respond_to do |format|
       format.html { render :template => @template }

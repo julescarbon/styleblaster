@@ -234,7 +234,7 @@ $(function(){
     $("#month").html( plop.month );
     $("#time").html( plop.time );
     $("#score").html( tophats(plop.score) );
-    buildSocialButtons( "http://styleblaster.net" + region + "/p/" + plop.id );
+    buildSocialButtons( "http://styleblaster.net/" + REGION + "/p/" + plop.id );
   }
 
   function flash(){
