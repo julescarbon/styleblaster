@@ -1,5 +1,6 @@
 
 .landscape {
+	overflow: auto;
 	#container {
 		width: 900px;
 		height: 600px;
@@ -291,9 +292,6 @@
 		width: 95px !important;
 	}
 	*****/
-	.fb_edge_widget_with_comment span.fb_edge_comment_widget iframe.fb_ltr {
-		display: none !important;
-	}
 }
 
 @media only screen and (max-device-width: 899px) and (orientation: portrait) {
