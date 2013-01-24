@@ -93,7 +93,7 @@ class PhotoController < ApplicationController
   end
   
   def gallery
-    @limit = 25
+    @limit = 41
 
     if @region.name == "artstech"
       @photos = @region.photos.order("id DESC").all
