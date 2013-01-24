@@ -4,9 +4,9 @@ require 'open-uri'
 require 'json'
 
 BUCKET = "artstech"
+INCOMING_DIR = "incoming/2013_01_23/"
 
 system("mkdir output")
-system("mkdir incoming")
 
 def most_recent_file(dir)
   Dir.glob("#{dir}/*").max { |a,b|
@@ -44,7 +44,7 @@ end
 
 old_jpg = nil
 loop {
-  jpg = most_recent_file("incoming")
+  jpg = most_recent_file( INCOMING_DIR )
   key = current_key()
   puts "current key: #{key} ... #{jpg}"
 

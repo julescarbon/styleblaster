@@ -76,7 +76,7 @@ h7 {
 
 <script type="text/javascript">
 $(function(){
-	$("#bgs li").bind("touchend click", function(){
+	$("#bgs li").bind("click", function(){
 		$(".selected").removeClass("selected");
 		$(this).addClass("selected");
 		var id = $(this).data('id');
@@ -86,7 +86,7 @@ $(function(){
 		});
 	});
 
-	$("#ok").bind("touchend click", function(){
+	$("#ok").bind("click", function(){
 		$("#thanks").hide();
 		setTimeout(function(){
 			$("#backgrounds").fadeIn(400);
