@@ -21,6 +21,12 @@
 			<br>
 			<a id="about">About</a> &middot;
 			<a href="/<%= @region.name %>/top" id="top">Popular</a> &middot; <a href="/<%= @region.name %>/random" id="random">Random</a> &middot; <a href="/<%= @region.name %>/gallery">Gallery</a>
+
+			<div id="social">
+				<div class="fb-like" data-href="http://styleblaster.net/<%= @region.name %>/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 95px;"></div>
+				<a href="https://twitter.com/share" class="twitter-share-button" data-text="<%= @region.name.capitalize %> Styleblaster" data-url="http://styleblaster.net/<%= @region.name %>">Tweet</a>
+			</div>
+
 		</div>
 	
 	</div>

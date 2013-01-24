@@ -75,6 +75,8 @@ class PhotoController < ApplicationController
 
     @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
+		@og_url += "p/#{@photos.first.id}/"
+
     respond_to do |format|
       format.html { render :template => @template }
       format.json { render json: @photos }
@@ -152,6 +154,7 @@ class PhotoController < ApplicationController
       @landscape = false
 			@template = "photo/index"
     end
+    @og_url = "http://styleblaster.net/#{@region.name}/"
   end
 
   def sql_rand
