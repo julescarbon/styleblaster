@@ -1,5 +1,46 @@
-
 #gallery {
+	width: 100%;
+	height: 100%;
+	* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+	.sidebar {
+		width: 200px;
+		background: rgba(0,0,0,0.3);
+	}
+	.header {
+		height: 100px;
+		padding: 10px;
+		font-size: 15px;
+		color: #444;
+		min-width: 750px;
+		.time {
+			min-width: 250px;
+			display: inline-block;
+		}
+	}
+	.items {
+		background: #fff;
+		padding: 10px;
+		box-shadow: 0 inset;
+		font-size: 20px;
+	}
+	.inner {
+		min-width: 750px;
+	}
+	h5 {
+		font-size: 24px;
+		letter-spacing: -2px;
+		display: inline;
+		margin: 0 10px 0 0;
+		line-height: 24px;
+		color: #111;
+	}
+}
+
+
+
+/*
+#gallery {
+	width: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -17,9 +58,14 @@
 	top: 50%;
 	left: 50%;
 	margin-top: -267px;
-	margin-left: -496px;
 	width: 992px;
+	background: white;
+	min-height: 100%;
+	width: 100%;
+	margin-left: -496px;
 }
+*/
+
 #gallery .items a {
 	text-decoration: none;
 	border: 0;
@@ -31,7 +77,7 @@
 #gallery .items img {
 	display: inline-block;
 	background: #fff;
-	padding: 2px;
+	padding: 4px;
 	box-shadow: 0 1px 2px #888;
 	margin: 6px;
 	width: 100px;
@@ -40,8 +86,10 @@
 	box-shadow: 0 1px 2px #000;
 }
 .landscape #gallery .items img {
-	width: 140px;
+	width: 200px;
 }
+
+/*
 #gallery .next {
 	position: absolute;
 	top: 50%;
@@ -58,14 +106,6 @@
 	margin-left: -486px;
 	margin-top: -307px;
 }
-#gallery .prev h5 {
-	font-size: 24px;
-	letter-spacing: -2px;
-	display: inline;
-}
-#gallery .prev {
-	font-size: 20px;
-}
 #gallery .next {
 	font-size: 20px;
 	color: #48f;
@@ -77,3 +117,4 @@
 	color: #38f;
 	border: 0;
 }
+*/

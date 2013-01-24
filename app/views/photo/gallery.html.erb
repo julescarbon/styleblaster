@@ -1,13 +1,32 @@
-<div id="gallery">
-	<div class="prev">
-		<h5>styleblaster.net/<%= @region.name %></h5>
-		.
-		<%= @photos.first.created_at.strftime("%A, %B %d, %Y @ %l:%M %p") %>
-	</div>
-	<a class="next" href="/<%= @region.name %>/gallery/<%= @next_id %>">next page &rarr;</a>
-	<div class="items">
-		<% @photos.each do |photo| %>
-		<%= link_to image_tag(photo.photo.url), "/#{@region.name}/p/#{photo.id}" %>
-		<% end %>
-	</div>
-</div>
+<table id="gallery" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+	
+		<td class="sidebar" rowspan="2">
+			&nbsp;
+		</td>
+		
+		<td class="header" valign="bottom">
+			<div class="inner">
+				<h5>styleblaster.net/<%= @region.name %></h5>
+				<span class="time">
+					<%= @photos.first.created_at.strftime("%A, %B %d, %Y") %>
+				</span>
+				
+				<% if @next_id %>
+					<a class="next" href="/<%= @region.name %>/gallery/<%= @next_id %>">next page &rarr;</a>
+				<% end %>
+			</div>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="items" valign="top">
+			<div class="inner">
+				<% @photos.each do |photo| %>
+				<%= link_to image_tag(photo.photo.url), "/#{@region.name}/p/#{photo.id}" %>
+				<% end %>
+			</div>
+		</td>
+	</tr>
+
+</table>

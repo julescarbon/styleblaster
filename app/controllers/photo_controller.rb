@@ -84,7 +84,9 @@ class PhotoController < ApplicationController
   def gallery
     @limit = 25
 
-    if not params[:id].nil?
+    if @region.name == "artstech"
+      @photos = @region.photos.all
+    elsif not params[:id].nil?
       @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit).all
       @next_id = @photos.pop.id
     else
