@@ -3,7 +3,7 @@ class Photo < ActiveRecord::Base
   belongs_to :region
 
   has_attached_file :photo,
-    :styles => { :original => ["800x600>", :jpg] },
+    :styles => { :original => ["800x600>", :jpg], :thumb => ["200x200>", :jpg] },
     :default_style => :original,
     :storage => :s3,
     :s3_storage_class => :reduced_redundancy,

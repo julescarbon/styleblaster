@@ -33,7 +33,7 @@
 		<td class="items" valign="top">
 			<div class="inner">
 				<% @photos.each do |photo| %>
-				<%= link_to image_tag(photo.photo.url), "/#{@region.name}/p/#{photo.id}" %>
+				<%= link_to image_tag(photo.photo.url(:thumb, false)), "/#{@region.name}/p/#{photo.id}" %>
 				<% end %>
 			</div>
 		</td>
