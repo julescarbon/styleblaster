@@ -96,7 +96,7 @@ class PhotoController < ApplicationController
     @limit = 25
 
     if @region.name == "artstech"
-      @photos = @region.photos.all
+      @photos = @region.photos.order("id DESC").all
     elsif not params[:id].nil?
       @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit).all
       @next_id = @photos.pop.id
