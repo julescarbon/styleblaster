@@ -24,8 +24,6 @@
 				<a href="/<%= @region.name %>/top" id="top">Popular</a> &middot; <a href="/<%= @region.name %>/random" id="random">Random</a> &middot; <a href="/<%= @region.name %>/gallery">Gallery</a>
 	
 				<div id="social">
-					<div class="fb-like" data-href="<%= @og_url %>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 95px;"></div>
-					<a href="https://twitter.com/share" class="twitter-share-button" data-text="<%= @region.name.capitalize %> Styleblaster" data-url="<%= @og_url %>">Tweet</a>
 				</div>
 			</div>
 		</div>
@@ -130,8 +128,6 @@ setTimeout(function(){
       fjs.parentNode.insertBefore(js,fjs);
     }
   })(document,"script","twitter-wjs");
-
-  $("#social").delay(200).animate({ opacity: 1.0 }, 500);
 
 }, 500);
 </script>

@@ -38,5 +38,6 @@ function buildSocialButtonHTML(url) {
 											'" data-related="styleblaster" class="twitter-share-button" ' +
 											'data-lang="en">Tweet</a>';
 	$("#social").html( facebookButton + twitterButton );
+	$("#social").css("opacity", 0.0).delay(200).animate({ opacity: 1.0 }, 500);
 }
 
