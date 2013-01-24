@@ -29,15 +29,18 @@
 	border: 0;
 }
 #gallery .items img {
-	width: 100px;
 	display: inline-block;
 	background: #fff;
 	padding: 2px;
 	box-shadow: 0 1px 2px #888;
 	margin: 6px;
+	width: 100px;
 }
 #gallery .items img:hover {
 	box-shadow: 0 1px 2px #000;
+}
+.landscape #gallery .items img {
+	width: 140px;
 }
 #gallery .next {
 	position: absolute;
