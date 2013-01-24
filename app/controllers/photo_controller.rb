@@ -75,7 +75,9 @@ class PhotoController < ApplicationController
 
     @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
-		@og_url += "p/#{@photos.first.id}/"
+		@og_title = "Styleblaster"
+		@og_image = @photos.first.photo.url
+    @og_url = "http://styleblaster.net/#{@region.name}/p/#{@photos.first.id}/"
 
     respond_to do |format|
       format.html { render :template => @template }
@@ -154,8 +156,11 @@ class PhotoController < ApplicationController
       @landscape = false
 			@template = "photo/index"
     end
+		@og_title = "Styleblaster"
     @og_url = "http://styleblaster.net/#{@region.name}/"
-  end
+		@og_image = "http://styleblaster.net/assets/big-top-hat.png"
+		@og_description = "Williamsburg's premier live fashion blog, documenting the style of today."
+	end
 
   def sql_rand
     @sql_rand = Rails.env.production? ? "RANDOM()" : "RANDOM()"
