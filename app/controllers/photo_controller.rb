@@ -75,7 +75,11 @@ class PhotoController < ApplicationController
 
     @photos = @region.photos.where("id <= ?", params[:id]).order("id DESC").limit(@limit)
 
-		@og_title = "Styleblaster"
+		if @region.name == "artstech"
+			@og_title = "Styleblaster @ Arts/Tech NYC"
+		else
+			@og_title = "Styleblaster"
+		end
 		@og_image = @photos.first.photo.url
     @og_url = "http://styleblaster.net/#{@region.name}/p/#{@photos.first.id}/"
 
@@ -97,6 +101,12 @@ class PhotoController < ApplicationController
       @photos = @region.photos.order("id DESC").limit(@limit)
       @next_id = @photos.pop.id
     end
+
+		if @region.name == "artstech"
+			@og_title = "Styleblaster @ Arts/Tech NYC"
+		else
+			@og_title = "Styleblaster"
+		end
 
     respond_to do |format|
       format.html { render :template => "photo/gallery" }
@@ -156,6 +166,7 @@ class PhotoController < ApplicationController
       @landscape = false
 			@template = "photo/index"
     end
+    
 		@og_title = "Styleblaster"
     @og_url = "http://styleblaster.net/#{@region.name}/"
 		@og_image = "http://styleblaster.net/assets/big-top-hat.png"
