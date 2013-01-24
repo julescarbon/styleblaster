@@ -9,7 +9,7 @@ function buildSocialButtons (url) {
 		buildSocialButtonHTML( url );
 		buildFacebookButton();
 		buildTwitterButton();
-	}, 1000);
+	}, 500);
 }
 
 // Build any new Facebook buttons, retrying if the API hasn't loaded yet.
