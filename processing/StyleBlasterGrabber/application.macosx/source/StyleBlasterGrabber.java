@@ -55,7 +55,7 @@ MotionSensor motionSensor;
 //SETUP VARS
 String version = "1.5";
 int startHour = 8; //am
-int endHour = 15;  //3pm
+int endHour = 12+4;  //4pm
 int endMinute = 25; 
 boolean production = true;
 
@@ -111,11 +111,11 @@ cam.settings();
   //initialize sensor position
   motionSensor._r.width = 20;
   motionSensor._r.height = 20;
-  motionSensor._r.x = width/2 - motionSensor._r.width/2;
-  motionSensor._r.y = height * 3/5;
+  motionSensor._r.x = (width/2 - motionSensor._r.width/2);
+  motionSensor._r.y = height/2+50;
   motionSensor.update();
 
-  of = new OpticalFlow(cam);
+  of = new OpticalFlow(cam, 50);
 
 
 }
@@ -325,6 +325,8 @@ public void keyPressed() {
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
   else if (key=='d') disable=!disable; // disable/enable
+    else if (key=='=') disable=!disable; // zoom in
+
 }
 
 
@@ -438,7 +440,7 @@ class OpticalFlow {
 
   PFont font;
   int[] vline;
-  MovieMaker movie;
+ // MovieMaker movie;
 
   // capture parameters
   int fps=30;
@@ -478,7 +480,9 @@ class OpticalFlow {
 
   float ballpx, ballpy, ballvx, ballvy, ballgy, ballsz, ballsz2, ballfv, ballhv, ballvmax;
 
-  OpticalFlow(Capture v) {
+  OpticalFlow(Capture v, int stps) {
+    gs=stps; // grid step (pixels)
+
     wscreen=width;
     hscreen=height;
 
@@ -693,6 +697,9 @@ class OpticalFlow {
          xFlowSum += sflowx[ig];
       }
     }
+    
+    //normalize with number of grid steps
+    xFlowSum = xFlowSum*gs;
 
     // 4th sweep : draw the flow
     if (flagseg) {
@@ -729,9 +736,6 @@ class OpticalFlow {
 
           float u=df*sflowx[ig];
           float v=df*sflowy[ig];
-
-        //  xFlowSum += u;          
-         // yFlow += v;
 
           // draw the line segments for optical flow
           float a=sqrt(u*u+v*v);
@@ -807,7 +811,7 @@ class OpticalFlow {
 
     ///////////////////////////////////////////////////
     // recording movie 
-    if (flagmovie) movie.addFrame();
+  //  if (flagmovie) movie.addFrame();
 
     //  print information (not shown in the movie)
     fill(255, 0, 0);

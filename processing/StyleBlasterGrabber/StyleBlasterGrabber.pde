@@ -28,14 +28,9 @@ MotionSensor motionSensor;
 //SETUP VARS
 String version = "1.5";
 int startHour = 8; //am
-int endHour = 15;  //3pm
+int endHour = 12+4;  //4pm
 int endMinute = 25; 
-<<<<<<< HEAD
 boolean production = true;
-=======
-
-boolean production = false;
->>>>>>> bd59ede9b8ae62f2b4a6f3564609c63ea5eb8f1f
 
 String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
 String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
@@ -89,11 +84,11 @@ cam.settings();
   //initialize sensor position
   motionSensor._r.width = 20;
   motionSensor._r.height = 20;
-  motionSensor._r.x = width/2 - motionSensor._r.width/2;
-  motionSensor._r.y = height * 3/5;
+  motionSensor._r.x = (width/2 - motionSensor._r.width/2);
+  motionSensor._r.y = height/2+50;
   motionSensor.update();
 
-  of = new OpticalFlow(cam);
+  of = new OpticalFlow(cam, 50);
 
 
 }

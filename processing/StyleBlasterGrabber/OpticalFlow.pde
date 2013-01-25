@@ -60,7 +60,9 @@ class OpticalFlow {
 
   float ballpx, ballpy, ballvx, ballvy, ballgy, ballsz, ballsz2, ballfv, ballhv, ballvmax;
 
-  OpticalFlow(Capture v) {
+  OpticalFlow(Capture v, int stps) {
+    gs=stps; // grid step (pixels)
+
     wscreen=width;
     hscreen=height;
 
@@ -275,6 +277,9 @@ class OpticalFlow {
          xFlowSum += sflowx[ig];
       }
     }
+    
+    //normalize with number of grid steps
+    xFlowSum = xFlowSum*gs;
 
     // 4th sweep : draw the flow
     if (flagseg) {
@@ -311,9 +316,6 @@ class OpticalFlow {
 
           float u=df*sflowx[ig];
           float v=df*sflowy[ig];
-
-        //  xFlowSum += u;          
-         // yFlow += v;
 
           // draw the line segments for optical flow
           float a=sqrt(u*u+v*v);

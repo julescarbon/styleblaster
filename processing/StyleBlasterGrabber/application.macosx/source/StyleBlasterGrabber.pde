@@ -28,7 +28,7 @@ MotionSensor motionSensor;
 //SETUP VARS
 String version = "1.5";
 int startHour = 8; //am
-int endHour = 15;  //3pm
+int endHour = 12+4;  //4pm
 int endMinute = 25; 
 boolean production = true;
 
@@ -84,11 +84,11 @@ cam.settings();
   //initialize sensor position
   motionSensor._r.width = 20;
   motionSensor._r.height = 20;
-  motionSensor._r.x = width/2 - motionSensor._r.width/2;
-  motionSensor._r.y = height * 3/5;
+  motionSensor._r.x = (width/2 - motionSensor._r.width/2);
+  motionSensor._r.y = height/2+50;
   motionSensor.update();
 
-  of = new OpticalFlow(cam);
+  of = new OpticalFlow(cam, 50);
 
 
 }
@@ -298,5 +298,7 @@ void keyPressed() {
   else if (key=='f') of.flagflow=!of.flagflow; // show opticalflow on/off
   else if (key=='v') production=!production; // send to production endpoint
   else if (key=='d') disable=!disable; // disable/enable
+    else if (key=='=') disable=!disable; // zoom in
+
 }
 
