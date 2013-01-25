@@ -91,15 +91,17 @@ $(function(){
 
   var fetching = false;
   function fetch (id, callback) {
-    if (fetching) return;
+    console.log("not fetching yet..", id);
     id = parseInt(id) - 1;
-    if (id > 0) {
+    if (id > 0 && ! fetching) {
       fetching = true;
       $.get(region + "/p/" + id, csrf({ limit: 24 }), function(plops){
       	if (plops.length > 0) {
 					preload(plops, callback);
 				}
-				fetching = false;
+				setTimeout(function(){
+					fetching = false;
+				}, 2000);
       }, "json")
     }
   }
@@ -120,6 +122,7 @@ $(function(){
     if (callback) callback();
   }
   
+  var holdThrottle = null;
   function keydown (e) {
     switch (e.keyCode) {
 			
@@ -128,7 +131,12 @@ $(function(){
 				break;
 
       case 39: // right
-				forward();
+      	if (! holdThrottle && ! fetching) {
+					forward();
+					holdThrottle = setTimeout(function(){
+						holdThrottle = null;
+					}, 50);
+      	}
         break;
 
       case 37: // left
