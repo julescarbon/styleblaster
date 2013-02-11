@@ -171,7 +171,11 @@ class PhotoController < ApplicationController
     end
     
 		@og_title = "Styleblaster"
-    @og_url = "http://styleblaster.net/#{@region.name}/"
+		if @region.name != "nyc"
+			@og_url = "http://styleblaster.net/#{@region.name}/"
+		else
+			@og_url = "http://styleblaster.net/"
+		end
 		@og_image = "http://styleblaster.net/assets/big-top-hat.png"
 		@og_description = "Williamsburg's premier live fashion blog, documenting the style of today."
 	end
