@@ -235,6 +235,7 @@ $(function(){
     return false;
   }
 
+	var socialLoaded = false;
   function show(plop){ 
     $("#square").attr( 'src', plop.image_url );
     $("#link").attr( 'href', plop.image_url );
@@ -242,7 +243,11 @@ $(function(){
     $("#month").html( plop.month );
     $("#time").html( plop.time );
     $("#score").html( tophats(plop.score) );
-    buildSocialButtons( "http://styleblaster.net/" + REGION + "/p/" + plop.id );
+    if (socialLoaded) {
+			buildSocialButtons( "http://styleblaster.net/" + REGION + "/p/" + plop.id );
+		} else {
+			socialLoaded = true;
+		}
   }
 
   function flash(){
