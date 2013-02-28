@@ -157,7 +157,7 @@ class PhotoController < ApplicationController
   def fetch_region
     if params[:region]
       @region = Region.find_by_name(params[:region])
-      if @region.name == "artstech"
+      if @region.landscape
       	@landscape = true
       	@template = "photo/landscape"
       else
