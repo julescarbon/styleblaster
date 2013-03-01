@@ -43,7 +43,8 @@ $(function(){
       preload(PLOPS);
       rewind();
     }
-    if (window.location.pathname == "/") startTimer();
+		var pathparts = window.location.pathname.replace(/^\//,"").replace(/\/$/,"").split("/");
+		if (pathparts.length == 0 || (pathparts.length == 1 && pathparts[0] == REGION)) startTimer();
   }
 
   var timer = null;
