@@ -102,7 +102,7 @@ class PhotoController < ApplicationController
       @next_id = @photos.pop.id
     else
       @photos = @region.photos.order("id DESC").limit(@limit)
-      @next_id = @photos.any? and @photos.pop.id
+      @next_id = @photos.pop.id
     end
 
 		if @region.name == "artstech"
