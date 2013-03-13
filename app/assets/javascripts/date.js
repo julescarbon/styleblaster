@@ -1,4 +1,9 @@
-
+Date.prototype.isDST = function(){
+	return this.toTimeString().toLowerCase().indexOf("d") !== -1
+}
+Date.prototype.isStandardTime = function(){
+	return ! this.isDST();
+}
 function month(m) {
   return MONTHS[m];
 }
