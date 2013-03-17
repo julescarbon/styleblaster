@@ -16,7 +16,7 @@ class PhotoController < ApplicationController
     	return
       # @photos = @region.photos.order("id DESC").limit(@limit)
       # @nighttime = false
-    elsif @nighttime and @region.name != "dev" and @region.name != "irl"
+    elsif @nighttime and not @region.always_on
       @photos = @region.photos.where("created_at > ? AND score > 0", now - 24 * 3600).order("score DESC").limit(@limit)
     else
       @photos = @region.photos.order("id DESC").limit(@limit)
