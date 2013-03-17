@@ -10,10 +10,12 @@ function Plop (data){
   base.image_url = base_url + data.photo_file_name.replace(".JPG", ".jpg").replace(/.png$/, ".jpg");
 
   var d = derail_date(data.created_at);
+	if (d.isStandardTime()) {
+		d.setHours(d.getHours()-1);
+	}
   base.day = d.getDate();
   base.month = month(d.getMonth());
-    //temp fix for time offset -1 -jk
-  base.time = twelve(d.getHours()-1) + ":" + zero(d.getMinutes()) + " " + merid(d.getHours());
+  base.time = twelve(d.getHours()) + ":" + zero(d.getMinutes()) + " " + merid(d.getHours());
 
   base.preload = function(){
     var img = new Image();

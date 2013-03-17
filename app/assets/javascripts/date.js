@@ -1,4 +1,14 @@
-
+Date.prototype.stdTimezoneOffset = function() {
+  var jan = new Date(this.getFullYear(), 0, 1);
+	var jul = new Date(this.getFullYear(), 6, 1);
+	return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+}
+Date.prototype.isDST = function(){
+	return this.getTimezoneOffset() < this.stdTimezoneOffset();
+}
+Date.prototype.isStandardTime = function(){
+	return ! this.isDST();
+}
 function month(m) {
   return MONTHS[m];
 }
