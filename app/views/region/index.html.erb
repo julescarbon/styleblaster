@@ -2,11 +2,15 @@
 <tt><a href="/r/new">+ New region</a>
 <br>
 <% @regions.each do |region| %>
+<span>
   <a href="/r/<%= region.name %>/edit">edit</a>
-  &middot;
-  <%= region.name %>
-  &middot;
-  <big><%= link_to region.title, region.path %></big>
+</span>
+<span>
+  <big><%= link_to region.name, region.path %></big>
+</span>
+<span>
+	<%= r.photos.count %>
+</span>
 <span>
   <%= region.css == "" ? "x" : "css" %>
 </span>
@@ -30,6 +34,6 @@
 
 <style>
 big { display: inline-block; width: 150px;}
-span { display: inline-block; width: 55px; font-size: 10px;}
+span { display: inline-block; width: 95px; font-size: 10px;}
 h2 img { margin-bottom: -10px;margin-right:5px;width:50px; }
 </style>
