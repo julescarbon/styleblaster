@@ -3,6 +3,6 @@ class Region < ActiveRecord::Base
   has_many :photos
 
   def path
-    "http://#{name}.styleblaster.net/"
+    "http://styleblaster.net/#{name}/"
   end
 end
