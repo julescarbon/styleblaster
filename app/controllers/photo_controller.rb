@@ -11,7 +11,7 @@ class PhotoController < ApplicationController
   def index
     @limit = params[:limit] || 24;
 
-    if @region.name == "artstech"
+    if @region.gallery_index
     	redirect_to "/#{@region.name}/gallery/"
     	return
       # @photos = @region.photos.order("id DESC").limit(@limit)

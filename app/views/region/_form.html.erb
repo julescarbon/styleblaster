@@ -33,27 +33,37 @@
   <div>
     <%= f.label :landscape %>
     <%= f.check_box :landscape %>
+    <span>(optimizes layout)</span>
   </div>
 
   <div>
     <%= f.label :always_on %>
     <%= f.check_box :always_on %>
+    <span>(disables night mode)</span>
   </div>
 
   <div>
     <%= f.label :public %>
     <%= f.check_box :public %>
+    <span>(list in header dropdown)</span>
   </div>
 
   <div>
+    <%= f.label :gallery_index, "Gallery index" %>
+    <%= f.check_box :gallery_index %>
+    <span>(redirect if there won't be any new photos)</span>
+  </div>
+  
+  <div>
     <label></label>
-    <%= f.submit %>
+    <%= f.submit "Save Region" %>
   </div>
 
 <% end %>
 
 <style>
 label { display: inline-block; vertical-align: top; width: 100px; font-size: 12px; }
+div span { display: inline-block; font-size: 10px; color: #666; margin-left: 10px; }
 textarea { height: 150px;}
 form div { padding: 5px;}
 h2 img { margin-bottom: -10px;margin-right:5px;width:50px; }

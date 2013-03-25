@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325170522) do
+ActiveRecord::Schema.define(:version => 20130325175814) do
 
   create_table "backgrounds", :force => true do |t|
     t.string   "name"
@@ -36,15 +36,16 @@ ActiveRecord::Schema.define(:version => 20130325170522) do
   create_table "regions", :force => true do |t|
     t.string    "name"
     t.string    "secret"
-    t.timestamp "created_at",                    :null => false
-    t.timestamp "updated_at",                    :null => false
+    t.timestamp "created_at",                       :null => false
+    t.timestamp "updated_at",                       :null => false
     t.string    "title"
     t.string    "tagline"
     t.text      "css"
     t.text      "manifesto"
-    t.boolean   "landscape",  :default => false
-    t.boolean   "always_on",  :default => false
-    t.boolean   "public",     :default => true
+    t.boolean   "landscape",     :default => false
+    t.boolean   "always_on",     :default => false
+    t.boolean   "public",        :default => true
+    t.boolean   "gallery_index", :default => false
   end
 
 end

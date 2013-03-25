@@ -1,5 +1,5 @@
 class Region < ActiveRecord::Base
-  attr_accessible :name, :title, :secret, :tagline, :css, :manifesto, :landscape, :always_on, :public
+  attr_accessible :name, :title, :secret, :tagline, :css, :manifesto, :landscape, :always_on, :public, :gallery_index
   has_many :photos
 
   def path
