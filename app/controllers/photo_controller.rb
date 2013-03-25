@@ -14,6 +14,9 @@ class PhotoController < ApplicationController
     if @region.gallery_index?
     	redirect_to "/#{@region.name}/gallery/"
     	return
+    elsif @region.top_index?
+    	redirect_to "/#{@region.name}/top/"
+    	return
       # @photos = @region.photos.order("id DESC").limit(@limit)
       # @nighttime = false
     elsif @nighttime and not @region.always_on
