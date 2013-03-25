@@ -48,7 +48,7 @@
 <table id="site_header" width="100%">
 	<tr>
 		<td align="left" valign="middle">
-			styleblaster
+			<a href="http://styleblaster.net/">styleblaster</a>
 			<select id="region_selector">
 				<%= Region.where(:public => true).order(:name).all.each do |region| %>
 				<% if @region and @region == region %>

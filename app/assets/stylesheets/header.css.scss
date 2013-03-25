@@ -13,6 +13,10 @@
 	}
 	td:first-child {
 		padding-left: 10px;
+		a {
+			color: #888;
+			font-size: 18px;
+		}
 	}
 	select {
 		margin-left: 20px;
@@ -29,5 +33,6 @@
 		height: 33px;
 		overflow: hidden;
 		opacity: 0;
+		margin-top: 7px;
 	}
 }
