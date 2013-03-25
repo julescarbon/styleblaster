@@ -2,7 +2,7 @@
 <h2><img src="/assets/tophat.png" width="50" height="43"> Regions</h2>
 <a href="/r/new">+ New region</a>
 <br>
-<% @regions.order(:name).each do |region| %>
+<% @regions.each do |region| %>
 <span>
   <a href="/r/<%= region.name %>/edit">edit</a>
 </span>

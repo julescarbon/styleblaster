@@ -15,7 +15,9 @@ function buildSocialButtons (url) {
 // Build any new Facebook buttons, retrying if the API hasn't loaded yet.
 function buildFacebookButton () {
   try {
-    FB.XFBML.parse();
+  	$(".fb-like[fb-xfbml-state!=rendered]").each(function(){
+			FB.XFBML.parse(this.parentNode);
+		});
   } catch (ex) {
     facebookTimeout = setTimeout(buildFacebookButton, 66);
   }
@@ -23,7 +25,9 @@ function buildFacebookButton () {
 // Build any new Twitter buttons, retrying if the API hasn't loaded yet.
 function buildTwitterButton () {
   try {
-    twttr.widgets.load();
+  	$(".twitter-share-button[data-twttr-rendered!=true]").each(function(){
+			twttr.widgets.load(this.parentNode);
+		});
   } catch (ex) {
     twitterTimeout = setTimeout(buildTwitterButton, 50);
   }

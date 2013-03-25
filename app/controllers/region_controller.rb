@@ -3,7 +3,7 @@ class RegionController < ApplicationController
   http_basic_authenticate_with :name => "style", :password => "blaster"
 
   def index
-    @regions = Region.all
+    @regions = Region.order(:name).all
   end
 
   def new
