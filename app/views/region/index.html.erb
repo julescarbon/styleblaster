@@ -1,5 +1,5 @@
 <h2><img src="/assets/tophat.png"> Regions</h2>
-<tt><a href="/r/new">+ New region</a>
+<a href="/r/new">+ New region</a>
 <br>
 <% @regions.each do |region| %>
 <span>
@@ -9,16 +9,13 @@
   <big><%= link_to region.name, region.path %></big>
 </span>
 <span>
-	<%= r.photos.count %>
-</span>
-<span>
   <%= region.css == "" ? "x" : "css" %>
 </span>
 <span>
   <%= region.manifesto == "" ? "x" : "manifesto" %>
 </span>
 <span style="width: 100px; text-align: right;">
-  <%= region.photos.count %> photos&nbsp;
+  <%= region.photos.count %> photos&nbsp;&nbsp;&nbsp;
 </span>
 <span style="width: 300px;">
   <%= link_to "latest", region.path + "latest" %>
@@ -34,6 +31,6 @@
 
 <style>
 big { display: inline-block; width: 150px;}
-span { display: inline-block; width: 95px; font-size: 10px;}
+span { display: inline-block; width: 95px; font-size: 13px;}
 h2 img { margin-bottom: -10px;margin-right:5px;width:50px; }
 </style>

@@ -7,3 +7,9 @@
 //= require jquery
 //= require_tree ./vendor/
 //= require_tree .
+
+$(function(){
+	$("#region_selector").change(function(){
+		window.location.href = window.location.origin + "/" + $(this).val();
+	});
+});

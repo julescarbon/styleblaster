@@ -45,6 +45,29 @@
 </head>
 <body class="<%= @nighttime ? 'night' : 'day' %> <%= @landscape ? 'landscape' : 'portrait' %>">
 
+<table id="site_header" width="100%">
+	<tr>
+		<td align="left" valign="middle">
+			styleblaster
+			<select id="region_selector">
+				<%= Region.all.each do |region| %>
+				<% if @region and @region == region %>
+					<option value="<%= region.name %>" selected><%= region.name %></option>
+				<% else %>
+					<option value="<%= region.name %>"><%= region.name %></option>
+				<% end %>
+				<% end %>
+			</select>
+		</td>
+		<td align="right" valign="middle">
+			<div id="main_social">
+				<div class="fb-like" data-href="http://styleblaster.net/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" style="height: 24px; width: 95px;"></div>
+				<a href="https://twitter.com/share" class="twitter-share-button" data-text="Live Williamsburg streetstyle -- Styleblaster" data-url="http://styleblaster.net/">Tweet</a>
+			</div>
+		</td>
+	</tr>
+</table>
+
 <%= yield %>
 
 </body>

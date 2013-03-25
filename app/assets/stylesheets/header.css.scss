@@ -1,0 +1,33 @@
+#site_header {
+	width:100%;
+	margin: 0; padding: 0;
+	background: black;
+	td {
+		margin: 0;
+		padding: 3px;
+		color: #888;
+		font-weight: bold;
+		letter-spacing: -1px;
+		height: 40px;
+		overflow: hidden;
+	}
+	td:first-child {
+		padding-left: 10px;
+	}
+	select {
+		margin-left: 20px;
+		opacity: 0.8;
+	}
+	select:focus {
+		opacity: 1.0;
+	}
+	select:hover {
+		opacity: 1.0;
+	}
+	#main_social {
+		width: 250px;
+		height: 33px;
+		overflow: hidden;
+		opacity: 0;
+	}
+}
