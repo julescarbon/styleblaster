@@ -49,9 +49,9 @@
   </div>
 
   <div>
-    <%= f.label :gallery_index, "Gallery index" %>
+    <%= f.label :gallery_index %>
     <%= f.check_box :gallery_index %>
-    <span>(redirect if there won't be any new photos)</span>
+    <span>(redirect if there are no new photos)</span>
   </div>
   
   <div>
@@ -62,6 +62,7 @@
 <% end %>
 
 <style>
+article { padding: 10px; }
 label { display: inline-block; vertical-align: top; width: 100px; font-size: 12px; }
 div span { display: inline-block; font-size: 10px; color: #666; margin-left: 10px; }
 textarea { height: 150px;}

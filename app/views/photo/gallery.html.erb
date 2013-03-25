@@ -9,7 +9,7 @@
 			<div class="inner">
 				<span class="left">
 					<h5>styleblaster.net/<%= @region.name %></h5>
-					<%= @photos.first.created_at.strftime("%A, %B %d, %Y") %>
+					<%= @photos.any? ? @photos.first.created_at.strftime("%A, %B %d, %Y") : "" %>
 				</span>
 				
 				<span class="right">
@@ -32,8 +32,12 @@
 		</td>
 		<td class="items" valign="top">
 			<div class="inner">
-				<% @photos.each do |photo| %>
-				<%= link_to image_tag(photo.photo.url(:thumb, false)), "/#{@region.name}/p/#{photo.id}" %>
+				<% if @photos.any? %>
+					<% @photos.each do |photo| %>
+					<%= link_to image_tag(photo.photo.url(:thumb, false)), "/#{@region.name}/p/#{photo.id}" %>
+					<% end %>
+				<% else %>
+					No mo' photos!
 				<% end %>
 			</div>
 		</td>
