@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228225145) do
+ActiveRecord::Schema.define(:version => 20130317031453) do
 
   create_table "backgrounds", :force => true do |t|
     t.string   "name"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20130228225145) do
     t.text      "css"
     t.text      "manifesto"
     t.boolean   "landscape",  :default => false
+    t.boolean   "always_on",  :default => false
   end
 
 end
