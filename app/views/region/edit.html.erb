@@ -1,4 +1,4 @@
 <article>
-<h2><img src="/assets/tophat.png" width="50" height="43"> editing <%= @region.name %></h2>
+<h2><a href="/r"><img src="/assets/tophat.png" width="50" height="43"></a> Editing <%= link_to @region.name, @region.path %></h2>
 <%= render :partial => "form" %>
 </article>

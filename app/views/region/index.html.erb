@@ -2,7 +2,7 @@
 <h2><img src="/assets/tophat.png" width="50" height="43"> Regions</h2>
 <a href="/r/new">+ New region</a>
 <br>
-<% @regions.each do |region| %>
+<% @regions.order(:name).each do |region| %>
 <span>
   <a href="/r/<%= region.name %>/edit">edit</a>
 </span>
@@ -21,14 +21,14 @@
 <span style="width: 300px;">
   <%= link_to "latest", region.path + "latest" %>
   &middot;
-  <%= link_to "random", region.path + "random" %>
-  &middot;
-  <%= link_to "top scores", region.path + "top" %>
+  <%= link_to "top", region.path + "top" %>
   &middot;
   <%= link_to "gallery", region.path + "gallery" %>
+  &middot;
+  <%= link_to "random", region.path + "random" %>
 </span>
 <span style="width: 200px;">
-  <%= region.photos.count > 0 && region.photos.order("id DESC").first.created_at %>
+  <%= region.photos.count > 0 && region.photos.order("id DESC").first.created_at.strftime("%e %B %Y - %l:%M%P") %>
 </span>
   <br>
 <% end %>
