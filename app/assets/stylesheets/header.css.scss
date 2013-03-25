@@ -14,8 +14,12 @@
 	td:first-child {
 		padding-left: 10px;
 		a {
-			color: #888;
+			color: #aaa;
 			font-size: 18px;
+			&:hover {
+				color: #fff;
+				border: 0;
+			}
 		}
 	}
 	select {
