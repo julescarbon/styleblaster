@@ -50,7 +50,7 @@
 		<td align="left" valign="middle">
 			styleblaster
 			<select id="region_selector">
-				<%= Region.all.each do |region| %>
+				<%= Region.where(:public => true).order(:name).all.each do |region| %>
 				<% if @region and @region == region %>
 					<option value="<%= region.name %>" selected><%= region.name %></option>
 				<% else %>
