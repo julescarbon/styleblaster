@@ -8,6 +8,9 @@ html,body {
   overflow-y: auto;
   width: 100%;
   height: 100%;
+  -moz-transition: zoom 0.3s linear;
+  -webkit-transition: zoom 0.3s linear;
+  transition: zoom 0.3s linear;
 }
 body.day {
   background: #eee;
@@ -46,3 +49,27 @@ body.night {
     background: #888;
     -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
 }
+
+/*
+@media only screen and (min-device-height: 850px) {
+	body {
+		zoom: 0.95;
+	}
+	.fb-like span {
+		width: 89px !important;
+	}
+	.fb-like span iframe {
+		width: 89px !important;
+	}
+}
+
+@media only screen and (min-device-height: 1000px) {
+	body {
+		zoom: 1.00;
+	}
+	header {
+		zoom: 1.00;
+	}
+}
+*/
+
