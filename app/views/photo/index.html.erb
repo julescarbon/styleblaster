@@ -60,6 +60,9 @@
   <div id="manifesto">
     <span class="close">x</span>
     <h2>About Styleblaster</h2>
+<% if not @region.manifesto.nil? and not @region.manifesto.empty? %>
+    <%= @region.manifesto.html_safe %>
+<% else %>
     <p>
       Since the early 2000s, Williamsburg has been a neighborhood popular with a new cultural elite, the heirs of the artists and hipsters who in years past were attracted by its location, one subway stop from Manhattan.
     </p>
@@ -119,7 +122,7 @@
     <p>
       <b>A <a href="http://hellainteractive.com/">HELLA INTERACTIVE</a> / <a href="http://okfoc.us/">OKFOCUS</a> JOINT</b>
     </p>
-
+<% end %>
     <br>
   </div>
 </div>
