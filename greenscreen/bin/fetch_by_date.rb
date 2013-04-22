@@ -7,11 +7,11 @@ require 'rubygems'
 require 'aws-sdk'
 
 if ARGV.empty?
-  puts "usage: ./fetch_by_date.rb YYYY-M-D-"
+  puts "usage: ./fetch_by_date.rb YYYY-M-D- region"
   puts ".. matches like /.*YYYY-M-D-.*/"
 end
 
-source_match = ARGV[0]
+source_match, region_match = ARGV
 
 AWS.config(
   :access_key_id => ENV['OKFOCUS_S3_KEY'],
@@ -26,6 +26,10 @@ tm_bucket = s3.buckets[ bucket_key ]
 tm_bucket.objects.each do |source|
 
   if not source.key.include? "original" or not source.key.include? source_match
+    next
+  end
+
+  if not region_match.nil? and not source.key.include? region_match
     next
   end
 
