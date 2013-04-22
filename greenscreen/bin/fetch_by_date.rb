@@ -23,6 +23,16 @@ s3 = AWS::S3.new
 bucket_key = 'styleblast'
 tm_bucket = s3.buckets[ bucket_key ]
 
+
+def download (obj, dest)
+  open(dest, 'w') do |file|
+    obj.read do |chunk|
+      file.write chunk
+    end
+  end
+end
+
+
 tm_bucket.objects.each do |source|
 
   if not source.key.include? "original" or not source.key.include? source_match
@@ -49,8 +59,8 @@ tm_bucket.objects.each do |source|
   filename = datepartz.join("-") + ".jpg"
 
   puts source.key + "\t" + dir_path + "\t" + filename
-#  FileUtils.mkdir_p dir_path
-#  download( source.key, dir_path + "/" + filename )
+  FileUtils.mkdir_p dir_path
+  download( source, dir_path + "/" + filename )
   
   #ol_obj = ol_bucket.objects[obj.key]
   #obj.copy_to(ol_obj, {
@@ -59,10 +69,3 @@ tm_bucket.objects.each do |source|
   #})
 end
 
-def download (source, dest)
-  open(dest, 'w') do |file|
-    S3Object.stream(source, bucket_key) do |chunk|
-      file.write chunk
-    end
-  end
-end
