@@ -1,0 +1,88 @@
+<div id='rapper'></div>
+
+<div id='u_val'></div>
+<div id='v_val'></div>
+<div id='compass'></div>
+
+<script src="jquery.min.js"></script>
+<script src='canvasToBlob.js'></script>
+<script src='oflow.js'></script>
+<script>
+
+var camera = document.createElement('video')
+rapper.appendChild(camera)
+
+var flow = new oflow.WebCamFlow(camera);
+u_max = 0
+v_max = 0
+
+flow.onCalculated(function (direction) {
+  // direction is an object which describes current flow:
+  // direction.u, direction.v {floats} general flow vector
+  // direction.zones {Array} is a collection of flowZones. 
+  if (direction.u < -1) {
+     compass.innerHTML = 'w' 
+	upload()
+  }
+  else if (direction.u > 1) {
+     compass.innerHTML = 'e'
+  }
+  else {
+    compass.innerHTML = ''
+  }
+  if (Math.abs(direction.u) > u_max) {
+    u_max = Math.abs(direction.u)
+    u_val.innerHTML = Math.floor( direction.u * 100 )
+  }
+
+
+  // v_val.innerHTML = Math.floor( direction.v * 100 )
+  // Each flow zone describes optical flow direction inside of it.
+  // flowZone : {
+  //  x, y // zone center
+  //  u, v // vector of flow in the zone
+  // }
+
+});
+
+// Starts capturing the flow from webcamera:
+flow.startCapture();
+
+// once you are done capturing call
+// flow.stopCapture();
+
+function upload(){
+	var canvas = document.createElement('canvas')
+	var ctx = canvas.getContext('2d')
+	canvas.width = camera.videoWidth
+	canvas.height = camera.videoHeight
+	ctx.drawImage(camera,0,0)
+	document.body.appendChild(canvas)
+	flow.stopCapture()
+	
+	canvas.toBlob(gotBlob, "image/jpeg")
+	
+	function gotBlob(blob) {
+		var params = new FormData()
+		params.append('secret', 'crackers')
+		params.append('test', blob, "blob.jpg")
+
+		$.ajax({
+			url: '/upload/dev',
+			data: params,
+			contentType: false,
+		    processData: false,
+			type: 'POST',
+			success: didUpload,
+		})
+	}
+}
+
+function didUpload(data){
+	console.log(data)
+	
+}
+
+</script>
+
+
