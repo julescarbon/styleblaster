@@ -144,3 +144,22 @@
 	border: 0;
 }
 */
+
+.datepicker_rapper {
+	position: relative;
+}
+
+.datepicker_rapper input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}
+
+#ui-datepicker-div {
+	background: white;
+}
+
+.ui-state-default {
+	border-bottom: 1px solid transparent;
+}

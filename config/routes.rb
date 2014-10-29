@@ -13,6 +13,7 @@ PhotoboothGallery::Application.routes.draw do
   post   '/r/'            => "region#create"
   get    '/r/'            => "region#index"
 
+  get    '/:region/:year/:month/:day'   => "photo#gallery_by_day"
   get    '/:region/gallery/:id'   => "photo#gallery"
   get    '/:region/gallery'       => "photo#gallery"
   get    '/:region/popular'       => "photo#popular"
