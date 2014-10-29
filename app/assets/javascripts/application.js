@@ -7,7 +7,6 @@
 //= require jquery
 //= require_tree ./vendor/
 //= require_tree .
-//= require jquery-ui
 
 $(function(){
 	$("#region_selector").change(function(){
