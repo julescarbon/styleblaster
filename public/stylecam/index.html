@@ -1,15 +1,23 @@
+<style>
+#compass { display: none }
+</style>
+
 <div id='rapper'></div>
 
 <div id='u_val'></div>
 <div id='v_val'></div>
 <div id='compass'></div>
 
-<script src="jquery.min.js"></script>
-<script src='canvasToBlob.js'></script>
-<script src='oflow.js'></script>
+<script src="/stylecam/jquery.min.js"></script>
+<script src="/stylecam/moment.js"></script>
+<script src='/stylecam/canvasToBlob.js'></script>
+<script src='/stylecam/oflow.js'></script>
 <script>
 
+var delay_after_taking_picture = 5000
+
 var camera = document.createElement('video')
+camera.style.WebkitTransform = "rotate(90deg)"
 rapper.appendChild(camera)
 
 var flow = new oflow.WebCamFlow(camera);
@@ -21,11 +29,11 @@ flow.onCalculated(function (direction) {
   // direction.u, direction.v {floats} general flow vector
   // direction.zones {Array} is a collection of flowZones. 
   if (direction.u < -1) {
-     compass.innerHTML = 'w' 
-	upload()
+    compass.innerHTML = 'w' 
+		upload()
   }
   else if (direction.u > 1) {
-     compass.innerHTML = 'e'
+    compass.innerHTML = 'e'
   }
   else {
     compass.innerHTML = ''
@@ -43,35 +51,40 @@ flow.onCalculated(function (direction) {
   //  u, v // vector of flow in the zone
   // }
 
-});
+})
 
-// Starts capturing the flow from webcamera:
 flow.startCapture();
 
-// once you are done capturing call
-// flow.stopCapture();
+
+var canvas = document.createElement('canvas')
+var ctx = canvas.getContext('2d')
 
 function upload(){
-	var canvas = document.createElement('canvas')
-	var ctx = canvas.getContext('2d')
-	canvas.width = camera.videoWidth
-	canvas.height = camera.videoHeight
-	ctx.drawImage(camera,0,0)
-	document.body.appendChild(canvas)
+	var w = canvas.width = 450
+	var h = canvas.height = 600
+
+	ctx.translate(w/2, h/2)
+	ctx.rotate(Math.PI/2)
+	ctx.translate(-w/2, -h/2)
+
+	ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
+
+	// document.body.appendChild(canvas)
+
 	flow.stopCapture()
-	
+
 	canvas.toBlob(gotBlob, "image/jpeg")
 	
 	function gotBlob(blob) {
 		var params = new FormData()
 		params.append('secret', 'crackers')
-		params.append('test', blob, "blob.jpg")
+		params.append('test', blob, moment().format("YYYY-MM-DD-hh-mm-ss") + ".jpg")
 
 		$.ajax({
 			url: '/upload/dev',
 			data: params,
 			contentType: false,
-		    processData: false,
+		  processData: false,
 			type: 'POST',
 			success: didUpload,
 		})
@@ -80,7 +93,12 @@ function upload(){
 
 function didUpload(data){
 	console.log(data)
-	
+	var img = new Image ()
+	img.src = data
+	document.body.appendChild(img)
+	setTimeout(function(){
+		flow.startCapture()
+	}, delay_after_taking_picture)
 }
 
 </script>

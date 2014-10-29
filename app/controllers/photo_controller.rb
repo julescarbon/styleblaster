@@ -135,6 +135,10 @@ class PhotoController < ApplicationController
   # /upload API used by processing, returns url to image
   def create
     @region = Region.find_by_name(params[:name])
+    if @region.secret != params[:secret]
+    	render :text => "404"
+    	return
+    end
     @photo = Photo.create( :photo => params[:test], :score => 1, :region => @region )
     render :text => @photo.photo.url
     # render :text => "http://localhost:3000/gallery/" + @photo.id.to_s

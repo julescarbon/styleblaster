@@ -380,9 +380,9 @@ function WebCamFlow(defaultVideoTag, zoneSize) {
         videoFlow,
         onWebCamFail = function onWebCamFail(e) {
             if(e.code === 1){
-                window.alert('You have denied access to your camera. I cannot do anything.');
+                document.write('You have denied access to your camera. I cannot do anything.');
             } else { 
-                window.alert('getUserMedia() is not supported in your browser.');
+                document.write('getUserMedia() is not supported in your browser.');
             }
         },
         gotFlow = function(direction) {
