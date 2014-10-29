@@ -17,7 +17,7 @@
 var delay_after_taking_picture = 500
 
 var camera = document.createElement('video')
-camera.style.WebkitTransform = "rotate(90deg) scaleY(-1)"
+camera.style.WebkitTransform = "rotate(-90deg) scaleX(-1)"
 rapper.appendChild(camera)
 
 var flow = new oflow.WebCamFlow(camera);
@@ -53,6 +53,7 @@ flow.startCapture();
 
 var canvas = document.createElement('canvas')
 var ctx = canvas.getContext('2d')
+rapper.appendChild(canvas)
 
 var taking_photo = false
 
@@ -66,8 +67,9 @@ function upload () {
 	ctx.translate(w/2, h/2)
 	ctx.rotate(Math.PI/2)
 	ctx.translate(-w/2, -h/2)
-  ctx.scale(1, -1)
+
 	ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
+  ctx.scale(1, 1)
 
 	canvas.toBlob(gotBlob, "image/jpeg")
 
@@ -84,6 +86,11 @@ function upload () {
 			type: 'POST',
 			success: didUpload,
 		})
+
+		setTimeout(function(){
+			taking_photo = false
+		}, delay_after_taking_picture)
+
 	}
 }
 
