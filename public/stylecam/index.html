@@ -70,7 +70,7 @@ function upload () {
 	ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
 
 	canvas.toBlob(gotBlob, "image/jpeg")
-	
+
 	function gotBlob(blob) {
 		var params = new FormData()
 		params.append('secret', 'crackers')
@@ -94,10 +94,9 @@ function didUpload(data){
 	$("#rapper").append(img)
 
 	setTimeout(function(){
-		taking_photo = true
+		taking_photo = false
 	}, delay_after_taking_picture)
 }
-
 </script>
 
 
