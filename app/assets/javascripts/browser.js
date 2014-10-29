@@ -1,4 +1,12 @@
 $(function(){
+    $("#datepicker").datepicker({
+        dateFormat: "yy/mm/dd",
+        onSelect: function () {
+			var region = window.location.pathname.split('/')[1]
+			window.location.pathname = '/' + region + '/' + this.value
+        }
+    });
+
 	if (!( 'REGION' in window )) return;
 	
 	var region = "/" + REGION;

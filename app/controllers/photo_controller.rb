@@ -120,6 +120,20 @@ class PhotoController < ApplicationController
     end
   end    
 
+  def gallery_by_day
+    @limit = 41
+    @start_time = DateTime.new(params[:year].to_i, params[:month].to_i, params[:day].to_i ,23 ,59 ,0)
+
+    @photos = @region.photos.where("created_at <= ?", @start_time).order("id DESC").limit(@limit).all
+    @next_id = @photos.pop.id
+		@og_title = "Styleblaster"
+
+    respond_to do |format|
+      format.html { render :template => "photo/gallery" }
+      format.json { render json: @photos }
+    end
+  end
+
   # Show images by a random ID
   def random
     @limit = params[:limit] || 1;
