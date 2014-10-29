@@ -16,15 +16,22 @@
 
 var delay_after_taking_picture = 500
 
+var position, sun, startTime
+
+var canvas = document.createElement('canvas')
+var ctx = canvas.getContext('2d')
+var taking_photo = false
+
 var camera = document.createElement('video')
 camera.style.WebkitTransform = "rotate(-90deg) scaleX(-1)"
 rapper.appendChild(camera)
 
 var flow = new oflow.WebCamFlow(camera);
-u_max = 0
-v_max = 0
+flow.onCalculated(gotFlow)
 
-flow.onCalculated(function (direction) {
+navigator.geolocation.getCurrentPosition(gotPosition)
+
+function gotFlow (direction) {
   // direction is an object which describes current flow:
   // direction.u, direction.v {floats} general flow vector
   // direction.zones {Array} is a collection of flowZones. 
@@ -35,28 +42,18 @@ flow.onCalculated(function (direction) {
   else if (direction.v > 1) {
     compass.innerHTML = 'e'
   }
-  else {
-    compass.innerHTML = ''
-  }
-
   // v_val.innerHTML = Math.floor( direction.v * 100 )
   // Each flow zone describes optical flow direction inside of it.
   // flowZone : {
   //  x, y // zone center
   //  u, v // vector of flow in the zone
   // }
-
-})
-
-flow.startCapture();
-
-
-var canvas = document.createElement('canvas')
-var ctx = canvas.getContext('2d')
-rapper.appendChild(canvas)
-
-var taking_photo = false
-
+}
+function gotPosition (pos) {
+  position = pos
+  sun = SunCalc.getTimes(new Date(), pos.coords.latitude, pos.coords.longitude)
+  flow.startCapture()
+}
 function upload () {
 	if (taking_photo) return
 	taking_photo = true
@@ -72,29 +69,22 @@ function upload () {
   ctx.scale(1, 1)
 
 	canvas.toBlob(gotBlob, "image/jpeg")
-
-	function gotBlob(blob) {
-		var params = new FormData()
-		params.append('secret', 'crackers')
-		params.append('test', blob, moment().format("YYYY-MM-DD-hh-mm-ss") + ".jpg")
-
-		$.ajax({
-			url: '/upload/dev',
-			data: params,
-			contentType: false,
-		  processData: false,
-			type: 'POST',
-			success: didUpload,
-		})
-
-		setTimeout(function(){
-			taking_photo = false
-		}, delay_after_taking_picture)
-
-	}
 }
+function gotBlob (blob) {
+  var params = new FormData()
+  params.append('secret', 'crackers')
+  params.append('test', blob, moment().format("YYYY-MM-DD-hh-mm-ss") + ".jpg")
 
-function didUpload(data){
+  $.ajax({
+    url: '/upload/dev',
+    data: params,
+    contentType: false,
+    processData: false,
+    type: 'POST',
+    success: didUpload,
+  })
+}
+function didUpload (data) {
 	var img = new Image ()
 	img.src = data
 	$("#rapper img").remove()
