@@ -17,7 +17,7 @@
 var delay_after_taking_picture = 500
 
 var camera = document.createElement('video')
-camera.style.WebkitTransform = "rotate(90deg)"
+camera.style.WebkitTransform = "rotate(90deg) scaleY(-1)"
 rapper.appendChild(camera)
 
 var flow = new oflow.WebCamFlow(camera);
@@ -66,7 +66,7 @@ function upload () {
 	ctx.translate(w/2, h/2)
 	ctx.rotate(Math.PI/2)
 	ctx.translate(-w/2, -h/2)
-
+  ctx.scale(1, -1)
 	ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
 
 	canvas.toBlob(gotBlob, "image/jpeg")
