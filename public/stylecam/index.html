@@ -54,9 +54,12 @@ flow.startCapture();
 var canvas = document.createElement('canvas')
 var ctx = canvas.getContext('2d')
 
-function upload(){
-	flow.stopCapture()
+var taking_photo = false
 
+function upload () {
+	if (taking_photo) return
+	taking_photo = true
+	
 	var w = canvas.width = 450
 	var h = canvas.height = 600
 
@@ -65,8 +68,6 @@ function upload(){
 	ctx.translate(-w/2, -h/2)
 
 	ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
-
-	// document.body.appendChild(canvas)
 
 	canvas.toBlob(gotBlob, "image/jpeg")
 	
@@ -87,12 +88,13 @@ function upload(){
 }
 
 function didUpload(data){
-	console.log(data)
 	var img = new Image ()
 	img.src = data
-	document.body.appendChild(img)
+	$("#rapper img").remove()
+	$("#rapper").append(img)
+
 	setTimeout(function(){
-		flow.startCapture()
+		taking_photo = true
 	}, delay_after_taking_picture)
 }
 
