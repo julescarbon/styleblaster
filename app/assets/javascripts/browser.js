@@ -1,8 +1,9 @@
 $(function(){
     $("#datepicker").datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "yy/mm/dd",
         onSelect: function () {
-			console.log(this.value);
+			var region = window.location.pathname.split('/')[1]
+			window.location.pathname = '/' + region + '/' + this.value
         }
     });
 
