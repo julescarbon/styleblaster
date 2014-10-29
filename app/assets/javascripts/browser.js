@@ -1,4 +1,11 @@
 $(function(){
+    $("#datepicker").datepicker({
+        dateFormat: "yy-mm-dd",
+        onSelect: function () {
+			console.log(this.value);
+        }
+    });
+
 	if (!( 'REGION' in window )) return;
 	
 	var region = "/" + REGION;

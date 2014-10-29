@@ -10,6 +10,7 @@
 				<span class="left">
 					<h5>styleblaster.net/<%= @region.name %></h5>
 					<%= @photos.any? ? @photos.first.created_at.strftime("%A, %B %d, %Y") : "" %>
+					<input type='text' id='datepicker'>
 				</span>
 				
 				<span class="right">
