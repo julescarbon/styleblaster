@@ -7,13 +7,15 @@ var blaster = (function(){
     right: false,
     up: false,
     down: false,
+    show_flow: true,
     threshold: 1,
   }
 
   var position, sun, startTime
   var canvas, ctx, camera, flow
   var taking_photo = false
-
+  var w = 0, h = 0
+  
   function init () {
     build()
     start()
@@ -21,8 +23,12 @@ var blaster = (function(){
   function build () {
     canvas = document.createElement('canvas')
     ctx = canvas.getContext('2d')
+    document.body.appendChild(canvas)
     taking_photo = false
-
+    
+    w = canvas.width = 450
+    h = canvas.height = 600
+    
     camera = document.createElement('video')
     camera.style.WebkitTransform = "rotate(-90deg) scaleX(-1)"
     rapper.appendChild(camera)
@@ -47,17 +53,16 @@ var blaster = (function(){
     // direction.u, direction.v {floats} general flow vector
     // direction.zones {Array} is a collection of flowZones. 
     if (settings.left && direction.v < -settings.threshold) {
-      return upload()
+//      return upload()
     }
     else if (settings.right && direction.v > settings.threshold) {
-      return upload()
+//      return upload()
     }
     // v_val.innerHTML = Math.floor( direction.v * 100 )
-    // Each flow zone describes optical flow direction inside of it.
-    // flowZone : {
-    //  x, y // zone center
-    //  u, v // vector of flow in the zone
-    // }
+    if (settings.show_flow) {
+      drawCamera()
+      drawFlow(direction.zones)
+    }
   }
 
   function gotPosition (pos) {
@@ -65,20 +70,46 @@ var blaster = (function(){
     sun = SunCalc.getTimes(new Date(), pos.coords.latitude, pos.coords.longitude)
     flow.startCapture()
   }
-
-  function upload () {
-    if (taking_photo) return
-    taking_photo = true
-  
-    var w = canvas.width = 450
-    var h = canvas.height = 600
-
+  function clamp(n,a,b) { return n<a?a:n<b?n:b }
+  function drawFlow (zones) {
+    // ctx.clearRect(0,0,w,h)
+    ctx.save()
+    ctx.translate(w/2, h/2)
+    ctx.rotate(Math.PI/2)
+    ctx.translate(-w/2, -h/2)
+    ctx.translate(-75, 75)
+    ctx.lineWidth = 2
+    
+    var zone, i, r, g, b
+    for (i = 0, len = zones.length; i < len; i++) {
+      zone = zones[i]
+      r = ~~( 255 *  Math.abs( clamp(zone[2], -1, 0) ) )
+      g = ~~Math.abs(255*clamp(zone[2]+1,0,2)/2)
+      b = ~~Math.abs(255*clamp(zone[3]+1,0,2)/2)
+      ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")"
+      ctx.beginPath()
+      ctx.moveTo(zone[0], zone[1])
+      ctx.lineTo(zone[0]+zone[2], zone[1]+zone[3])
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
+  function drawCamera () {
+    ctx.save()
     ctx.translate(w/2, h/2)
     ctx.rotate(Math.PI/2)
     ctx.translate(-w/2, -h/2)
 
     ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
     ctx.scale(1, 1)
+    ctx.restore()
+  }
+
+  function upload () {
+    if (taking_photo) return
+    taking_photo = true
+  
+    drawCamera()
 
     canvas.toBlob(gotBlob, "image/jpeg")
   }
