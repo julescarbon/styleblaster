@@ -3,6 +3,7 @@ var blaster = (function(){
   var settings = {
     delay_after_taking_picture: 500,
     use_geolocation: false,
+    enabled: false,
     left: true,
     right: false,
     up: false,
@@ -37,25 +38,21 @@ var blaster = (function(){
     flow = new oflow.WebCamFlow(camera)
     flow.onCalculated(gotFlow)
   }
+  function toggle(opt, id){
+    opt[id] = ! opt[id]
+    document.getElementById(id + "_button").classList.toggle("enabled")
+  }
+  function toggle_fn(opt, id) {
+    opt[id] && document.getElementById(id + "_button").classList.toggle("enabled")
+    return toggle.bind(this, opt, id)
+  }
   function bind () {
-    keys.on("f", function(){
-      settings.show_flow = ! settings.show_flow
-    })
-    keys.on("enter", function(){
-      settings.show_flow = ! settings.show_flow
-    })
-    keys.on("l", function(){
-      settings.left = ! settings.left
-    })
-    keys.on("r", function(){
-      settings.right = ! settings.right
-    })
-    keys.on("u", function(){
-      settings.up = ! settings.up
-    })
-    keys.on("d", function(){
-      settings.down = ! settings.down
-    })
+    keys.on("f", toggle_fn(settings, 'show_flow'))
+    keys.on("enter", toggle_fn(settings, 'enabled'))
+    keys.on("left", toggle_fn(settings, 'left'))
+    keys.on("right", toggle_fn(settings, 'up'))
+    keys.on("up", toggle_fn(settings, 'right'))
+    keys.on("down", toggle_fn(settings, 'down'))
   }
   function start () {
     if (settings.use_geolocation) {

@@ -2,8 +2,20 @@
 body { background: black; color: white; }
 #compass { display: none }
 #rapper { display: none }
+button { font-family: sans-serif; color: #888; background: transparent; border: 0; }
+button.enabled { color: #fff; }
+#enabled_button { background: #888; border-radius: 50%; width: 16px;height:16px; }
+#enabled_button.enabled { backgroun: #f00; }
 </style>
 
+<div>
+<button id="enabled_button"></button>
+<button id="show_flow_button">flow</button>
+<button id="left_button">&larr;</button>
+<button id="right_button">&rarr;</button>
+<button id="up_button">&uarr;</button>
+<button id="down_button">&darr;</button>
+</div>
 <div id='rapper'></div>
 
 <div id='u_val'></div>
