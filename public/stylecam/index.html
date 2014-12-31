@@ -1,11 +1,12 @@
 <style>
 body { background: black; color: white; }
 #compass { display: none }
-#rapper { display: none }
+#camera_rapper, #canvas_rapper { float: left; }
+#camera_rapper { display: none; }
 button { font-family: sans-serif; color: #888; background: transparent; border: 0; }
 button.enabled { color: #fff; }
 #enabled_button { background: #888; border-radius: 50%; width: 16px;height:16px; }
-#enabled_button.enabled { backgroun: #f00; }
+#enabled_button.enabled { background: #f00; }
 </style>
 
 <div>
@@ -16,7 +17,8 @@ button.enabled { color: #fff; }
 <button id="up_button">&uarr;</button>
 <button id="down_button">&darr;</button>
 </div>
-<div id='rapper'></div>
+<div id='camera_rapper'></div>
+<div id='canvas_rapper'></div>
 
 <div id='u_val'></div>
 <div id='v_val'></div>

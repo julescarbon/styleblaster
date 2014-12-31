@@ -1,7 +1,7 @@
 var blaster = (function(){
 
   var settings = {
-    delay_after_taking_picture: 500,
+    delay_after_taking_picture: 1500,
     use_geolocation: false,
     enabled: false,
     left: true,
@@ -25,7 +25,7 @@ var blaster = (function(){
   function build () {
     canvas = document.createElement('canvas')
     ctx = canvas.getContext('2d')
-    document.body.appendChild(canvas)
+    canvas_rapper.appendChild(canvas)
     taking_photo = false
     
     w = canvas.width = 450
@@ -33,7 +33,7 @@ var blaster = (function(){
     
     camera = document.createElement('video')
     camera.style.WebkitTransform = "rotate(-90deg) scaleX(-1)"
-    rapper.appendChild(camera)
+    camera_rapper.appendChild(camera)
 
     flow = new oflow.WebCamFlow(camera)
     flow.onCalculated(gotFlow)
@@ -42,17 +42,20 @@ var blaster = (function(){
     opt[id] = ! opt[id]
     document.getElementById(id + "_button").classList.toggle("enabled")
   }
-  function toggle_fn(opt, id) {
-    opt[id] && document.getElementById(id + "_button").classList.toggle("enabled")
-    return toggle.bind(this, opt, id)
+  function bind_el(fn, opt, id) {
+    var button = document.getElementById(id + "_button")
+    var fn = fn.bind(this, opt, id)
+    opt[id] && button.classList.add("enabled")
+    button.addEventListener("click", fn)
+    return fn
   }
   function bind () {
-    keys.on("f", toggle_fn(settings, 'show_flow'))
-    keys.on("enter", toggle_fn(settings, 'enabled'))
-    keys.on("left", toggle_fn(settings, 'left'))
-    keys.on("right", toggle_fn(settings, 'up'))
-    keys.on("up", toggle_fn(settings, 'right'))
-    keys.on("down", toggle_fn(settings, 'down'))
+    keys.on("f", bind_el(toggle, settings, 'show_flow'))
+    keys.on("enter", bind_el(toggle, settings, 'enabled'))
+    keys.on("left", bind_el(toggle, settings, 'left'))
+    keys.on("right", bind_el(toggle, settings, 'up'))
+    keys.on("up", bind_el(toggle, settings, 'right'))
+    keys.on("down", bind_el(toggle, settings, 'down'))
   }
   function start () {
     if (settings.use_geolocation) {
@@ -147,16 +150,15 @@ var blaster = (function(){
       type: 'POST',
       success: didUpload,
     })
+    setTimeout(function(){
+      taking_photo = false
+    }, settings.delay_after_taking_picture)
   }
   function didUpload (data) {
     var img = new Image ()
     img.src = data
     $("#rapper img").remove()
     $("#rapper").append(img)
-
-    setTimeout(function(){
-      taking_photo = false
-    }, settings.delay_after_taking_picture)
   }
 
   $(init)
