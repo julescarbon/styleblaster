@@ -18,6 +18,7 @@ var blaster = (function(){
   
   function init () {
     build()
+    bind()
     start()
   }
   function build () {
@@ -36,6 +37,26 @@ var blaster = (function(){
     flow = new oflow.WebCamFlow(camera)
     flow.onCalculated(gotFlow)
   }
+  function bind () {
+    keys.on("f", function(){
+      settings.show_flow = ! settings.show_flow
+    })
+    keys.on("enter", function(){
+      settings.show_flow = ! settings.show_flow
+    })
+    keys.on("l", function(){
+      settings.left = ! settings.left
+    })
+    keys.on("r", function(){
+      settings.right = ! settings.right
+    })
+    keys.on("u", function(){
+      settings.up = ! settings.up
+    })
+    keys.on("d", function(){
+      settings.down = ! settings.down
+    })
+  }
   function start () {
     if (settings.use_geolocation) {
       navigator.geolocation.getCurrentPosition(gotPosition)
@@ -52,17 +73,20 @@ var blaster = (function(){
     // direction is an object which describes current flow:
     // direction.u, direction.v {floats} general flow vector
     // direction.zones {Array} is a collection of flowZones. 
-    if (settings.left && direction.v < -settings.threshold) {
-//      return upload()
+    else if (settings.left && direction.v < -settings.threshold) {
+      settings.enabled && upload()
     }
     else if (settings.right && direction.v > settings.threshold) {
-//      return upload()
+      settings.enabled && upload()
     }
-    // v_val.innerHTML = Math.floor( direction.v * 100 )
-    if (settings.show_flow) {
-      drawCamera()
-      drawFlow(direction.zones)
+    else if (settings.up && direction.u < settings.threshold) {
+      settings.enabled && upload()
     }
+    else if (settings.down && direction.u > settings.threshold) {
+      settings.enabled && upload()
+    }
+    drawCamera()
+    settings.show_flow && drawFlow(direction.zones)
   }
 
   function gotPosition (pos) {
