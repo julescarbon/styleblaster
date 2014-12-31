@@ -9,6 +9,9 @@ var blaster = (function(){
     up: false,
     down: false,
     show_flow: true,
+    flip: false,
+    flop: false,
+    rotate: true,
     threshold: 1,
   }
 
@@ -28,11 +31,15 @@ var blaster = (function(){
     canvas_rapper.appendChild(canvas)
     taking_photo = false
     
-    w = canvas.width = 450
-    h = canvas.height = 600
-    
+    if (settings.rotate) {
+      w = canvas.width = 450
+      h = canvas.height = 600
+    }
+    else {
+      w = canvas.width = 600
+      h = canvas.height = 450
+    }
     camera = document.createElement('video')
-    camera.style.WebkitTransform = "rotate(-90deg) scaleX(-1)"
     camera_rapper.appendChild(camera)
 
     flow = new oflow.WebCamFlow(camera)
@@ -42,6 +49,21 @@ var blaster = (function(){
     opt[id] = ! opt[id]
     document.getElementById(id + "_button").classList.toggle("enabled")
   }
+  function toggle_rotate(opt, id){
+    toggle(opt, id)
+    rotate()
+  }
+  function rotate(){
+    if (settings.rotate) {
+      w = canvas.width = 450
+      h = canvas.height = 600
+    }
+    else {
+      w = canvas.width = 600
+      h = canvas.height = 450
+    }
+  }
+
   function bind_el(fn, opt, id) {
     var button = document.getElementById(id + "_button")
     var fn = fn.bind(this, opt, id)
@@ -56,6 +78,9 @@ var blaster = (function(){
     keys.on("right", bind_el(toggle, settings, 'up'))
     keys.on("up", bind_el(toggle, settings, 'right'))
     keys.on("down", bind_el(toggle, settings, 'down'))
+    keys.on("\\", bind_el(toggle_rotate, settings, 'rotate'))
+    keys.on("[", bind_el(toggle, settings, 'flip'))
+    keys.on("]", bind_el(toggle, settings, 'flop'))
   }
   function start () {
     if (settings.use_geolocation) {
@@ -98,10 +123,22 @@ var blaster = (function(){
   function drawFlow (zones) {
     // ctx.clearRect(0,0,w,h)
     ctx.save()
-    ctx.translate(w/2, h/2)
-    ctx.rotate(Math.PI/2)
-    ctx.translate(-w/2, -h/2)
-    ctx.translate(-75, 75)
+    if (settings.rotate) {
+      ctx.translate(w/2, h/2)
+      ctx.rotate(Math.PI/2)
+      ctx.translate(-w/2, h/2)
+    }
+    if (settings.flip) {
+      ctx.scale(-1, 1)
+      ctx.translate(-w, 0)
+    }
+    if (settings.flop) {
+      ctx.scale(1, -1)
+      ctx.translate(0, -h)
+    }
+    if (settings.rotate) {
+      ctx.translate(-75, 75)
+    }
     ctx.lineWidth = 2
     
     var zone, i, r, g, b
@@ -120,11 +157,27 @@ var blaster = (function(){
   }
   function drawCamera () {
     ctx.save()
-    ctx.translate(w/2, h/2)
-    ctx.rotate(Math.PI/2)
-    ctx.translate(-w/2, -h/2)
-
-    ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, -75, 75, 600, 450)
+    var x = 0
+    var y = 0
+    if (settings.rotate) {
+      ctx.translate(w/2, h/2)
+      ctx.rotate(Math.PI/2)
+      ctx.translate(-w/2, -h/2)
+    }
+    if (settings.flip) {
+      ctx.scale(-1, 1)
+      ctx.translate(-w, 0)
+    }
+    if (settings.flop) {
+      ctx.scale(1, -1)
+      ctx.translate(0, -h)
+    }
+    if (settings.rotate) {
+      x = (w - camera.videoWidth)/2 + 20
+      y = (h - camera.videoHeight)/2 + 10
+    }
+    
+    ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, x, y, 600, 450)
     ctx.scale(1, 1)
     ctx.restore()
   }
@@ -150,18 +203,21 @@ var blaster = (function(){
       type: 'POST',
       success: didUpload,
     })
+    taking_photo_el.classList.add("active")
     setTimeout(function(){
       taking_photo = false
+      taking_photo_el.classList.remove("active")
     }, settings.delay_after_taking_picture)
   }
   function didUpload (data) {
     var img = new Image ()
     img.src = data
-    $("#rapper img").remove()
-    $("#rapper").append(img)
+    taking_photo_el.classList.remove("active")
+    $("#image_rapper").empty()
+    $("#image_rapper").append(img)
   }
-
   $(init)
-
+  $('body').addClass('loaded')
+  
   return settings
 })()

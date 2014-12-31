@@ -381,10 +381,13 @@ function WebCamFlow(defaultVideoTag, zoneSize) {
         flowCalculatedCallback,
         videoFlow,
         onWebCamFail = function onWebCamFail(e) {
-            if(e.code === 1){
-                document.write('You have denied access to your camera. I cannot do anything.');
-            } else { 
-                document.write('getUserMedia() is not supported in your browser.');
+            if (e.code === 1) {
+                $(error_el).show().html('You have denied access to your camera. I cannot do anything.')
+                $("#buttons").hide()
+            }
+            else { 
+                $(error_el).show().html('getUserMedia() did not detect a camera.  Check that your camera is plugged in and working.')
+                $("#buttons").hide()
             }
         },
         gotFlow = function(direction) {

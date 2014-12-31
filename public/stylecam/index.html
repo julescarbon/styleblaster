@@ -1,28 +1,42 @@
 <style>
-body { background: black; color: white; }
+html,body { width: 100%; height: 100%; margin: 0; padding: 0; }
+body { background: black; color: white; font-family: sans-serif; font-weight: 300; opacity: 0; transition: opacity 200ms; }
+body.loaded { opacity: 1; }
 #compass { display: none }
-#camera_rapper, #canvas_rapper { float: left; }
+#camera_rapper, #canvas_rapper, #image_rapper { float: right; }
 #camera_rapper { display: none; }
+#image_rapper {  }
 button { font-family: sans-serif; color: #888; background: transparent; border: 0; }
 button.enabled { color: #fff; }
 #enabled_button { background: #888; border-radius: 50%; width: 16px;height:16px; }
 #enabled_button.enabled { background: #f00; }
+#buttons { text-align: right; padding: 10px; }
+#taking_photo_el { display: none; }
+#taking_photo_el.active { display: inline; color: white; }
+#error_el { background: #222; width: 350px; padding: 20px; text-align: center; line-height: 24px; position: absolute; top: 10%; left: 50%; transform: translateX(-50%); display: none; }
 </style>
 
-<div>
+<div id="buttons">
+<span id="taking_photo_el">taking photo</span>
 <button id="enabled_button"></button>
 <button id="show_flow_button">flow</button>
 <button id="left_button">&larr;</button>
 <button id="right_button">&rarr;</button>
 <button id="up_button">&uarr;</button>
 <button id="down_button">&darr;</button>
+<button id="rotate_button">rotate 90 &deg;</button>
+<button id="flip_button">flip</button>
+<button id="flop_button">flop</button>
 </div>
 <div id='camera_rapper'></div>
 <div id='canvas_rapper'></div>
+<div id='image_rapper'></div>
 
 <div id='u_val'></div>
 <div id='v_val'></div>
 <div id='compass'></div>
+
+<div id='error_el'></div>
 
 <script src='/stylecam/js/vendor/jquery.min.js'></script>
 <script src='/stylecam/js/vendor/moment.js'></script>
