@@ -13,7 +13,7 @@ var blaster = (function(){
     show_flow: true,
     flip: false,
     flop: false,
-    rotate: true,
+    rotate: false,
     threshold: 1,
   }
 
@@ -21,7 +21,8 @@ var blaster = (function(){
   var canvas, ctx, camera, flow
   var taking_photo = false
   var w = 0, h = 0
-  var cw, ch
+  var cw, ch, xmin, xmax, ymin, ymax
+  var dragging = false
   
   function init () {
     build()
@@ -58,7 +59,7 @@ var blaster = (function(){
       w = canvas.width = settings.width
       h = canvas.height = settings.height
     }
-
+    
     var camera_aspect = camera.videoWidth / camera.videoHeight
     if (camera_aspect > settings.width/settings.height) {
       cw = settings.width
@@ -87,12 +88,34 @@ var blaster = (function(){
     keys.on("\\", bind_el(toggle_rotate, settings, 'rotate'))
     keys.on("[", bind_el(toggle, settings, 'flip'))
     keys.on("]", bind_el(toggle, settings, 'flop'))
+
+    canvas.addEventListener("mousedown", function(e){
+      dragging = true
+      xmin = e.pageX - canvas.offsetLeft
+      ymin = e.pageY - canvas.offsetTop
+    })
+    canvas.addEventListener("mousemove", function(e){
+      if (! dragging) return
+      xmax = e.pageX - canvas.offsetLeft
+      ymax = e.pageY - canvas.offsetTop
+    })
+    canvas.addEventListener("mouseup", function(e){
+      dragging = false
+      var swap
+      if (xmax < xmin) {
+        swap = xmin; xmin = xmax; xmax = swap
+      }
+      if (ymax < ymin) {
+        swap = ymin; ymin = ymax; ymax = swap
+      }
+    })
   }
   function start () {
     if (settings.use_geolocation) {
       navigator.geolocation.getCurrentPosition(gotPosition)
     }
     else {
+      capturing = true
       flow.startCapture()
     }
   }
@@ -104,6 +127,10 @@ var blaster = (function(){
     var interval = setInterval(function(){
       if (camera.videoWidth) {
         rotate()
+        xmin = 100
+        xmax = canvas.width - 100
+        ymin = 100
+        ymax = canvas.height - 100
         clearInterval(interval)
       }
     }, 50)
@@ -111,20 +138,42 @@ var blaster = (function(){
   function gotFlow (direction) {
     // direction is an object which describes current flow:
     // direction.u, direction.v {floats} general flow vector
-    // direction.zones {Array} is a collection of flowZones. 
-    if (settings.left && direction.v < -settings.threshold) {
-      settings.enabled && upload()
+    // direction.zones {Array} is a collection of flowZones.
+    if (! capturing) return
+    
+    var u = 0, v = 0, i, zone, zoneCount = 0, len, zones = direction.zones
+    var reals = []
+    for (i = 0, len = zones.length; i < len; i++) {
+      zone = zones[i]
+      if (xmin < zone[0] && zone[0] < xmax && ymin < zone[1] && zone[1] < ymax && zone[2] && zone[3]) {
+        u += zone[2]
+        v += zone[3]
+        zoneCount += 1
+        reals.push(zone)
+      }
     }
-    else if (settings.right && direction.v > settings.threshold) {
-      settings.enabled && upload()
+    if (zoneCount) {
+      u /= zoneCount
+      v /= zoneCount
+      u_val.innerHTML = u.toFixed(2)
+      v_val.innerHTML = v.toFixed(2)
     }
-    else if (settings.up && direction.u < settings.threshold) {
-      settings.enabled && upload()
-    }
-    else if (settings.down && direction.u > settings.threshold) {
-      settings.enabled && upload()
+    if (zoneCount && settings.enabled) {
+      if (settings.left && v < -settings.threshold) {
+        upload()
+      }
+      else if (settings.right && v > settings.threshold) {
+        upload()
+      }
+      else if (settings.up && u < -settings.threshold) {
+        upload()
+      }
+      else if (settings.down && u > settings.threshold) {
+        upload()
+      }
     }
     drawCamera()
+    drawRegion()
     settings.show_flow && drawFlow(direction.zones)
   }
 
@@ -162,19 +211,55 @@ var blaster = (function(){
 
     ctx.lineWidth = 2
     
-    var zone, i, r, g, b
+    var zone, i, r, g, b, aa
     for (i = 0, len = zones.length; i < len; i++) {
       zone = zones[i]
       r = ~~( 255 *  Math.abs( clamp(zone[2], -1, 0) ) )
       g = ~~Math.abs(255*clamp(zone[2]+1,0,2)/2)
       b = ~~Math.abs(255*clamp(zone[3]+1,0,2)/2)
-      ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")"
+      if (xmin < zone[0] && zone[0] < xmax && ymin < zone[1] && zone[1] < ymax) {
+        ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")"
+      }
+      else {
+        aa = ((r+g+b)/3)|0
+        ctx.strokeStyle = "rgb(" + aa + "," + aa + "," + aa + ")"
+      }
       ctx.beginPath()
       ctx.moveTo(zone[0], zone[1])
       ctx.lineTo(zone[0]+zone[2], zone[1]+zone[3])
       ctx.stroke()
     }
     ctx.scale(1, 1)
+    ctx.restore()
+  }
+  function drawRegion () {
+    ctx.save()
+    if (settings.rotate) {
+      ctx.translate(w/2, h/2)
+      ctx.rotate(Math.PI/2)
+      ctx.translate(-w/2, h/2)
+    }
+    if (settings.flip) {
+      ctx.scale(-1, 1)
+      ctx.translate(-w, 0)
+    }
+    if (settings.flop) {
+      ctx.scale(1, -1)
+      ctx.translate(0, -h)
+    }
+    if (settings.rotate) {
+      if (settings.flop) {
+        ctx.translate(0, h)
+      }
+      else {
+        ctx.translate(0, -h)
+      }
+      ctx.translate((w - cw)/2, (h - ch)/2)
+    }
+    ctx.fillStyle = "rgba(255,0,0,0.2)"
+    ctx.strokeStyle = "#f00"
+    ctx.fillRect(xmin, ymin, xmax-xmin, ymax-ymin)
+    ctx.strokeRect(xmin, ymin, xmax-xmin, ymax-ymin)
     ctx.restore()
   }
   function drawCamera () {
@@ -206,7 +291,7 @@ var blaster = (function(){
   }
 
   function upload () {
-    if (taking_photo) return
+    if (taking_photo || dragging) return
     taking_photo = true
   
     drawCamera()

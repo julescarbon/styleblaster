@@ -14,26 +14,27 @@ button.enabled { color: #fff; }
 #taking_photo_el { display: none; }
 #taking_photo_el.active { display: inline; color: white; }
 #error_el { background: #222; width: 350px; padding: 20px; text-align: center; line-height: 24px; position: absolute; top: 10%; left: 50%; transform: translateX(-50%); display: none; }
+#u_val, #v_val { font-size: 13px; color: #ddd; display: inline-block; min-width: 30px; }
 </style>
 
 <div id="buttons">
-<span id="taking_photo_el">taking photo</span>
-<button id="enabled_button"></button>
-<button id="show_flow_button">flow</button>
-<button id="left_button">&larr;</button>
-<button id="right_button">&rarr;</button>
-<button id="up_button">&uarr;</button>
-<button id="down_button">&darr;</button>
-<button id="rotate_button">rotate 90 &deg;</button>
-<button id="flip_button">flip</button>
-<button id="flop_button">flop</button>
+  <span id='u_val'></span>
+  <span id='v_val'></span>
+  <span id="taking_photo_el">taking photo</span>
+  <button id="enabled_button"></button>
+  <button id="show_flow_button">flow</button>
+  <button id="left_button">&larr;</button>
+  <button id="right_button">&rarr;</button>
+  <button id="up_button">&uarr;</button>
+  <button id="down_button">&darr;</button>
+  <button id="rotate_button">rotate 90 &deg;</button>
+  <button id="flip_button">flip</button>
+  <button id="flop_button">flop</button>
 </div>
 <div id='camera_rapper'></div>
 <div id='canvas_rapper'></div>
 <div id='image_rapper'></div>
 
-<div id='u_val'></div>
-<div id='v_val'></div>
 <div id='compass'></div>
 
 <div id='error_el'></div>
