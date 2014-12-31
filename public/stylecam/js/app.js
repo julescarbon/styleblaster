@@ -2,6 +2,8 @@ var blaster = (function(){
 
   var settings = {
     delay_after_taking_picture: 1500,
+    width: 600,
+    height: 450,
     use_geolocation: false,
     enabled: false,
     left: true,
@@ -19,6 +21,7 @@ var blaster = (function(){
   var canvas, ctx, camera, flow
   var taking_photo = false
   var w = 0, h = 0
+  var cw, ch
   
   function init () {
     build()
@@ -30,19 +33,12 @@ var blaster = (function(){
     ctx = canvas.getContext('2d')
     canvas_rapper.appendChild(canvas)
     taking_photo = false
-    
-    if (settings.rotate) {
-      w = canvas.width = 450
-      h = canvas.height = 600
-    }
-    else {
-      w = canvas.width = 600
-      h = canvas.height = 450
-    }
+
     camera = document.createElement('video')
     camera_rapper.appendChild(camera)
-
+    
     flow = new oflow.WebCamFlow(camera)
+    flow.onCamera(gotCamera)
     flow.onCalculated(gotFlow)
   }
   function toggle(opt, id){
@@ -55,12 +51,22 @@ var blaster = (function(){
   }
   function rotate(){
     if (settings.rotate) {
-      w = canvas.width = 450
-      h = canvas.height = 600
+      w = canvas.width = settings.height
+      h = canvas.height = settings.width
     }
     else {
-      w = canvas.width = 600
-      h = canvas.height = 450
+      w = canvas.width = settings.width
+      h = canvas.height = settings.height
+    }
+
+    var camera_aspect = camera.videoWidth / camera.videoHeight
+    if (camera_aspect > settings.width/settings.height) {
+      cw = settings.width
+      ch = (settings.width / camera.videoWidth) * camera.videoHeight
+    }
+    else {
+      cw = (settings.height / camera.videoHeight) * camera.videoWidth
+      ch = settings.height
     }
   }
 
@@ -93,7 +99,15 @@ var blaster = (function(){
   function stop () {
     flow.stopCapture()
   }
-
+  function gotCamera () {
+    // wait until we *actually* got the camera
+    var interval = setInterval(function(){
+      if (camera.videoWidth) {
+        rotate()
+        clearInterval(interval)
+      }
+    }, 50)
+  }
   function gotFlow (direction) {
     // direction is an object which describes current flow:
     // direction.u, direction.v {floats} general flow vector
@@ -137,8 +151,21 @@ var blaster = (function(){
       ctx.translate(0, -h)
     }
     if (settings.rotate) {
-      ctx.translate(-75, 75)
+      if (settings.flop) {
+        ctx.translate(0, h)
+      }
+      else {
+        ctx.translate(0, -h)
+      }
+      ctx.translate((w - cw)/2, (h - ch)/2)
     }
+    ctx.strokeStyle = "red"
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(0,0)
+    ctx.lineTo(1000,-1000)
+    ctx.stroke()
+
     ctx.lineWidth = 2
     
     var zone, i, r, g, b
@@ -153,22 +180,13 @@ var blaster = (function(){
       ctx.lineTo(zone[0]+zone[2], zone[1]+zone[3])
       ctx.stroke()
     }
+    ctx.scale(1, 1)
     ctx.restore()
   }
   function drawCamera () {
     ctx.save()
     var x = 0
     var y = 0
-    var cw, ch
-    var camera_aspect = camera.videoWidth / camera.videoHeight
-    if (camera_aspect > 600/450) {
-      cw = 600
-      ch = (600 / camera.videoWidth) * camera.videoHeight
-    }
-    else {
-      cw = (450 / camera.videoHeight) * camera.videoWidth
-      ch = 450
-    }
 
     if (settings.rotate) {
       ctx.translate(w/2, h/2)

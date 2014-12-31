@@ -377,6 +377,7 @@ function WebCamFlow(defaultVideoTag, zoneSize) {
     var videoTag,
         isCapturing,
         localStream,
+        cameraCallbacks = [],
         calculatedCallbacks = [],
         flowCalculatedCallback,
         videoFlow,
@@ -407,6 +408,9 @@ function WebCamFlow(defaultVideoTag, zoneSize) {
                 localStream = stream;
                 videoTag.src = window.URL.createObjectURL(stream);
                 if (stream) {
+                    cameraCallbacks.forEach(function (callback) {
+                        callback();
+                    });
                     videoFlow.startCapture(videoTag);
                     videoFlow.onCalculated(gotFlow);
                 }
@@ -425,6 +429,9 @@ function WebCamFlow(defaultVideoTag, zoneSize) {
         if (!isCapturing) {
             initCapture();
         }
+    };
+    this.onCamera = function (callback) {
+        cameraCallbacks.push(callback);
     };
     this.onCalculated = function (callback) {
         calculatedCallbacks.push(callback);
