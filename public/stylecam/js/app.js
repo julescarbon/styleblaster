@@ -159,12 +159,6 @@ var blaster = (function(){
       }
       ctx.translate((w - cw)/2, (h - ch)/2)
     }
-    ctx.strokeStyle = "red"
-    ctx.lineWidth = 2
-    ctx.beginPath()
-    ctx.moveTo(0,0)
-    ctx.lineTo(1000,-1000)
-    ctx.stroke()
 
     ctx.lineWidth = 2
     
