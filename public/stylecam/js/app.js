@@ -73,7 +73,7 @@ var blaster = (function(){
     // direction is an object which describes current flow:
     // direction.u, direction.v {floats} general flow vector
     // direction.zones {Array} is a collection of flowZones. 
-    else if (settings.left && direction.v < -settings.threshold) {
+    if (settings.left && direction.v < -settings.threshold) {
       settings.enabled && upload()
     }
     else if (settings.right && direction.v > settings.threshold) {
