@@ -159,6 +159,17 @@ var blaster = (function(){
     ctx.save()
     var x = 0
     var y = 0
+    var cw, ch
+    var camera_aspect = camera.videoWidth / camera.videoHeight
+    if (camera_aspect > 600/450) {
+      cw = 600
+      ch = (600 / camera.videoWidth) * camera.videoHeight
+    }
+    else {
+      cw = (450 / camera.videoHeight) * camera.videoWidth
+      ch = 450
+    }
+
     if (settings.rotate) {
       ctx.translate(w/2, h/2)
       ctx.rotate(Math.PI/2)
@@ -173,11 +184,11 @@ var blaster = (function(){
       ctx.translate(0, -h)
     }
     if (settings.rotate) {
-      x = (w - camera.videoWidth)/2 + 20
-      y = (h - camera.videoHeight)/2 + 10
+      x = (w - cw)/2
+      y = (h - ch)/2
     }
     
-    ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, x, y, 600, 450)
+    ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, x, y, cw, ch)
     ctx.scale(1, 1)
     ctx.restore()
   }
