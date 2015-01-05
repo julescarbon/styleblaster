@@ -71,7 +71,7 @@ var blaster = (function(){
     }
   }
 
-  function bind_el(fn, opt, id) {
+  function bind_el (fn, opt, id) {
     var button = document.getElementById(id + "_button")
     var fn = fn.bind(this, opt, id)
     opt[id] && button.classList.add("enabled")
@@ -142,14 +142,12 @@ var blaster = (function(){
     if (! capturing) return
     
     var u = 0, v = 0, i, zone, zoneCount = 0, len, zones = direction.zones
-    var reals = []
     for (i = 0, len = zones.length; i < len; i++) {
       zone = zones[i]
       if (xmin < zone[0] && zone[0] < xmax && ymin < zone[1] && zone[1] < ymax && zone[2] && zone[3]) {
         u += zone[2]
         v += zone[3]
         zoneCount += 1
-        reals.push(zone)
       }
     }
     if (zoneCount) {
