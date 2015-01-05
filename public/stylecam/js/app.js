@@ -4,7 +4,7 @@ var blaster = (function(){
     delay_after_taking_picture: 1500,
     width: 600,
     height: 450,
-    use_geolocation: false,
+    use_geolocation: true,
     enabled: false,
     left: true,
     right: false,
@@ -23,6 +23,8 @@ var blaster = (function(){
   var w = 0, h = 0
   var cw, ch, xmin, xmax, ymin, ymax
   var dragging = false
+  var capturing = false
+  var daylight = true
   
   function init () {
     build()
@@ -91,7 +93,7 @@ var blaster = (function(){
 
     canvas.addEventListener("mousedown", function(e){
       dragging = true
-      xmin = e.pageX - canvas.offsetLeft
+      xmin = e.pageX - canvas.offsetLeft  
       ymin = e.pageY - canvas.offsetTop
     })
     canvas.addEventListener("mousemove", function(e){
@@ -156,7 +158,7 @@ var blaster = (function(){
       u_val.innerHTML = u.toFixed(2)
       v_val.innerHTML = v.toFixed(2)
     }
-    if (zoneCount && settings.enabled) {
+    if (zoneCount && settings.enabled && daylight && ! dragging) {
       if (settings.left && v < -settings.threshold) {
         upload()
       }
@@ -177,8 +179,27 @@ var blaster = (function(){
 
   function gotPosition (pos) {
     position = pos
-    sun = SunCalc.getTimes(new Date(), pos.coords.latitude, pos.coords.longitude)
+    capturing = true
+    checkDaylight()
     flow.startCapture()
+  }
+  function checkDaylight () {
+    var now = new Date()
+    sun = SunCalc.getTimes(now, position.coords.latitude, position.coords.longitude)
+    if (sun.sunrise < now && now < sun.sunset) {
+      daylight = true
+      setTimeout(checkDaylight, sun.sunset - now + 30000)
+    }
+    else {
+      daylight = false
+      if (now < sun.sunrise) {
+        setTimeout(checkDaylight, sun.sunrise - now)
+      }
+      else if (sun.sunset < now) {
+        var tomorrow = moment().endOf('day').add(5, 'hour').toDate()
+        setTimeout(checkDaylight, tomorrow - now)
+      }
+    }
   }
   function clamp(n,a,b) { return n<a?a:n<b?n:b }
   function drawFlow (zones) {
