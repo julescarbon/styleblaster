@@ -14,7 +14,7 @@ button.enabled { color: #fff; }
 #taking_photo_el { display: none; }
 #taking_photo_el.active { display: inline; color: white; }
 #error_el { background: #222; width: 350px; padding: 20px; text-align: center; line-height: 24px; position: absolute; top: 10%; left: 50%; transform: translateX(-50%); display: none; }
-#u_val, #v_val { font-size: 13px; color: #ddd; display: inline-block; min-width: 30px; }
+#u_val, #v_val, #sun_el { font-size: 13px; color: #ddd; display: inline-block; min-width: 30px; }
 </style>
 
 <div id="buttons">
@@ -30,6 +30,7 @@ button.enabled { color: #fff; }
   <button id="rotate_button">rotate 90 &deg;</button>
   <button id="flip_button">flip</button>
   <button id="flop_button">flop</button>
+  <span id="sun_el"></span>
 </div>
 <div id='camera_rapper'></div>
 <div id='canvas_rapper'></div>

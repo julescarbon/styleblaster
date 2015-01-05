@@ -188,15 +188,19 @@ var blaster = (function(){
     sun = SunCalc.getTimes(now, position.coords.latitude, position.coords.longitude)
     if (sun.sunrise < now && now < sun.sunset) {
       daylight = true
+      sun_el.innerHTML = "sunset at " + moment(sun.sunset).format('h:mm a')
       setTimeout(checkDaylight, sun.sunset - now + 30000)
     }
     else {
       daylight = false
       if (now < sun.sunrise) {
+        sun_el.innerHTML = "sunrise at " + moment(sun.sunrise).format('h:mm a')
         setTimeout(checkDaylight, sun.sunrise - now)
       }
       else if (sun.sunset < now) {
         var tomorrow = moment().endOf('day').add(5, 'hour').toDate()
+        var tomorrow_sun = SunCalc.getTimes(tomorrow, position.coords.latitude, position.coords.longitude)
+        sun_el.innerHTML = "sunrise at " + moment(tomorrow_sun.sunrise).format('h:mm a')
         setTimeout(checkDaylight, tomorrow - now)
       }
     }
