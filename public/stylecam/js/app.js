@@ -16,7 +16,7 @@ var blaster = (function(){
     rotate: true,
     sixteen_nine: true,
     threshold: 1.5,
-    zoom:2
+    zoom:1
   }
 
   var position, sun, startTime
