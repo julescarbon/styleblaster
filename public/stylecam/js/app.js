@@ -169,7 +169,6 @@ var blaster = (function(){
       v /= zoneCount
       if (settings.rotate) {
       	var swap = u; u = v; v = swap;
-      	u = -u
       }
       u_val.innerHTML = u.toFixed(2)
       v_val.innerHTML = v.toFixed(2)
