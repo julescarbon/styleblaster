@@ -3,7 +3,7 @@ var blaster = (function(){
   var settings = {
     delay_after_taking_picture: 1500,
     width: 600,
-    height: 450,
+    height: 400,
     use_geolocation: true,
     enabled: false,
     left: true,
@@ -14,14 +14,14 @@ var blaster = (function(){
     flip: false,
     flop: false,
     rotate: false,
-    threshold: 1,
+    threshold: 1.5,
   }
 
   var position, sun, startTime
   var canvas, ctx, camera, flow
   var taking_photo = false
   var w = 0, h = 0
-  var cw, ch, xmin, xmax, ymin, ymax
+  var cw, ch, ox, oy, xmin, xmax, ymin, ymax
   var dragging = false
   var capturing = false
   var daylight = true
@@ -67,12 +67,12 @@ var blaster = (function(){
     
     var camera_aspect = camera.videoWidth / camera.videoHeight
     if (camera_aspect > settings.width/settings.height) {
-      cw = settings.width
-      ch = (settings.width / camera.videoWidth) * camera.videoHeight
-    }
-    else {
       cw = (settings.height / camera.videoHeight) * camera.videoWidth
       ch = settings.height
+    }
+    else {
+      cw = settings.width
+      ch = (settings.width / camera.videoWidth) * camera.videoHeight
     }
   }
 
@@ -158,6 +158,9 @@ var blaster = (function(){
     if (zoneCount) {
       u /= zoneCount
       v /= zoneCount
+      if (settings.rotate) {
+      	var swap = u; u = v; v = swap;
+      }
       u_val.innerHTML = u.toFixed(2)
       v_val.innerHTML = v.toFixed(2)
       
