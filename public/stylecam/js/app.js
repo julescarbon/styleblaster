@@ -159,16 +159,16 @@ var blaster = (function(){
       v_val.innerHTML = v.toFixed(2)
     }
     if (zoneCount && settings.enabled && daylight && ! dragging) {
-      if (settings.left && v < -settings.threshold) {
+      if (settings.up && v < -settings.threshold) {
         upload()
       }
-      else if (settings.right && v > settings.threshold) {
+      else if (settings.down && v > settings.threshold) {
         upload()
       }
-      else if (settings.up && u < -settings.threshold) {
+      else if (settings.left && u < -settings.threshold) {
         upload()
       }
-      else if (settings.down && u > settings.threshold) {
+      else if (settings.right && u > settings.threshold) {
         upload()
       }
     }
