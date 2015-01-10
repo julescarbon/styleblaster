@@ -16,6 +16,7 @@ var blaster = (function(){
     rotate: true,
     sixteen_nine: true,
     threshold: 1.5,
+    zoom:2
   }
 
   var position, sun, startTime
@@ -56,6 +57,7 @@ var blaster = (function(){
     toggle(opt, id)
     rotate()
   }
+
   function rotate(){
   	var camera_aspect
     if (settings.rotate) {
@@ -326,8 +328,8 @@ var blaster = (function(){
       y = (h - ch)/2
     }
     
+    ctx.scale(settings.zoom, settings.zoom)
     ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, x, y, cw, ch)
-    ctx.scale(1, 1)
     ctx.restore()
   }
 
