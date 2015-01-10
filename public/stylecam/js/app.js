@@ -14,6 +14,7 @@ var blaster = (function(){
     flip: false,
     flop: false,
     rotate: false,
+    sixteen_nine: true,
     threshold: 1.5,
   }
 
@@ -56,6 +57,7 @@ var blaster = (function(){
     rotate()
   }
   function rotate(){
+  	var camera_aspect
     if (settings.rotate) {
       w = canvas.width = settings.height
       h = canvas.height = settings.width
@@ -65,15 +67,21 @@ var blaster = (function(){
       h = canvas.height = settings.height
     }
     
-    var camera_aspect = camera.videoWidth / camera.videoHeight
-    if (camera_aspect > settings.width/settings.height) {
-      cw = (settings.height / camera.videoHeight) * camera.videoWidth
-      ch = settings.height
-    }
-    else {
-      cw = settings.width
-      ch = (settings.width / camera.videoWidth) * camera.videoHeight
-    }
+    var vw = camera.videoWidth, vh = camera.videoHeight
+		if (settings.sixteen_nine) {
+			vw = 16
+			vh = 9
+		}
+		camera_aspect = vw / vh
+
+		if (camera_aspect > settings.width/settings.height) {
+			cw = (settings.height / vh) * vw
+			ch = settings.height
+		}
+		else {
+			cw = settings.width
+			ch = (settings.width / vw) * vh
+		}
   }
 
   function bind_el (fn, opt, id) {
@@ -93,6 +101,7 @@ var blaster = (function(){
     keys.on("\\", bind_el(toggle_rotate, settings, 'rotate'))
     keys.on("[", bind_el(toggle, settings, 'flip'))
     keys.on("]", bind_el(toggle, settings, 'flop'))
+    keys.on("9", bind_el(toggle, settings, 'sixteen_nine'))
 
     canvas.addEventListener("mousedown", function(e){
       dragging = true
