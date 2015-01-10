@@ -13,7 +13,7 @@ var blaster = (function(){
     show_flow: true,
     flip: false,
     flop: false,
-    rotate: false,
+    rotate: true,
     sixteen_nine: true,
     threshold: 1.5,
   }
@@ -169,6 +169,7 @@ var blaster = (function(){
       v /= zoneCount
       if (settings.rotate) {
       	var swap = u; u = v; v = swap;
+      	u = -u
       }
       u_val.innerHTML = u.toFixed(2)
       v_val.innerHTML = v.toFixed(2)
@@ -369,5 +370,6 @@ var blaster = (function(){
   $('body').addClass('loaded')
   
   settings.resetRange = function(){ u_range = [0,0] }
+  settings.getRect = function(){ return [x_min, x_max, y_min, y_max] }
   return settings
 })()
