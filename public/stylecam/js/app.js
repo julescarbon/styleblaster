@@ -25,6 +25,9 @@ var blaster = (function(){
   var dragging = false
   var capturing = false
   var daylight = true
+  var u_range = [0,0]
+  var v_range = [0,0]
+
   
   function init () {
     build()
@@ -157,6 +160,10 @@ var blaster = (function(){
       v /= zoneCount
       u_val.innerHTML = u.toFixed(2)
       v_val.innerHTML = v.toFixed(2)
+      
+      u_range[0] = Math.min(u, u_range[0])
+      u_range[1] = Math.max(u, u_range[1])
+      u_val.innerHTML = u_range[0].toFixed(2) + ", " + u_range[1].toFixed(2) + " ... " + u.toFixed(2)
     }
     if (zoneCount && settings.enabled && daylight && ! dragging) {
       if (settings.up && v < -settings.threshold) {
@@ -176,7 +183,6 @@ var blaster = (function(){
     drawRegion()
     settings.show_flow && drawFlow(direction.zones)
   }
-
   function gotPosition (pos) {
     position = pos
     capturing = true
@@ -350,5 +356,6 @@ var blaster = (function(){
   $(init)
   $('body').addClass('loaded')
   
+  settings.resetRange = function(){ u_range = [0,0] }
   return settings
 })()
