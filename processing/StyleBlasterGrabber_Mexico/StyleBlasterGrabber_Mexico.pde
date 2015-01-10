@@ -2,7 +2,6 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -38,7 +37,7 @@ String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
 
 // select the production endpoint for the compiled build
 String uploadURL = gdlUploadURL;
-String tag = "nyc";
+String tag = "gdl";
 
 int camWidth;
 int camHeight = 720;
@@ -49,13 +48,11 @@ float sensorRes = 1;
 
 public void setup() {
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
-  //camHeight = 2;
   int sketchHeight = 1000;
   int sketchWidth = 666;
   float m = .7;
 
   size(round(sketchWidth*m), round(sketchHeight*m));
-  //   size(1280, 720);
 
   String[] devices = Capture.list();
   // uncomment the line below to print a list of devices ready for img capture
@@ -63,21 +60,12 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  if (version == "2.0") {
-    cam = new Capture(this, 1280, 960, "Logitech Camera");
-  }
-  else {
     //   cam = new Capture(this, 2592,1944);
     //Logitech 910c
     //cam = new Capture(this, 1280, 960);
     //Microsoft Studio
     cam = new Capture(this, 1920, 1080);
-    // cam = new Capture(this, 1280, 720);
-  }
 
-  if (version == "2.0") {
-    //   cam.start();
-  }
   //set global framerate
   int f = 25;
   frameRate(f);
@@ -96,8 +84,6 @@ public void setup() {
   motionSensor.update();
 
   of = new OpticalFlow(cam);
-
-
 }
 
 void draw() {
