@@ -2,7 +2,7 @@ import processing.opengl.*;
 import processing.video.*;
 import org.seltar.Bytes2Web.*;
 import java.awt.Rectangle;
-import gifAnimation.*;
+//import gifAnimation.*;
 
 OpticalFlow of;
 Capture cam;
@@ -16,12 +16,12 @@ boolean uploading = false;
 boolean checkRight = false;
 boolean grab = false;
 boolean disable = false;
-boolean recordGif = false;
-boolean doGifs = false;
+//boolean recordGif = false;
+// f boolean doGifs = false;
 ImageToWeb img;
 byte[] imgBytes;
 PImage grabImage;
-GifMaker gifExport;
+//GifMaker gifExport;
 
 MotionSensor leftSensor, rightSensor;
 
@@ -156,7 +156,7 @@ void draw() {
     grab = false;
     //update the reference image on the sensors
     leftSensor._image = grabImage;
-    if (doGifs) {
+    /*if (doGifs) {
       if (of.xFlowSum < flowThreshold) {
         if (!recordGif) {
           gifExport = new GifMaker(this, getTimestamp()+".gif");
@@ -173,7 +173,7 @@ void draw() {
         recordGif = false;
         //  gifExport = new GifMaker(this, "export.gif");
       }
-    }
+    }*/
 
     hit = leftSensor.checkHitArea();     
     if (hit) {
