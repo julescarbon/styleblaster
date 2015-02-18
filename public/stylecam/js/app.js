@@ -3,8 +3,8 @@ var blaster = (function(){
   var settings = {
     delay_after_taking_picture: 1500,
     width: 600,
-    height: 450,
-    use_geolocation: false,
+    height: 400,
+    use_geolocation: true,
     enabled: false,
     left: true,
     right: false,
@@ -13,16 +13,23 @@ var blaster = (function(){
     show_flow: true,
     flip: false,
     flop: false,
-    rotate: false,
-    threshold: 1,
+    rotate: true,
+    sixteen_nine: true,
+    threshold: 1.5,
+    zoom:1
   }
 
   var position, sun, startTime
   var canvas, ctx, camera, flow
   var taking_photo = false
   var w = 0, h = 0
-  var cw, ch, xmin, xmax, ymin, ymax
+  var cw, ch, ox, oy, xmin, xmax, ymin, ymax
   var dragging = false
+  var capturing = false
+  var daylight = true
+  var u_range = [0,0]
+  var v_range = [0,0]
+
   
   function init () {
     build()
@@ -50,7 +57,9 @@ var blaster = (function(){
     toggle(opt, id)
     rotate()
   }
+
   function rotate(){
+  	var camera_aspect
     if (settings.rotate) {
       w = canvas.width = settings.height
       h = canvas.height = settings.width
@@ -60,18 +69,24 @@ var blaster = (function(){
       h = canvas.height = settings.height
     }
     
-    var camera_aspect = camera.videoWidth / camera.videoHeight
-    if (camera_aspect > settings.width/settings.height) {
-      cw = settings.width
-      ch = (settings.width / camera.videoWidth) * camera.videoHeight
-    }
-    else {
-      cw = (settings.height / camera.videoHeight) * camera.videoWidth
-      ch = settings.height
-    }
+    var vw = camera.videoWidth, vh = camera.videoHeight
+		if (settings.sixteen_nine) {
+			vw = 16
+			vh = 9
+		}
+		camera_aspect = vw / vh
+
+		if (camera_aspect > settings.width/settings.height) {
+			cw = (settings.height / vh) * vw
+			ch = settings.height
+		}
+		else {
+			cw = settings.width
+			ch = (settings.width / vw) * vh
+		}
   }
 
-  function bind_el(fn, opt, id) {
+  function bind_el (fn, opt, id) {
     var button = document.getElementById(id + "_button")
     var fn = fn.bind(this, opt, id)
     opt[id] && button.classList.add("enabled")
@@ -88,10 +103,11 @@ var blaster = (function(){
     keys.on("\\", bind_el(toggle_rotate, settings, 'rotate'))
     keys.on("[", bind_el(toggle, settings, 'flip'))
     keys.on("]", bind_el(toggle, settings, 'flop'))
+    keys.on("9", bind_el(toggle, settings, 'sixteen_nine'))
 
     canvas.addEventListener("mousedown", function(e){
       dragging = true
-      xmin = e.pageX - canvas.offsetLeft
+      xmin = e.pageX - canvas.offsetLeft  
       ymin = e.pageY - canvas.offsetTop
     })
     canvas.addEventListener("mousemove", function(e){
@@ -142,33 +158,38 @@ var blaster = (function(){
     if (! capturing) return
     
     var u = 0, v = 0, i, zone, zoneCount = 0, len, zones = direction.zones
-    var reals = []
     for (i = 0, len = zones.length; i < len; i++) {
       zone = zones[i]
       if (xmin < zone[0] && zone[0] < xmax && ymin < zone[1] && zone[1] < ymax && zone[2] && zone[3]) {
         u += zone[2]
         v += zone[3]
         zoneCount += 1
-        reals.push(zone)
       }
     }
     if (zoneCount) {
       u /= zoneCount
       v /= zoneCount
+      if (settings.rotate) {
+      	var swap = u; u = v; v = swap;
+      }
       u_val.innerHTML = u.toFixed(2)
       v_val.innerHTML = v.toFixed(2)
+      
+      u_range[0] = Math.min(u, u_range[0])
+      u_range[1] = Math.max(u, u_range[1])
+      u_val.innerHTML = u_range[0].toFixed(2) + ", " + u_range[1].toFixed(2) + " ... " + u.toFixed(2)
     }
-    if (zoneCount && settings.enabled) {
-      if (settings.left && v < -settings.threshold) {
+    if (zoneCount && settings.enabled && daylight && ! dragging) {
+      if (settings.up && v < -settings.threshold) {
         upload()
       }
-      else if (settings.right && v > settings.threshold) {
+      else if (settings.down && v > settings.threshold) {
         upload()
       }
-      else if (settings.up && u < -settings.threshold) {
+      else if (settings.left && u < -settings.threshold) {
         upload()
       }
-      else if (settings.down && u > settings.threshold) {
+      else if (settings.right && u > settings.threshold) {
         upload()
       }
     }
@@ -176,11 +197,33 @@ var blaster = (function(){
     drawRegion()
     settings.show_flow && drawFlow(direction.zones)
   }
-
   function gotPosition (pos) {
     position = pos
-    sun = SunCalc.getTimes(new Date(), pos.coords.latitude, pos.coords.longitude)
+    capturing = true
+    checkDaylight()
     flow.startCapture()
+  }
+  function checkDaylight () {
+    var now = new Date()
+    sun = SunCalc.getTimes(now, position.coords.latitude, position.coords.longitude)
+    if (sun.sunrise < now && now < sun.sunset) {
+      daylight = true
+      sun_el.innerHTML = "sunset at " + moment(sun.sunset).format('h:mm a')
+      setTimeout(checkDaylight, sun.sunset - now + 30000)
+    }
+    else {
+      daylight = false
+      if (now < sun.sunrise) {
+        sun_el.innerHTML = "sunrise at " + moment(sun.sunrise).format('h:mm a')
+        setTimeout(checkDaylight, sun.sunrise - now)
+      }
+      else if (sun.sunset < now) {
+        var tomorrow = moment().endOf('day').add(5, 'hour').toDate()
+        var tomorrow_sun = SunCalc.getTimes(tomorrow, position.coords.latitude, position.coords.longitude)
+        sun_el.innerHTML = "sunrise at " + moment(tomorrow_sun.sunrise).format('h:mm a')
+        setTimeout(checkDaylight, tomorrow - now)
+      }
+    }
   }
   function clamp(n,a,b) { return n<a?a:n<b?n:b }
   function drawFlow (zones) {
@@ -285,8 +328,8 @@ var blaster = (function(){
       y = (h - ch)/2
     }
     
+    ctx.scale(settings.zoom, settings.zoom)
     ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight, x, y, cw, ch)
-    ctx.scale(1, 1)
     ctx.restore()
   }
 
@@ -327,5 +370,7 @@ var blaster = (function(){
   $(init)
   $('body').addClass('loaded')
   
+  settings.resetRange = function(){ u_range = [0,0] }
+  settings.getRect = function(){ return [x_min, x_max, y_min, y_max] }
   return settings
 })()
