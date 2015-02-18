@@ -28,11 +28,15 @@ MotionSensor leftSensor, rightSensor;
 //SETUP VARS
 String version = "2.0";
 int startHour = 7; //am
-int endHour = 16;  //3:59pm
+int endHour = 18;  //3:59pm
 int endMinute = 25; 
 int sensorBuffer = -220;
 int sensorBufferY = 50;
-String uploadURL = "http://styleblaster.herokuapp.com/upload";
+String uploadURL;
+String nycUploadURL = "http://styleblaster.herokuapp.com/upload/nyc";
+String gdlUploadURL = "http://styleblaster.herokuapp.com/upload/gdl";
+String devUploadURL = "http://styleblaster.herokuapp.com/upload/dev";
+
 int camWidth;
 int camHeight = 720;
 int sensorThreshold = 13;
@@ -40,6 +44,8 @@ int flowThreshold = -220;
 float sensorRes = 1;
 
 public void setup() {
+  uploadURL = devUploadURL;
+  
   int camWidth = 1280;//(16*camHeight)/9; //get correct aspect ratio for width
   //camHeight = 2;
   int sketchHeight = 1000;
@@ -55,16 +61,10 @@ public void setup() {
   fill(255, 50, 50);
   noFill();
   String[] cameras = Capture.list();
-  if (version == "2.0") {
-    //Microsoft Studio
-    cam = new Capture(this, 1920, 1080, "Microsoft¬Æ LifeCam Studio(TM)");
-  }
-  else {
-
-    //Microsoft Studio
-    cam = new Capture(this, 1920, 1080);
-  }
-
+  //Microsoft Studio
+ // cam = new Capture(this, 1920, 1080, "Microsoft¬Æ LifeCam Studio(TM)");
+  cam = new Capture(this, 1920, 1080);
+  
   cam.start();
 
   //set global framerate
@@ -244,7 +244,9 @@ void takePicture() {
 
 void uploadPicture() {
   // img.post(String project, String url, String filename, boolean popup, byte[] bytes)
-  img.post("test", uploadURL, getTimestamp() + ".png", false, imgBytes);
+  String name = getTimestamp() + ".png";
+  println("uploading "+name+" to "+uploadURL);
+  img.post("test", uploadURL, name, false, imgBytes);
   cameraTimer.start();
 }
 
