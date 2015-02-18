@@ -41,7 +41,12 @@ var camera = (function(){
   function build(){
     video = document.createElement("video")
     navigator.getMedia({
-        video: true,
+        video: {
+        	maxWidth: 1280,
+					maxHeight: 720,
+					minWidth: 1280,
+					minHeight: 720
+        },
         audio: false
       },
       function(stream) {

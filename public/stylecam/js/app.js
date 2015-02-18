@@ -15,7 +15,7 @@ var blaster = (function(){
     flop: false,
     rotate: true,
     sixteen_nine: true,
-    threshold: 1.5,
+    threshold: 10.0,
     zoom:1
   }
 
