@@ -169,11 +169,11 @@ public void draw() {
     text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
+  grab = false;
   if (blast) {
-
     //BLAST OFF!
     boolean hit = false;
-    grab = false;
+    
     //update the reference image on the sensors
     leftSensor._image = grabImage;
 
@@ -807,7 +807,7 @@ class Timer {
 }
 
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--stop-color=#cccccc", "StyleBlasterGrabber2_0" };
+    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--hide-stop", "StyleBlasterGrabber2_0" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

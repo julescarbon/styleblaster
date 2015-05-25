@@ -145,11 +145,11 @@ void draw() {
     text("xFlowSum: "+of.xFlowSum, width - 150, height - 5); // time (msec) for this frame
   }
 
+  grab = false;
   if (blast) {
-
     //BLAST OFF!
     boolean hit = false;
-    grab = false;
+    
     //update the reference image on the sensors
     leftSensor._image = grabImage;
 
